@@ -119,9 +119,6 @@ This project is open source and available under the [MIT License](LICENSE).
 ## 📞 Contact
 
 - **GitHub**: [@Adon-Paul](https://github.com/Adon-Paul)
-- **Email**: [Your email here]
-- **LinkedIn**: [Your LinkedIn profile]
-- **Website**: [Live portfolio URL when deployed]
 
 ## 🙏 Acknowledgments
 
