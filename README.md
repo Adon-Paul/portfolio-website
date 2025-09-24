@@ -39,7 +39,29 @@ A modern, responsive portfolio website to showcase my projects, skills, and prof
 - **Deployment**: GitHub Pages, Netlify, or Vercel
 - **CMS Integration**: For blog functionality (if implemented)
 
-## 📁 Project Structure
+## � Getting Started
+
+### Prerequisites
+- Modern browser (Chrome, Firefox, Edge, Safari)
+- Optional: Live Server extension in VS Code for hot reloads
+
+### Run locally
+```powershell
+cd portfolio-website
+start msedge index.html
+```
+
+Or, if you use the Live Server extension, right-click `index.html` and select **Open with Live Server** for auto-refreshing.
+
+### Customize the template
+1. **Update personal info**: Replace headings, stats, and contact details in `index.html`.
+2. **Add project imagery**: Drop screenshots into `images/projects/` and update the `<div class="project-thumb">` placeholders.
+3. **Tailor content**: Edit copy in the Services, Lab, Highlights, and Updates sections to match your story.
+4. **Refresh metrics**: Adjust GitHub follower/repo counts and timeline dates as your profile evolves.
+5. **Adjust styles**: Modify colors, gradients, and spacing in `css/style.css`. Layer additional tweaks in `css/responsive.css` for smaller screens.
+6. **Enhance interactions**: Extend animations or scroll effects in `js/main.js` as you learn new patterns.
+
+## �📁 Project Structure
 
 ```
 portfolio-website/
@@ -82,8 +104,8 @@ Through this project, I aim to learn and implement:
 
 ### Phase 1: Foundation
 - [x] Project setup and repository creation
-- [ ] Basic HTML structure
-- [ ] CSS reset and base styles
+- [x] Basic HTML structure
+- [x] CSS reset and base styles
 - [ ] Responsive layout framework
 
 ### Phase 2: Core Pages
@@ -119,9 +141,10 @@ This project is open source and available under the [MIT License](LICENSE).
 ## 📞 Contact
 
 - **GitHub**: [@Adon-Paul](https://github.com/Adon-Paul)
-- **Email**: [Your email here]
-- **LinkedIn**: [Your LinkedIn profile]
-- **Website**: [Live portfolio URL when deployed]
+- **Email**: [adonpaultomy@gmail.com](mailto:adonpaultomy@gmail.com)
+- **LinkedIn**: [Adon Paul Tomy](https://linkedin.com/in/adon-paul-tomy)
+- **Location**: Kalamassery, Kerala, India
+- **Website**: Coming soon (will link once deployed)
 
 ## 🙏 Acknowledgments
 
