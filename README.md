@@ -130,30 +130,6 @@ Through this project, I aim to learn and implement:
 
 This is a personal learning project, but suggestions and feedback are always welcome! Feel free to:
 
-- Open issues for suggestions or bugs
-- Submit pull requests for improvements
-- Share feedback on design or functionality
 
-## 📄 License
-
-This project is open source and available under the [MIT License](LICENSE).
-
-## 📞 Contact
-
-- **GitHub**: [@Adon-Paul](https://github.com/Adon-Paul)
-- **Email**: [adonpaultomy@gmail.com](mailto:adonpaultomy@gmail.com)
-- **LinkedIn**: [Adon Paul Tomy](https://linkedin.com/in/adon-paul-tomy)
-- **Location**: Kalamassery, Kerala, India
-- **Website**: Coming soon (will link once deployed)
-
-## 🙏 Acknowledgments
-
-- Inspiration from various portfolio designs
-- Web development community for resources and tutorials
-- Open source tools and libraries used
-
----
-
-⭐ Star this repository if you find it helpful or interesting!
 
 **Note**: This is an active learning project. The codebase and documentation will evolve as I continue to develop my skills and add new features.
