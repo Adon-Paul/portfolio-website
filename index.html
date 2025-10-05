@@ -195,7 +195,22 @@
   /* Animations (respect reduced motion) */
   @keyframes fadeUp { from { opacity: 0; transform: translateY(14px);} to { opacity: 1; transform: translateY(0);} }
   .content-card { animation: fadeUp .75s cubic-bezier(.22,1,.36,1) forwards; }
-  @media (prefers-reduced-motion: reduce) { .content-card { animation: none; } }
+  
+  /* Shooting stars effect - very subtle */
+  .shooting-star { position: fixed; width: 2px; height: 2px; background: white; border-radius: 50%; opacity: 0; pointer-events: none; z-index: 1; box-shadow: 0 0 4px 1px rgba(255,255,255,.6); }
+  @keyframes shootingStar {
+    0% { transform: translateX(0) translateY(0) rotate(-45deg); opacity: 0; }
+    5% { opacity: .8; }
+    100% { transform: translateX(-300px) translateY(300px) rotate(-45deg); opacity: 0; }
+  }
+  .shooting-star:nth-child(1) { top: 10%; right: 20%; animation: shootingStar 2.5s ease-in 2s infinite; }
+  .shooting-star:nth-child(2) { top: 30%; right: 60%; animation: shootingStar 3s ease-in 6s infinite; }
+  .shooting-star:nth-child(3) { top: 50%; right: 15%; animation: shootingStar 2.8s ease-in 10s infinite; }
+  .shooting-star:nth-child(4) { top: 20%; right: 80%; animation: shootingStar 3.2s ease-in 14s infinite; }
+  .shooting-star:nth-child(5) { top: 60%; right: 45%; animation: shootingStar 2.6s ease-in 18s infinite; }
+  /* Hide shooting stars in light mode and respect reduced motion */
+  html[data-theme="light"] .shooting-star { display: none; }
+  @media (prefers-reduced-motion: reduce) { .content-card { animation: none; } .shooting-star { display: none; } }
     /* Theme toggle (top-right) */
     .theme-toggle { position: fixed; top: 16px; right: 16px; z-index: 9999; width: 76px; height: 40px; border-radius: 999px; border:1px solid rgba(255,255,255,0.12); background: #1b1e2b; box-shadow: 0 4px 18px rgba(0,0,0,.35), 0 0 0 3px rgba(255,255,255,0.04) inset; display: inline-flex; align-items: center; padding: 4px; cursor: pointer; transition: background .25s ease, border-color .25s ease; }
     .theme-toggle::before { content:""; position:absolute; inset:4px; border-radius:999px; background:
@@ -293,6 +308,12 @@
   <footer>© <span id="year"></span> Adon Paul</footer>
   <div id="lottieLoader" class="lottie-loader" aria-hidden="true"></div>
   <div class="cursor-light" id="cursorLight" aria-hidden="true"></div>
+  <!-- Shooting stars background effect -->
+  <div class="shooting-star" aria-hidden="true"></div>
+  <div class="shooting-star" aria-hidden="true"></div>
+  <div class="shooting-star" aria-hidden="true"></div>
+  <div class="shooting-star" aria-hidden="true"></div>
+  <div class="shooting-star" aria-hidden="true"></div>
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
     var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
