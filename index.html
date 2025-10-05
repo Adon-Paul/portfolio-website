@@ -4,25 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Coming Soon · Adon Paul Tomy</title>
-  <meta name="description" content="Adon Paul Tomy — Flutter Developer & Computer Science Student.   <script>
-    document.getElementById('year').textContent = new Date().getFullYear();
-    var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-    // Initialize Lottie loader animation
-    (function initLottie(){
-      if (!window.lottie) return;
-      var container = document.getElementById('lottieLoader');
-      if (!container) return;
-      lottie.loadAnimation({
-        container: container,
-        renderer: 'svg',
-        loop: true,
-        autoplay: true,
-        path: '/assets/anim/loader cat.json'
-      });
-    })();
-
-    // Theme: initialize from localStorage or system preferenceportfolio coming soon.">
+  <meta name="description" content="Adon Paul Tomy — Flutter Developer & Computer Science Student. New portfolio coming soon.">
   <link rel="canonical" href="https://adonpaultomy.wiki/">
   <meta property="og:site_name" content="Adon Paul Portfolio">
   <meta property="og:type" content="website">
@@ -94,9 +76,9 @@
     html[data-theme="light"] footer { color: #555d7a; opacity: .65; }
 
   /* Lottie loader cat at bottom-right */
-  .lottie-loader { position: fixed; bottom: 20px; right: 24px; width: 120px; height: 120px; z-index: 10; pointer-events: none; opacity: .85; }
-  html[data-theme="light"] .lottie-loader { opacity: .75; }
-  @media (max-width: 820px) { .lottie-loader { width: 90px; height: 90px; bottom: 16px; right: 16px; } }
+  .lottie-loader { position: fixed; bottom: 0; right: 0; width: 220px; height: 220px; z-index: 9998; pointer-events: auto; opacity: .9; filter: drop-shadow(0 4px 12px rgba(0,0,0,.3)); }
+  html[data-theme="light"] .lottie-loader { opacity: .85; filter: drop-shadow(0 4px 12px rgba(0,0,0,.2)); }
+  @media (max-width: 820px) { .lottie-loader { width: 160px; height: 160px; } }
   /* Vertical divider near card (light mode only) */
   html[data-theme="light"] .right::before { content:""; position: absolute; left: clamp(-34px, -3.2vw, -22px); top: 0; bottom: 0; width: 1.5px; background: linear-gradient(180deg, rgba(30,60,120,0), rgba(30,60,120,.12) 12%, rgba(30,60,120,.18) 50%, rgba(30,60,120,.08) 88%, rgba(30,60,120,0)); border-radius:1px; }
   /* Optional decorative accents for light mode */
@@ -306,8 +288,35 @@
   <div id="lottieLoader" class="lottie-loader" aria-hidden="true"></div>
   <div class="cursor-light" id="cursorLight" aria-hidden="true"></div>
   <script>
-  document.getElementById('year').textContent = new Date().getFullYear();
-  var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    document.getElementById('year').textContent = new Date().getFullYear();
+    var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // Initialize Lottie loader animation
+    (function initLottie(){
+      if (typeof lottie === 'undefined') {
+        console.log('Lottie not loaded yet, waiting...');
+        setTimeout(initLottie, 100);
+        return;
+      }
+      var container = document.getElementById('lottieLoader');
+      if (!container) {
+        console.log('Lottie container not found');
+        return;
+      }
+      try {
+        lottie.loadAnimation({
+          container: container,
+          renderer: 'svg',
+          loop: true,
+          autoplay: true,
+          path: '/assets/anim/Loader cat.json'
+        });
+        console.log('Lottie animation loaded successfully');
+      } catch(e) {
+        console.error('Lottie error:', e);
+      }
+    })();
+
     // Theme: initialize from localStorage or system preference
     (function(){
       var storageKey = 'theme';
