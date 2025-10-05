@@ -130,12 +130,13 @@
     background: linear-gradient(165deg, rgba(255,255,255,.22), rgba(255,255,255,0) 45%);
     opacity: .48; mix-blend-mode: screen;
   }
-  /* Light mode subtitle: teal gradient text similar to reference */
+  /* Light mode subtitle: dark gray for readability */
   html[data-theme="light"] .subtitle {
-    background: linear-gradient(110deg, #0fb7b0, #18d4cc);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
+    background: none;
+    -webkit-background-clip: unset;
+    background-clip: unset;
+    color: #2a3050;
+    font-weight: 600;
   }
   html[data-theme="light"] h1 {
     color: #0b0b12;
