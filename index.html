@@ -17,6 +17,8 @@
   <meta name="twitter:description" content="Flutter Developer | Computer Science Student. New portfolio coming soon.">
   <meta name="twitter:image" content="https://adonpaultomy.wiki/images/profile/og-image.svg">
   <link rel="icon" href="/images/icons/favicon.svg" type="image/svg+xml">
+  <link rel="preload" as="image" href="/images/profile/WEWSITEDARK.png">
+  <link rel="preload" as="image" href="/images/profile/WEWSITELIGHT.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
@@ -47,13 +49,13 @@
   main { width: 100%; max-width: none; min-height: 100vh; padding: 0 1.5rem; }
   .coming-grid { display:grid; grid-template-columns: minmax(320px, 42vw) 1fr; align-items: stretch; gap: clamp(16px, 4vw, 56px); height: 100%; }
     .left { display:flex; justify-content:flex-start; align-items:flex-end; }
-  .photo-wrap { position: relative; height: 100%; }
-    .profile-photo { height: 100%; width: auto; max-width: none; display:block; object-fit: cover; object-position: left bottom; border-radius: 0; transition: filter .25s ease, transform .25s ease; filter: brightness(.72) saturate(.92); }
+  .photo-wrap { position: relative; height: 100%; transition: filter .32s cubic-bezier(.22,1,.36,1); will-change: filter; }
+    .profile-photo { height: 100%; width: auto; max-width: none; display:block; object-fit: cover; object-position: left bottom; border-radius: 0; transition: opacity .28s cubic-bezier(.22,1,.36,1), filter .28s cubic-bezier(.22,1,.36,1), transform .24s ease; filter: brightness(.72) saturate(.92); will-change: opacity, filter; }
   /* Subtle right-edge fade for the photo to blend into background */
   .photo-wrap::after { content:""; position:absolute; right:-1px; top:0; bottom:0; width: min(14vw, 180px); pointer-events:none; background: linear-gradient(90deg, rgba(11,11,18,0) 0%, rgba(11,11,18,.04) 30%, rgba(11,11,18,.08) 55%, rgba(11,11,18,0) 100%); mix-blend-mode: normal; }
     /* Image brightens on hover (no halo/glow overlay) */
     .photo-wrap:hover .profile-photo { filter: brightness(1) saturate(1); }
-  .right { text-align:center; margin: 0 auto; max-width: 760px; padding-bottom: 56px; position: relative; }
+  .right { text-align:center; margin: 0 auto; max-width: 1200px; padding-bottom: 56px; position: relative; }
   h1 { font-family: "Space Grotesk", Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; font-weight: 700; font-size: clamp(2.1rem, 2rem + 2.5vw, 3.6rem); margin: 0 0 .6rem; letter-spacing: .2px; }
   .subtitle { color: var(--muted); margin: 0 0 1.75rem; font-weight:600; font-size: clamp(1rem, .9rem + .6vw, 1.25rem); }
   p { color: #cfd3ff; margin: 0 0 1.15rem; font-size: clamp(1rem, .95rem + .3vw, 1.1rem); }
@@ -73,7 +75,7 @@
     html[data-theme="light"] main::after  { width: 420px; height: 420px; bottom: -120px; left: -120px; background: radial-gradient(closest-side, rgba(20,24,28,.38), transparent 70%); }
 
   /* Content card (glassmorphism) */
-  .content-card { padding: clamp(16px, 2.2vw, 28px); border-radius: 18px; position: relative; }
+  .content-card { padding: clamp(24px, 3.2vw, 44px) clamp(18px, 2.4vw, 32px); border-radius: 18px; position: relative; transition: border-radius .32s cubic-bezier(.22,1,.36,1), box-shadow .32s cubic-bezier(.22,1,.36,1), border-color .32s cubic-bezier(.22,1,.36,1), background .32s cubic-bezier(.22,1,.36,1), filter .32s cubic-bezier(.22,1,.36,1), opacity .32s cubic-bezier(.22,1,.36,1), backdrop-filter .32s cubic-bezier(.22,1,.36,1), -webkit-backdrop-filter .32s cubic-bezier(.22,1,.36,1); will-change: filter, opacity; }
   /* Light mode glass: brighter, clearer frosted panel */
   html[data-theme="light"] .content-card {
     background: linear-gradient(135deg, rgba(255,255,255,.55), rgba(255,255,255,.25));
@@ -87,6 +89,14 @@
     background: linear-gradient(180deg, rgba(255,255,255,.60), rgba(255,255,255,0) 38%);
     opacity: .50; mix-blend-mode: screen;
   }
+  /* Morph effect during theme transition: soft blur/opacity instead of scale */
+  html.theme-morph .content-card { filter: blur(4px) saturate(108%); opacity: .96; }
+  html.theme-morph .photo-wrap { filter: blur(2px) contrast(1.02); }
+  @media (prefers-reduced-motion: reduce) {
+    html.theme-morph .content-card, html.theme-morph .photo-wrap { filter: none; opacity: 1; }
+  }
+  /* Image cross-fade helper */
+  .profile-photo.fade { opacity: 0; filter: blur(1px) saturate(105%); }
   /* Dark mode glass: subtle frosted dark panel */
   html[data-theme="dark"] .content-card {
     background: linear-gradient(135deg, rgba(255,255,255,.08), rgba(255,255,255,.03));
@@ -264,16 +274,32 @@
         if (btn) btn.setAttribute('aria-pressed', String(pressed));
         var img = document.getElementById('heroPhoto');
         if (img) {
-          img.src = (t === 'light') ? '/images/profile/WEWSITELIGHT.png' : '/images/profile/WEWSITEDARK.png';
+          // smooth cross-fade using preload + onload swap
+          var nextSrc = (t === 'light') ? '/images/profile/WEWSITELIGHT.png' : '/images/profile/WEWSITEDARK.png';
+          if (img.getAttribute('src') !== nextSrc) {
+            img.classList.add('fade');
+            var pre = new Image();
+            pre.onload = function(){
+              img.src = nextSrc;
+              // allow CSS opacity to transition back
+              requestAnimationFrame(function(){
+                img.classList.remove('fade');
+              });
+            };
+            pre.src = nextSrc;
+          }
         }
       }
       apply(theme);
       var btn = document.getElementById('themeToggle');
       if (btn) {
         btn.addEventListener('click', function(){
+          // add morph blur on card during theme change
+          document.documentElement.classList.add('theme-morph');
           theme = (document.documentElement.getAttribute('data-theme') === 'light') ? 'dark' : 'light';
           apply(theme);
           try { localStorage.setItem(storageKey, theme); } catch(e){}
+          setTimeout(function(){ document.documentElement.classList.remove('theme-morph'); }, 360);
         });
         // Keyboard accessibility for space/enter
         btn.addEventListener('keydown', function(e){
