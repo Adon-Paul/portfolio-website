@@ -377,7 +377,7 @@
     })();
 
     // Text scramble/decrypt effect
-    (function initTextScramble(){
+    function runTextScramble(){
       if (reduceMotion) return;
       var heading = document.getElementById('mainHeading');
       if (!heading) return;
@@ -401,7 +401,10 @@
         }
         iterations += 1/3;
       }, 50);
-    })();
+    }
+    
+    // Run on page load
+    runTextScramble();
 
     // Initialize Lottie loader animation
     (function initLottie(){
@@ -468,6 +471,9 @@
           apply(theme);
           try { localStorage.setItem(storageKey, theme); } catch(e){}
           setTimeout(function(){ document.documentElement.classList.remove('theme-morph'); }, 360);
+          
+          // Trigger text scramble effect on theme change
+          setTimeout(runTextScramble, 200);
         });
         // Keyboard accessibility for space/enter
         btn.addEventListener('keydown', function(e){
