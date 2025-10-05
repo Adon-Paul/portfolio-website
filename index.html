@@ -196,49 +196,33 @@
   @keyframes fadeUp { from { opacity: 0; transform: translateY(14px);} to { opacity: 1; transform: translateY(0);} }
   .content-card { animation: fadeUp .75s cubic-bezier(.22,1,.36,1) forwards; }
   
-  /* Shooting stars effect with trail - behind content */
+  /* Shooting stars effect - no trail, behind content */
   .shooting-star { 
     position: fixed; 
-    width: 3px; 
-    height: 3px; 
+    width: 2px; 
+    height: 2px; 
     background: #ffffff; 
     border-radius: 50%; 
     opacity: 0; 
     pointer-events: none; 
     z-index: 0; 
-    box-shadow: 0 0 6px 2px rgba(255,255,255,.8), 0 0 10px 3px rgba(0,231,255,.5);
-    overflow: visible;
-  }
-  .shooting-star::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 80px;
-    height: 2px;
-    background: linear-gradient(to left, rgba(255,255,255,0) 0%, rgba(255,255,255,.7) 30%, rgba(0,231,255,.5) 100%);
-    transform: translateX(0) translateY(-50%);
-    transform-origin: right center;
-    border-radius: 2px;
+    box-shadow: 0 0 4px 2px rgba(255,255,255,.7), 0 0 8px 3px rgba(0,231,255,.4);
+    --travel-x: -400px;
+    --travel-y: 400px;
   }
   @keyframes shootingStar {
     0% { 
-      transform: translate(0, 0); 
+      transform: translate(0, 0);
       opacity: 0; 
     }
-    3% { 
-      opacity: .9; 
+    5% { 
+      opacity: 1; 
     }
     100% { 
-      transform: translate(-450px, 450px); 
+      transform: translate(var(--travel-x), var(--travel-y));
       opacity: 0; 
     }
   }
-  .star-1 { top: 10%; right: 20%; animation: shootingStar 2.5s ease-in 2s infinite; }
-  .star-2 { top: 40%; right: 75%; animation: shootingStar 2.8s ease-in 8s infinite; }
-  .star-3 { top: 60%; right: 30%; animation: shootingStar 2.6s ease-in 14s infinite; }
-  .star-4 { top: 25%; right: 88%; animation: shootingStar 2.7s ease-in 20s infinite; }
-  .star-5 { top: 70%; right: 55%; animation: shootingStar 2.9s ease-in 26s infinite; }
   /* Hide shooting stars in light mode and respect reduced motion */
   html[data-theme="light"] .shooting-star { display: none; }
   @media (prefers-reduced-motion: reduce) { .content-card { animation: none; } .shooting-star { display: none; } }
@@ -339,15 +323,58 @@
   <footer>© <span id="year"></span> Adon Paul</footer>
   <div id="lottieLoader" class="lottie-loader" aria-hidden="true"></div>
   <div class="cursor-light" id="cursorLight" aria-hidden="true"></div>
-  <!-- Shooting stars background effect -->
-  <div class="shooting-star star-1" aria-hidden="true"></div>
-  <div class="shooting-star star-2" aria-hidden="true"></div>
-  <div class="shooting-star star-3" aria-hidden="true"></div>
-  <div class="shooting-star star-4" aria-hidden="true"></div>
-  <div class="shooting-star star-5" aria-hidden="true"></div>
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
     var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // Randomized shooting stars
+    (function initShootingStars(){
+      if (reduceMotion) return;
+      var theme = document.documentElement.getAttribute('data-theme');
+      if (theme === 'light') return;
+      
+      function createShootingStar() {
+        var star = document.createElement('div');
+        star.className = 'shooting-star';
+        star.setAttribute('aria-hidden', 'true');
+        
+        // Random starting position (top 20-80% of viewport, right side)
+        var startTop = Math.random() * 60 + 10; // 10% to 70%
+        var startRight = Math.random() * 30 + 60; // 60% to 90%
+        
+        star.style.top = startTop + '%';
+        star.style.right = startRight + '%';
+        
+        // Random travel distance
+        var distance = Math.random() * 200 + 350; // 350-550px
+        var duration = Math.random() * 0.8 + 2; // 2-2.8s
+        
+        star.style.animation = 'shootingStar ' + duration + 's ease-in forwards';
+        star.style.setProperty('--travel-x', '-' + distance + 'px');
+        star.style.setProperty('--travel-y', distance + 'px');
+        
+        document.body.appendChild(star);
+        
+        // Remove after animation completes
+        setTimeout(function() {
+          star.remove();
+        }, duration * 1000);
+      }
+      
+      // Create shooting stars at random intervals
+      function scheduleNextStar() {
+        var delay = Math.random() * 8000 + 4000; // 4-12 seconds
+        setTimeout(function() {
+          createShootingStar();
+          scheduleNextStar();
+        }, delay);
+      }
+      
+      // Start the cycle
+      scheduleNextStar();
+      // Create first star after short delay
+      setTimeout(createShootingStar, 2000);
+    })();
 
     // Text scramble/decrypt effect
     (function initTextScramble(){
