@@ -1,0 +1,5 @@
+# robots.txt for adonpaultomy.wiki
+User-agent: *
+Allow: /
+
+Sitemap: https://adonpaultomy.wiki/sitemap.xml

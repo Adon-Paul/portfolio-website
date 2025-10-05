@@ -39,7 +39,7 @@ A modern, responsive portfolio website to showcase my projects, skills, and prof
 - **Deployment**: GitHub Pages, Netlify, or Vercel
 - **CMS Integration**: For blog functionality (if implemented)
 
-## � Getting Started
+## 🚀 Getting Started
 
 ### Prerequisites
 - Modern browser (Chrome, Firefox, Edge, Safari)
@@ -61,7 +61,7 @@ Or, if you use the Live Server extension, right-click `index.html` and select **
 5. **Adjust styles**: Modify colors, gradients, and spacing in `css/style.css`. Layer additional tweaks in `css/responsive.css` for smaller screens.
 6. **Enhance interactions**: Extend animations or scroll effects in `js/main.js` as you learn new patterns.
 
-## �📁 Project Structure
+## 🗂️ Project Structure
 
 ```
 portfolio-website/
@@ -130,6 +130,30 @@ Through this project, I aim to learn and implement:
 
 This is a personal learning project, but suggestions and feedback are always welcome! Feel free to:
 
+- Open issues for suggestions or bugs
+- Submit pull requests for improvements
+- Share feedback on design or functionality
 
+## 📄 License
+
+This project is open source and available under the [MIT License](LICENSE).
+
+## 📞 Contact
+
+- **GitHub**: [@Adon-Paul](https://github.com/Adon-Paul)
+- **Email**: [adonpaultomy@gmail.com](mailto:adonpaultomy@gmail.com)
+- **LinkedIn**: [Adon Paul Tomy](https://linkedin.com/in/adon-paul-tomy)
+- **Location**: Kalamassery, Kerala, India
+- **Website**: https://adonpaultomy.wiki
+
+## 🙏 Acknowledgments
+
+- Inspiration from various portfolio designs
+- Web development community for resources and tutorials
+- Open source tools and libraries used
+
+---
+
+⭐ Star this repository if you find it helpful or interesting!
 
 **Note**: This is an active learning project. The codebase and documentation will evolve as I continue to develop my skills and add new features.
