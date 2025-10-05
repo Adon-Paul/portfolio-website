@@ -4,7 +4,25 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Coming Soon · Adon Paul Tomy</title>
-  <meta name="description" content="Adon Paul Tomy — Flutter Developer & Computer Science Student. New portfolio coming soon.">
+  <meta name="description" content="Adon Paul Tomy — Flutter Developer & Computer Science Student.   <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+    var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // Initialize Lottie loader animation
+    (function initLottie(){
+      if (!window.lottie) return;
+      var container = document.getElementById('lottieLoader');
+      if (!container) return;
+      lottie.loadAnimation({
+        container: container,
+        renderer: 'svg',
+        loop: true,
+        autoplay: true,
+        path: '/assets/anim/loader cat.json'
+      });
+    })();
+
+    // Theme: initialize from localStorage or system preferenceportfolio coming soon.">
   <link rel="canonical" href="https://adonpaultomy.wiki/">
   <meta property="og:site_name" content="Adon Paul Portfolio">
   <meta property="og:type" content="website">
@@ -22,6 +40,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js" integrity="sha512-jEnuDt6jfecCjthQAJ+ed0MTVA++5ZKmlUcmDGBv2vUI/REn6FuIdixLNnQT+vKusE2hhTk2is3cFvv5wA+Sgg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -73,6 +92,11 @@
     .enter a:hover { opacity:1; color:#c8ceff; border-color: rgba(0,231,255,.45); }
     footer { position: fixed; bottom: 16px; left:0; right:0; text-align:center; color:#6f7390; font-size: .82rem; letter-spacing: .01em; opacity: .75; }
     html[data-theme="light"] footer { color: #555d7a; opacity: .65; }
+
+  /* Lottie loader cat at bottom-right */
+  .lottie-loader { position: fixed; bottom: 20px; right: 24px; width: 120px; height: 120px; z-index: 10; pointer-events: none; opacity: .85; }
+  html[data-theme="light"] .lottie-loader { opacity: .75; }
+  @media (max-width: 820px) { .lottie-loader { width: 90px; height: 90px; bottom: 16px; right: 16px; } }
   /* Vertical divider near card (light mode only) */
   html[data-theme="light"] .right::before { content:""; position: absolute; left: clamp(-34px, -3.2vw, -22px); top: 0; bottom: 0; width: 1.5px; background: linear-gradient(180deg, rgba(30,60,120,0), rgba(30,60,120,.12) 12%, rgba(30,60,120,.18) 50%, rgba(30,60,120,.08) 88%, rgba(30,60,120,0)); border-radius:1px; }
   /* Optional decorative accents for light mode */
@@ -279,6 +303,7 @@
     </div>
   </main>
   <footer>© <span id="year"></span> Adon Paul</footer>
+  <div id="lottieLoader" class="lottie-loader" aria-hidden="true"></div>
   <div class="cursor-light" id="cursorLight" aria-hidden="true"></div>
   <script>
   document.getElementById('year').textContent = new Date().getFullYear();
