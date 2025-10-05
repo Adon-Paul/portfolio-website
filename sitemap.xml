@@ -6,28 +6,8 @@
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://adonpaultomy.wiki/#work</loc>
+    <loc>https://adonpaultomy.wiki/home.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://adonpaultomy.wiki/#experiments</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://adonpaultomy.wiki/#about</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://adonpaultomy.wiki/#updates</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://adonpaultomy.wiki/#contact</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
   </url>
 </urlset>
