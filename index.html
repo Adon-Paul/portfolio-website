@@ -184,22 +184,6 @@
   @keyframes fadeUp { from { opacity: 0; transform: translateY(14px);} to { opacity: 1; transform: translateY(0);} }
   .content-card { animation: fadeUp .75s cubic-bezier(.22,1,.36,1) forwards; }
   @media (prefers-reduced-motion: reduce) { .content-card { animation: none; } }
-
-  /* Shard assembly effect for portrait intro */
-  .shards { position: absolute; inset: 0; pointer-events: none; z-index: 4; overflow: hidden; }
-  .shard { position: absolute; inset: 0; background-repeat: no-repeat; background-position: left bottom; background-size: auto 100%;
-    opacity: 0; filter: blur(7px) brightness(1.06); will-change: transform, opacity, filter; }
-  @keyframes shardIn {
-    0% { opacity: 0; transform: translate3d(var(--tx,0), var(--ty,12px), 0) scale(1.03) skewX(var(--sk,1.2deg)); filter: blur(7px) brightness(1.1); }
-    75% { opacity: 1; }
-    100% { opacity: 1; transform: translate3d(0,0,0) scale(1) skewX(0); filter: blur(0) brightness(1); }
-  }
-  @keyframes glitch {
-    0%, 100% { transform: translateX(0); }
-    42% { transform: translateX(-.8px); }
-    58% { transform: translateX(1px); }
-  }
-  .shard.play { animation: shardIn 1100ms cubic-bezier(.22,1,.36,1) forwards, glitch 550ms steps(2,end) 180ms 1; }
     /* Theme toggle (top-right) */
     .theme-toggle { position: fixed; top: 16px; right: 16px; z-index: 9999; width: 76px; height: 40px; border-radius: 999px; border:1px solid rgba(255,255,255,0.12); background: #1b1e2b; box-shadow: 0 4px 18px rgba(0,0,0,.35), 0 0 0 3px rgba(255,255,255,0.04) inset; display: inline-flex; align-items: center; padding: 4px; cursor: pointer; transition: background .25s ease, border-color .25s ease; }
     .theme-toggle::before { content:""; position:absolute; inset:4px; border-radius:999px; background:
@@ -270,7 +254,6 @@
     <div class="coming-grid">
       <div class="left">
         <div class="photo-wrap">
-          <div class="shards" id="shards"></div>
           <img class="profile-photo" id="heroPhoto" src="/images/profile/WEWSITEDARK.png" alt="Portrait of Adon Paul Tomy" loading="lazy" decoding="async">
         </div>
       </div>
@@ -352,41 +335,6 @@
           apply(ev.matches ? 'light' : 'dark');
         });
       }
-
-      // Intro shard animation (polygon assembly / subtle glitch)
-      (function initShards(){
-        if (reduceMotion) return; // respect reduced motion
-        var wrap = document.querySelector('.photo-wrap');
-        var shardsEl = document.getElementById('shards');
-        var imgEl = document.getElementById('heroPhoto');
-        if (!wrap || !shardsEl || !imgEl) return;
-        // Build a few overlay shards using the current image as background
-        var shardCount = 6;
-        var src = imgEl.getAttribute('src');
-        var rect = wrap.getBoundingClientRect();
-        for (var i=0;i<shardCount;i++){
-          var s = document.createElement('div');
-          s.className = 'shard';
-          s.style.backgroundImage = 'url("'+src+'")';
-          // Random clip polygon slices (simple rectangles with offsets to keep perf reasonable)
-          var x = Math.random()*18; var y = Math.random()*20; var w = 20 + Math.random()*34; var h = 26 + Math.random()*38;
-          var left = Math.max(0, x); var top = Math.max(0, y);
-          s.style.clipPath = 'polygon('+left+'% '+top+'%, '+(left+w)+'% '+top+'%, '+(left+w)+'% '+(top+h)+'%, '+left+'% '+(top+h)+'%)';
-          // Offset-in animation vars
-          s.style.setProperty('--tx', (Math.random()*20-10)+'px');
-          s.style.setProperty('--ty', (20 + Math.random()*30)+'px');
-          s.style.setProperty('--sk', (Math.random()>.5?1:-1)* (0.5 + Math.random()*1.5)+'deg');
-          // Stagger
-          s.style.animationDelay = (80 + i*70) + 'ms';
-          shardsEl.appendChild(s);
-        }
-        // Start the animation after a tick
-        requestAnimationFrame(function(){
-          Array.prototype.forEach.call(shardsEl.children, function(el){ el.classList.add('play'); });
-        });
-        // Clean up shards after done
-        setTimeout(function(){ shardsEl.innerHTML=''; }, 1400);
-      })();
 
       // Cursor-follow teal light and deep parallax
       (function initCursorParallax(){
