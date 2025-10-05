@@ -43,6 +43,7 @@
   </script>
   <style>
     :root { --bg:#0b0b12; --fg:#e7e7f0; --muted:#a0a3b1; --accent:#00e7ff; }
+    :root { --cursor-teal-inner: rgba(0,231,255,.35); }
     * { box-sizing: border-box; }
     html, body { height: 100%; }
   body { margin:0; background: radial-gradient(1200px 500px at 70% 20%, rgba(122,0,255,0.12), transparent 60%), var(--bg); color: var(--fg); font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; display:block; }
@@ -50,7 +51,7 @@
   .coming-grid { display:grid; grid-template-columns: minmax(320px, 42vw) 1fr; align-items: stretch; gap: clamp(16px, 4vw, 56px); height: 100%; }
     .left { display:flex; justify-content:flex-start; align-items:flex-end; }
   .photo-wrap { position: relative; height: 100%; transition: filter .32s cubic-bezier(.22,1,.36,1); will-change: filter; }
-    .profile-photo { height: 100%; width: auto; max-width: none; display:block; object-fit: cover; object-position: left bottom; border-radius: 0; transition: opacity .28s cubic-bezier(.22,1,.36,1), filter .28s cubic-bezier(.22,1,.36,1), transform .24s ease; filter: brightness(.72) saturate(.92); will-change: opacity, filter; }
+    .profile-photo { height: 100%; width: auto; max-width: none; display:block; object-fit: cover; object-position: left bottom; border-radius: 0; transition: opacity .28s cubic-bezier(.22,1,.36,1), filter .28s cubic-bezier(.22,1,.36,1), transform .24s ease; filter: brightness(.72) saturate(.92); will-change: opacity, filter, transform; }
   /* Subtle right-edge fade for the photo to blend into background */
   .photo-wrap::after { content:""; position:absolute; right:-1px; top:0; bottom:0; width: min(14vw, 180px); pointer-events:none; background: linear-gradient(90deg, rgba(11,11,18,0) 0%, rgba(11,11,18,.04) 30%, rgba(11,11,18,.08) 55%, rgba(11,11,18,0) 100%); mix-blend-mode: normal; }
     /* Image brightens on hover (no halo/glow overlay) */
@@ -160,10 +161,33 @@
   /* Typography polish for light mode */
   html[data-theme="light"] h1 { letter-spacing: .3px; }
 
+  /* Cursor-follow soft teal light */
+  .cursor-light { position: fixed; width: 360px; height: 360px; border-radius: 50%; pointer-events: none; z-index: 5;
+    background: radial-gradient(closest-side, var(--cursor-teal-inner), rgba(0,231,255,0) 70%);
+    filter: blur(36px); opacity: .28; mix-blend-mode: screen; transform: translate(-50%, -50%);
+  }
+  html[data-theme="light"] .cursor-light { opacity: .18; mix-blend-mode: lighten; }
+
   /* Animations (respect reduced motion) */
   @keyframes fadeUp { from { opacity: 0; transform: translateY(10px);} to { opacity: 1; transform: translateY(0);} }
   .content-card { animation: fadeUp .6s ease forwards; }
   @media (prefers-reduced-motion: reduce) { .content-card { animation: none; } }
+
+  /* Shard assembly effect for portrait intro */
+  .shards { position: absolute; inset: 0; pointer-events: none; z-index: 4; overflow: hidden; }
+  .shard { position: absolute; inset: 0; background-repeat: no-repeat; background-position: left bottom; background-size: auto 100%;
+    opacity: 0; filter: blur(6px) brightness(1.05); will-change: transform, opacity, filter; }
+  @keyframes shardIn {
+    0% { opacity: 0; transform: translate3d(var(--tx,0), var(--ty,10px), 0) scale(1.02) skewX(var(--sk,1deg)); filter: blur(6px) brightness(1.08); }
+    80% { opacity: 1; }
+    100% { opacity: 1; transform: translate3d(0,0,0) scale(1) skewX(0); filter: blur(0) brightness(1); }
+  }
+  @keyframes glitch {
+    0%, 100% { transform: translateX(0); }
+    45% { transform: translateX(-.6px); }
+    55% { transform: translateX(.8px); }
+  }
+  .shard.play { animation: shardIn 900ms cubic-bezier(.22,1,.36,1) forwards, glitch 480ms steps(2,end) 160ms 1; }
     /* Theme toggle (top-right) */
     .theme-toggle { position: fixed; top: 16px; right: 16px; z-index: 9999; width: 76px; height: 40px; border-radius: 999px; border:1px solid rgba(255,255,255,0.12); background: #1b1e2b; box-shadow: 0 4px 18px rgba(0,0,0,.35), 0 0 0 3px rgba(255,255,255,0.04) inset; display: inline-flex; align-items: center; padding: 4px; cursor: pointer; transition: background .25s ease, border-color .25s ease; }
     .theme-toggle::before { content:""; position:absolute; inset:4px; border-radius:999px; background:
@@ -205,7 +229,7 @@
   /* Ensure the image is flush with the viewport's left edge */
   .left { margin-left: 0; }
       /* Raise the photo slightly while keeping it flush with bottom */
-      .profile-photo { transform: translateY(-18px); margin-bottom: -18px; }
+      .profile-photo { transform: translateY(-18px) translate3d(var(--parallax-x, 0px), var(--parallax-y, 0px), 0); margin-bottom: -18px; }
 
   /* Light mode: align horizontally like dark mode (same gap, centered in column) */
   html[data-theme="light"] .coming-grid { gap: clamp(16px, 4vw, 56px); }
@@ -234,6 +258,7 @@
     <div class="coming-grid">
       <div class="left">
         <div class="photo-wrap">
+          <div class="shards" id="shards"></div>
           <img class="profile-photo" id="heroPhoto" src="/images/profile/WEWSITEDARK.png" alt="Portrait of Adon Paul Tomy" loading="lazy" decoding="async">
         </div>
       </div>
@@ -259,8 +284,10 @@
     </div>
   </main>
   <footer>© <span id="year"></span> Adon Paul</footer>
+  <div class="cursor-light" id="cursorLight" aria-hidden="true"></div>
   <script>
-    document.getElementById('year').textContent = new Date().getFullYear();
+  document.getElementById('year').textContent = new Date().getFullYear();
+  var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     // Theme: initialize from localStorage or system preference
     (function(){
       var storageKey = 'theme';
@@ -272,7 +299,7 @@
         var pressed = (t === 'light');
         var btn = document.getElementById('themeToggle');
         if (btn) btn.setAttribute('aria-pressed', String(pressed));
-        var img = document.getElementById('heroPhoto');
+  var img = document.getElementById('heroPhoto');
         if (img) {
           // smooth cross-fade using preload + onload swap
           var nextSrc = (t === 'light') ? '/images/profile/WEWSITELIGHT.png' : '/images/profile/WEWSITEDARK.png';
@@ -291,7 +318,7 @@
         }
       }
       apply(theme);
-      var btn = document.getElementById('themeToggle');
+  var btn = document.getElementById('themeToggle');
       if (btn) {
         btn.addEventListener('click', function(){
           // add morph blur on card during theme change
@@ -313,6 +340,75 @@
           apply(ev.matches ? 'light' : 'dark');
         });
       }
+
+      // Intro shard animation (polygon assembly / subtle glitch)
+      (function initShards(){
+        if (reduceMotion) return; // respect reduced motion
+        var wrap = document.querySelector('.photo-wrap');
+        var shardsEl = document.getElementById('shards');
+        var imgEl = document.getElementById('heroPhoto');
+        if (!wrap || !shardsEl || !imgEl) return;
+        // Build a few overlay shards using the current image as background
+        var shardCount = 6;
+        var src = imgEl.getAttribute('src');
+        var rect = wrap.getBoundingClientRect();
+        for (var i=0;i<shardCount;i++){
+          var s = document.createElement('div');
+          s.className = 'shard';
+          s.style.backgroundImage = 'url("'+src+'")';
+          // Random clip polygon slices (simple rectangles with offsets to keep perf reasonable)
+          var x = Math.random()*18; var y = Math.random()*20; var w = 20 + Math.random()*34; var h = 26 + Math.random()*38;
+          var left = Math.max(0, x); var top = Math.max(0, y);
+          s.style.clipPath = 'polygon('+left+'% '+top+'%, '+(left+w)+'% '+top+'%, '+(left+w)+'% '+(top+h)+'%, '+left+'% '+(top+h)+'%)';
+          // Offset-in animation vars
+          s.style.setProperty('--tx', (Math.random()*20-10)+'px');
+          s.style.setProperty('--ty', (20 + Math.random()*30)+'px');
+          s.style.setProperty('--sk', (Math.random()>.5?1:-1)* (0.5 + Math.random()*1.5)+'deg');
+          // Stagger
+          s.style.animationDelay = (80 + i*70) + 'ms';
+          shardsEl.appendChild(s);
+        }
+        // Start the animation after a tick
+        requestAnimationFrame(function(){
+          Array.prototype.forEach.call(shardsEl.children, function(el){ el.classList.add('play'); });
+        });
+        // Clean up shards after done
+        setTimeout(function(){ shardsEl.innerHTML=''; }, 1400);
+      })();
+
+      // Cursor-follow teal light and deep parallax
+      (function initCursorParallax(){
+        var light = document.getElementById('cursorLight');
+        var img = document.getElementById('heroPhoto');
+        if (!light || !img) return;
+        var rafId = null; var targetX=0, targetY=0; var px=0, py=0; // parallax accumulators
+        var maxShift = 16; // px parallax range
+        var follow = function(){
+          rafId = null;
+          // Soft follow for the light
+          var lx = parseFloat(light.style.left)||0; var ly = parseFloat(light.style.top)||0;
+          var nx = lx + (targetX - lx)*0.18; var ny = ly + (targetY - ly)*0.18;
+          light.style.left = nx + 'px';
+          light.style.top  = ny + 'px';
+          // Parallax easing
+          px += ( (targetX - window.innerWidth*0.35) / window.innerWidth * maxShift - px ) * 0.08;
+          py += ( (targetY - window.innerHeight*0.65) / window.innerHeight * maxShift - py ) * 0.08;
+          img.style.setProperty('--parallax-x', (px.toFixed(2))+'px');
+          img.style.setProperty('--parallax-y', (py.toFixed(2))+'px');
+        };
+        var onMove = function(ev){
+          if (reduceMotion) return;
+          targetX = ev.clientX; targetY = ev.clientY;
+          if (!rafId) rafId = requestAnimationFrame(follow);
+        };
+        window.addEventListener('mousemove', onMove, { passive: true });
+        // Hide light on touch devices or when mouse leaves
+        window.addEventListener('mouseleave', function(){ light.style.opacity = '0'; });
+        window.addEventListener('mouseenter', function(){ light.style.opacity = window.matchMedia('(prefers-color-scheme: light)').matches? '.18' : '.28'; });
+        // Position light initially at center-ish
+        targetX = window.innerWidth*0.35; targetY = window.innerHeight*0.65;
+        light.style.left = targetX + 'px'; light.style.top = targetY + 'px';
+      })();
     })();
   </script>
 </body>
