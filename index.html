@@ -283,7 +283,7 @@
       main { padding: 0 1rem; min-height: 100vh; display: flex; align-items: center; }
       .coming-grid { 
         grid-template-columns: 1fr; 
-        gap: 1rem; 
+        gap: 0; /* Remove gap - image will snap to card */
         padding-top: 0;
         align-items: start;
         width: 100%;
@@ -291,25 +291,29 @@
         margin: 0 auto;
       }
       
-      /* Portrait Image: Large, prominent, clean separation from card */
+      /* Portrait Image: Same width as card, snapped to top edge */
       .left { 
         justify-content: center; 
         order: 1; 
-        margin-bottom: 0;
+        margin-bottom: -20px; /* Negative margin to snap to card edge */
         z-index: 3;
+        width: 100%; /* Match parent width */
+        padding: 0; /* Remove any padding */
       }
       .photo-wrap { 
         height: auto; 
-        max-width: 100%; /* Full width within container */
-        margin: 0 auto; 
+        width: 100%; /* Full width to match card */
+        max-width: 100%;
+        margin: 0; 
       }
       .profile-photo { 
         width: 100%; 
         height: auto; 
-        max-height: 50vh; /* Larger, more prominent */
+        max-height: 55vh; /* Can be taller vertically as requested */
+        min-height: 350px; /* Ensure good vertical presence */
         object-fit: cover; 
         object-position: center top; /* Focus on face */
-        border-radius: 20px; /* Larger radius for modern look */
+        border-radius: 20px 20px 0 0; /* Rounded top, flat bottom to snap to card */
         box-shadow: 0 8px 32px rgba(0,0,0,.35);
       }
       .photo-wrap::after { display:none; }
@@ -324,16 +328,20 @@
         margin: 0 auto;
       }
       .content-card { 
-        padding: 1.75rem 1.5rem 1.5rem; /* Consistent padding, no extra top padding */
+        padding: 2rem 1.5rem 1.5rem; /* Extra top padding since image snaps to it */
         background: rgba(30, 34, 52, 0.85) !important; /* Stronger background for better contrast */
         backdrop-filter: blur(12px) saturate(180%);
         border: 1px solid rgba(255, 255, 255, 0.12);
+        border-top: none; /* Remove top border where image connects */
+        border-radius: 0 0 20px 20px; /* Only round bottom corners */
         box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 
                     inset 0 1px 0 rgba(255, 255, 255, 0.1);
       }
       html[data-theme="light"] .content-card {
         background: rgba(255, 255, 255, 0.85) !important;
         border: 1px solid rgba(0, 0, 0, 0.08);
+        border-top: none;
+        border-radius: 0 0 20px 20px;
         box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 
                     inset 0 1px 0 rgba(255, 255, 255, 0.6);
       }
@@ -405,18 +413,21 @@
     /* Extra Small Phones: Maintain proportions, slightly more compact */
     @media (max-width: 480px) {
       main { padding: 0 .85rem; }
-      .coming-grid { gap: .85rem; max-width: 100%; }
+      .coming-grid { gap: 0; max-width: 100%; } /* Keep snapped layout */
       
-      /* Maintain full-width approach */
+      /* Maintain full-width snapped approach */
+      .left { margin-bottom: -18px; }
       .profile-photo { 
-        max-height: 45vh; 
-        border-radius: 18px; 
+        max-height: 50vh; 
+        min-height: 320px;
+        border-radius: 18px 18px 0 0; /* Rounded top, flat bottom */
       }
       
       /* Slightly reduced card padding */
       .content-card { 
-        padding: 1.5rem 1.25rem 1.35rem;
-        border-radius: 18px; 
+        padding: 1.75rem 1.25rem 1.35rem;
+        border-radius: 0 0 18px 18px; /* Match smaller radius */
+        border-top: none;
       }
       
       /* Fine-tuned typography */
