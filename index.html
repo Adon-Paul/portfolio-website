@@ -280,93 +280,116 @@
     /* Mobile/Tablet: Comprehensive optimization for portrait and small screens */
     @media (max-width: 820px) {
       html, body { overflow-x: hidden; }
-      main { padding: 0 5%; min-height: auto; }
+      main { padding: 0 1rem; min-height: 100vh; display: flex; align-items: center; }
       .coming-grid { 
         grid-template-columns: 1fr; 
-        gap: 0; 
-        padding-top: 1.5rem;
+        gap: 1rem; 
+        padding-top: 0;
         align-items: start;
+        width: 100%;
+        max-width: 480px;
+        margin: 0 auto;
       }
       
-      /* Portrait Image: Reduce vertical footprint, create visual connection with card */
+      /* Portrait Image: Large, prominent, clean separation from card */
       .left { 
         justify-content: center; 
         order: 1; 
-        margin-bottom: -30px; /* Overlap with card for tight integration */
+        margin-bottom: 0;
         z-index: 3;
       }
       .photo-wrap { 
         height: auto; 
-        max-width: 65%; /* 60-70% of screen width as suggested */
+        max-width: 100%; /* Full width within container */
         margin: 0 auto; 
       }
       .profile-photo { 
         width: 100%; 
         height: auto; 
-        max-height: 35vh; /* Significantly reduced from 50vh */
+        max-height: 50vh; /* Larger, more prominent */
         object-fit: cover; 
-        object-position: center; 
-        border-radius: 16px; 
-        box-shadow: 0 12px 40px rgba(0,0,0,.4);
+        object-position: center top; /* Focus on face */
+        border-radius: 20px; /* Larger radius for modern look */
+        box-shadow: 0 8px 32px rgba(0,0,0,.35);
       }
       .photo-wrap::after { display:none; }
       
-      /* Main Card: Reduced padding, optimized width */
+      /* Main Card: Enhanced glassmorphism, better contrast */
       .right { 
         text-align: center; 
         padding-left: 0; 
-        padding-bottom: 60px; 
+        padding-bottom: 0; 
         order: 2;
-        width: 90%; /* 90% width with auto margins for breathing room */
+        width: 100%;
         margin: 0 auto;
       }
       .content-card { 
-        padding: 1.5rem 1.25rem; /* Reduced from 3rem to 1.5rem */
-        padding-top: 2.5rem; /* Extra top padding for overlapping image */
+        padding: 1.75rem 1.5rem 1.5rem; /* Consistent padding, no extra top padding */
+        background: rgba(30, 34, 52, 0.85) !important; /* Stronger background for better contrast */
+        backdrop-filter: blur(12px) saturate(180%);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 
+                    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      }
+      html[data-theme="light"] .content-card {
+        background: rgba(255, 255, 255, 0.85) !important;
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 
+                    inset 0 1px 0 rgba(255, 255, 255, 0.6);
       }
       
-      /* Typography: Scaled down 20-30% with proper line-height */
+      /* Typography: Clean, readable hierarchy */
       h1 { 
-        font-size: clamp(1.5rem, 7vw, 2rem); /* Reduced ~25% */
-        margin-bottom: .85rem; 
-        line-height: 1.2; /* Prevent squashed feeling */
+        font-size: clamp(1.65rem, 6vw, 1.95rem); 
+        margin-bottom: .65rem; 
+        line-height: 1.15;
+        letter-spacing: 0.02em;
       }
       .subtitle { 
-        font-size: clamp(.9rem, 3.8vw, 1.05rem); /* Reduced ~20% */
-        margin-bottom: 1.2rem; 
-        line-height: 1.4; /* Allow two-line wrap */
+        font-size: clamp(.88rem, 3.5vw, 1rem); 
+        margin-bottom: 1rem; 
+        line-height: 1.4;
         word-wrap: break-word;
       }
       p { 
-        font-size: clamp(.88rem, 3.2vw, .98rem); /* Compact body text */
+        font-size: clamp(.85rem, 3vw, .93rem); 
         margin-bottom: .85rem; 
-        line-height: 1.55;
+        line-height: 1.6;
+        opacity: 0.9;
       }
       
-      /* CTA Buttons: Vertical stack with full width for easy tapping */
+      /* CTA Buttons: Prominent vertical stack matching reference image */
       .links { 
-        flex-direction: column; /* Critical: stack vertically */
-        gap: .7rem; 
-        margin-top: 1.2rem; 
+        flex-direction: column;
+        gap: .8rem; 
+        margin-top: 1.3rem; 
       }
       .links a { 
-        width: 100%; /* Full width relative to card */
-        padding: .9rem 1rem; 
+        width: 100%;
+        padding: 1rem 1.2rem; /* More substantial buttons */
         font-size: .93rem;
+        font-weight: 550;
         justify-content: center;
-        min-height: 48px; /* Good tap target */
+        min-height: 50px;
+        border-radius: 12px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .links a:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(var(--accent-rgb), 0.3);
       }
       
-      /* Final Details: Subtle and compact */
+      /* Final Details: Clean and minimal */
       .enter { 
-        margin-top: 24px; /* Reduced vertical margin */
+        margin-top: 1.25rem;
       }
       .enter a { 
-        font-size: .87rem;
+        font-size: .82rem;
+        opacity: 0.8;
       }
       
-      footer { position: relative; margin-top: 1.5rem; padding: 1rem; font-size: .8rem; }
-      .lottie-loader { width: 140px; height: 140px; bottom: -45px; right: -25px; }
+      footer { position: relative; margin-top: 1.75rem; padding: .85rem; font-size: .75rem; opacity: 0.7; }
+      .lottie-loader { width: 100px; height: 100px; bottom: -30px; right: -15px; opacity: 0.6; }
       
       /* Theme Toggle: Small and accessible */
       .theme-toggle { 
@@ -379,54 +402,49 @@
       html[data-theme="light"] .theme-toggle .knob { transform: translateX(30px); }
     }
     
-    /* Extra Small Phones: Further optimization for <600px screens */
-    @media (max-width: 600px) {
-      main { padding: 0 4%; }
-      .coming-grid { padding-top: 1rem; }
+    /* Extra Small Phones: Maintain proportions, slightly more compact */
+    @media (max-width: 480px) {
+      main { padding: 0 .85rem; }
+      .coming-grid { gap: .85rem; max-width: 100%; }
       
-      /* Even tighter image */
-      .left { margin-bottom: -25px; }
-      .photo-wrap { max-width: 70%; }
+      /* Maintain full-width approach */
       .profile-photo { 
-        max-height: 32vh; 
-        border-radius: 14px; 
+        max-height: 45vh; 
+        border-radius: 18px; 
       }
       
-      /* Ultra-compact card */
+      /* Slightly reduced card padding */
       .content-card { 
-        padding: 1.25rem 1rem; 
-        padding-top: 2rem;
-        border-radius: 16px; 
+        padding: 1.5rem 1.25rem 1.35rem;
+        border-radius: 18px; 
       }
       
-      /* Tighter typography */
+      /* Fine-tuned typography */
       h1 { 
-        font-size: clamp(1.35rem, 8vw, 1.85rem); 
-        margin-bottom: .75rem;
-        line-height: 1.18;
+        font-size: clamp(1.5rem, 7vw, 1.75rem); 
+        margin-bottom: .6rem;
       }
       .subtitle { 
-        font-size: .88rem; 
-        margin-bottom: 1rem; 
+        font-size: .85rem; 
+        margin-bottom: .9rem; 
       }
       p { 
-        font-size: .85rem; 
-        margin-bottom: .75rem;
-        line-height: 1.5; 
+        font-size: .82rem; 
+        margin-bottom: .8rem;
       }
       
-      /* Optimized buttons */
-      .links { gap: .6rem; margin-top: 1rem; }
+      /* Maintain button prominence */
+      .links { gap: .75rem; margin-top: 1.2rem; }
       .links a { 
-        padding: .85rem .9rem; 
+        padding: .95rem 1.1rem; 
         font-size: .9rem;
       }
       
-      .enter { margin-top: 20px; }
-      .enter a { font-size: .84rem; }
+      .enter { margin-top: 1.15rem; }
+      .enter a { font-size: .8rem; }
       
-      footer { font-size: .75rem; padding: .85rem; margin-top: 1.25rem; }
-      .lottie-loader { width: 120px; height: 120px; bottom: -40px; right: -20px; }
+      footer { font-size: .72rem; padding: .8rem; margin-top: 1.5rem; }
+      .lottie-loader { width: 90px; height: 90px; bottom: -28px; right: -12px; }
     }
   </style>
 </head>
