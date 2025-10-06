@@ -296,7 +296,7 @@
         justify-content: center; 
         order: 1; 
         margin-bottom: -20px; /* Negative margin to snap to card edge */
-        z-index: 3;
+        z-index: 1; /* Behind the content card */
         width: 100%; /* Match parent width */
         padding: 0; /* Remove any padding */
       }
@@ -326,6 +326,8 @@
         order: 2;
         width: 100%;
         margin: 0 auto;
+        z-index: 2; /* In front of the image */
+        position: relative; /* Ensure z-index takes effect */
       }
       .content-card { 
         padding: 2rem 1.5rem 1.5rem; /* Extra top padding since image snaps to it */
