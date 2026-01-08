@@ -76,38 +76,6 @@
 
       setTimeout(function () {
         overlay.classList.add('to-dashboard');
-
-        // Trigger Photo Entry Sequence
-        setTimeout(function () {
-          var photoWrap = document.querySelector('.photo-wrap');
-          var contentRight = document.querySelector('.right');
-
-          if (photoWrap) {
-            // Stage 2: Rise to Center (Mid)
-            photoWrap.classList.remove('photo-entry-initial');
-            photoWrap.classList.add('photo-entry-mid');
-
-            // Stage 3: Settle to Position (Final) after a pause
-            setTimeout(function () {
-              photoWrap.classList.remove('photo-entry-mid');
-              photoWrap.classList.add('photo-entry-final');
-            }, 1300);
-          }
-
-          if (contentRight) {
-            // Trigger slightly staggered or same time? 
-            // Let's do same time for impact, maybe 50ms delay
-            setTimeout(function () {
-              contentRight.classList.remove('content-entry-initial');
-              contentRight.classList.add('content-entry-mid');
-
-              setTimeout(function () {
-                contentRight.classList.remove('content-entry-mid');
-                contentRight.classList.add('content-entry-final');
-              }, 1300);
-            }, 50);
-          }
-        }, 100); // Trigger almost immediately with splash wipe
       }, 600);
     } else {
       requestAnimationFrame(update);
