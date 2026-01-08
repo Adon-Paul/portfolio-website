@@ -77,14 +77,21 @@
       setTimeout(function () {
         overlay.classList.add('to-dashboard');
 
-        // Trigger Photo Entry
+        // Trigger Photo Entry Sequence
         setTimeout(function () {
           var photoWrap = document.querySelector('.photo-wrap');
           if (photoWrap) {
+            // Stage 2: Rise to Center (Mid)
             photoWrap.classList.remove('photo-entry-initial');
-            photoWrap.classList.add('photo-entry-active');
+            photoWrap.classList.add('photo-entry-mid');
+
+            // Stage 3: Settle to Position (Final) after a pause
+            setTimeout(function () {
+              photoWrap.classList.remove('photo-entry-mid');
+              photoWrap.classList.add('photo-entry-final');
+            }, 1300); // 1.2s transition + 100ms pause
           }
-        }, 300); // Slight delay to overlap with wipe
+        }, 100); // Trigger almost immediately with splash wipe
       }, 600);
     } else {
       requestAnimationFrame(update);
