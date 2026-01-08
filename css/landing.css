@@ -1009,20 +1009,23 @@
     /* Splash Screen Styles */
     #splash-overlay {
       position: fixed;
-      inset: 0;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
       background-color: #0b0b12;
       /* Match --bg */
       z-index: 99999;
       display: flex;
       justify-content: center;
       align-items: center;
-      transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1), height 0.8s cubic-bezier(0.77, 0, 0.175, 1);
+      transition: height 0.8s cubic-bezier(0.77, 0, 0.175, 1);
     }
 
     .splash-content {
       text-align: center;
       width: min(300px, 80vw);
-      transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1);
+      transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.4s ease;
     }
 
     .typewriter-text {
@@ -1138,21 +1141,13 @@
 
     /* Dashboard State classes */
     .to-dashboard {
-      /* Instead of moving completely off screen, stopping to leave a header */
-      transform: translateY(calc(-50% + 40px));
-      /* Move up so center is near top, fine tune calculation */
-      top: 0;
-      bottom: auto;
-      height: 80px;
-      /* Collapse height */
+      /* Just resize to header height */
+      height: 80px !important;
     }
 
     /* Better approach: using Fixed positioning we just need to move it to the top */
     #splash-overlay.to-dashboard {
-      transform: translateY(0);
-      /* Don't move the container away, resize it */
       height: 80px;
-      bottom: auto;
       border-bottom: 1px solid rgba(255, 255, 255, 0.1);
       backdrop-filter: blur(10px);
     }
