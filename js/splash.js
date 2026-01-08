@@ -80,6 +80,8 @@
         // Trigger Photo Entry Sequence
         setTimeout(function () {
           var photoWrap = document.querySelector('.photo-wrap');
+          var contentRight = document.querySelector('.right');
+
           if (photoWrap) {
             // Stage 2: Rise to Center (Mid)
             photoWrap.classList.remove('photo-entry-initial');
@@ -89,7 +91,21 @@
             setTimeout(function () {
               photoWrap.classList.remove('photo-entry-mid');
               photoWrap.classList.add('photo-entry-final');
-            }, 1300); // 1.2s transition + 100ms pause
+            }, 1300);
+          }
+
+          if (contentRight) {
+            // Trigger slightly staggered or same time? 
+            // Let's do same time for impact, maybe 50ms delay
+            setTimeout(function () {
+              contentRight.classList.remove('content-entry-initial');
+              contentRight.classList.add('content-entry-mid');
+
+              setTimeout(function () {
+                contentRight.classList.remove('content-entry-mid');
+                contentRight.classList.add('content-entry-final');
+              }, 1300);
+            }, 50);
           }
         }, 100); // Trigger almost immediately with splash wipe
       }, 600);

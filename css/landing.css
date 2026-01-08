@@ -73,7 +73,7 @@
     .photo-entry-mid {
       /* Move right (~25vw) to align with screen center
            Move up (~-20vh) to be in vertical center visually */
-      transform: translate(25vw, -15vh) scale(1.15);
+      transform: translate(25vw, -15vh) scale(1.2);
       z-index: 1000;
       /* High z-index to pop over everything */
     }
@@ -124,6 +124,35 @@
       max-width: 1200px;
       padding-bottom: 56px;
       position: relative;
+      /* Animation properties */
+      transition: filter .32s cubic-bezier(.22, 1, .36, 1), transform 1.2s cubic-bezier(0.19, 1, 0.22, 1);
+      will-change: filter, transform;
+      z-index: 9;
+    }
+
+    /* Stage 1: Initial (Start below screen, centered horizontally, large) */
+    .content-entry-initial {
+      /* Move LEFT (~25vw) to align with screen center (since we are in right col) 
+           Move down (120vh) to be offscreen */
+      transform: translate(-30vw, 120vh) scale(1.5);
+    }
+
+    /* Stage 2: Mid (Rise to Center, stay large) */
+    .content-entry-mid {
+      /* Move LEFT (~30vw) to align with screen center
+           Move up (~-15vh) to be in vertical center visually */
+      transform: translate(-30vw, -15vh) scale(1.15);
+      z-index: 1001;
+      /* High z-index to fly together with photo */
+    }
+
+    /* Stage 3: Final (Settle into grid position) */
+    .content-entry-final {
+      transform: translate(0, 0) scale(1);
+      z-index: 1;
+      /* Reset z-index */
+      transition: transform 1.5s cubic-bezier(0.19, 1, 0.22, 1);
+      /* Slower settle */
     }
 
     h1 {
