@@ -17,7 +17,7 @@
   var revealedIndex = 0; // chars visible so far
   var state = []; // { char: string, isResolved: bool, cycles: int, display: char }
   var lastRevealTime = 0;
-  var speed = 100; // ms per new char (typewriter speed)
+  var speed = 180; // ms per new char (typewriter speed)
 
   function update(timestamp) {
     if (!lastRevealTime) lastRevealTime = timestamp;
@@ -46,8 +46,8 @@
         activeUnresolved = true;
         s.cycles++;
 
-        // Resolve after X frames of scrambling (e.g., 15 frames = ~250ms)
-        if (s.cycles > 15) {
+        // Resolve after X frames of scrambling (e.g., 25 frames = ~400ms)
+        if (s.cycles > 25) {
           s.isResolved = true;
           output += s.char;
         } else {
