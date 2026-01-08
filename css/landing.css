@@ -1005,6 +1005,7 @@
       }
     }
 
+
     /* Splash Screen Styles */
     #splash-overlay {
       position: fixed;
@@ -1015,12 +1016,13 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1);
+      transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1), height 0.8s cubic-bezier(0.77, 0, 0.175, 1);
     }
 
     .splash-content {
       text-align: center;
       width: min(300px, 80vw);
+      transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1);
     }
 
     .typewriter-text {
@@ -1032,6 +1034,7 @@
       letter-spacing: 0.1em;
       text-transform: uppercase;
       /* Optional glitch effect on text once typed */
+      transition: opacity 0.4s ease, font-size 0.4s ease;
     }
 
     .typewriter-text.glitch-active {
@@ -1073,6 +1076,7 @@
       background: rgba(255, 255, 255, 0.1);
       border-radius: 2px;
       overflow: hidden;
+      transition: opacity 0.4s ease;
     }
 
     .loading-bar {
@@ -1087,4 +1091,117 @@
     /* Push up class */
     .slide-up {
       transform: translateY(-100%);
+    }
+
+    /* Dashboard Navigation Links */
+    .splash-nav {
+      opacity: 0;
+      transform: translateY(20px);
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-top: 1rem;
+      transition: opacity 0.6s ease 0.4s, transform 0.6s ease 0.4s;
+      pointer-events: none;
+    }
+
+    .splash-nav a {
+      color: var(--muted);
+      text-decoration: none;
+      font-family: "Space Grotesk", sans-serif;
+      font-weight: 600;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      position: relative;
+      transition: color 0.3s ease;
+    }
+
+    .splash-nav a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--accent);
+      transition: width 0.3s ease;
+    }
+
+    .splash-nav a:hover {
+      color: #fff;
+    }
+
+    .splash-nav a:hover::after {
+      width: 100%;
+    }
+
+    /* Dashboard State classes */
+    .to-dashboard {
+      /* Instead of moving completely off screen, stopping to leave a header */
+      transform: translateY(calc(-50% + 40px));
+      /* Move up so center is near top, fine tune calculation */
+      top: 0;
+      bottom: auto;
+      height: 80px;
+      /* Collapse height */
+    }
+
+    /* Better approach: using Fixed positioning we just need to move it to the top */
+    #splash-overlay.to-dashboard {
+      transform: translateY(0);
+      /* Don't move the container away, resize it */
+      height: 80px;
+      bottom: auto;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+    }
+
+    #splash-overlay.to-dashboard .splash-content {
+      /* Re-orient content */
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      padding: 0 2rem;
+      align-items: center;
+      max-width: 1200px;
+    }
+
+    #splash-overlay.to-dashboard .typewriter-text {
+      font-size: 1.1rem;
+      margin-bottom: 0;
+      min-height: auto;
+    }
+
+    /* Hide the glitch effect in dashboard mode for cleanliness, or keep small */
+    #splash-overlay.to-dashboard .typewriter-text.glitch-active::before {
+      display: none;
+    }
+
+    #splash-overlay.to-dashboard .loading-bar-container {
+      display: none;
+      /* Hide loading bar */
+    }
+
+    #splash-overlay.to-dashboard .splash-nav {
+      opacity: 1;
+      transform: translateY(0);
+      margin-top: 0;
+      pointer-events: auto;
+    }
+
+    @media (max-width: 600px) {
+      #splash-overlay.to-dashboard .splash-content {
+        flex-direction: column;
+        padding: 0.5rem;
+      }
+
+      #splash-overlay.to-dashboard {
+        height: 100px;
+      }
+
+      .splash-nav {
+        gap: 0.8rem;
+        font-size: 0.8rem;
+      }
     }
