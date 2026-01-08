@@ -72,10 +72,10 @@
     /* Stage 2: Mid (Rise to Center, stay large) */
     .photo-entry-mid {
       /* Move right (~25vw) to align with screen center
-           Move up (~-20vh) to be in vertical center visually */
-      transform: translate(25vw, -15vh) scale(1.2);
-      z-index: 1000;
-      /* High z-index to pop over everything */
+           Move up (~-15vh) to be in vertical center visually */
+      transform: translate(25vw, -15vh) scale(1.15);
+      z-index: 100;
+      /* Raised, but below content */
     }
 
     /* Stage 3: Final (Settle into grid position) */
@@ -127,7 +127,8 @@
       /* Animation properties */
       transition: filter .32s cubic-bezier(.22, 1, .36, 1), transform 1.2s cubic-bezier(0.19, 1, 0.22, 1);
       will-change: filter, transform;
-      z-index: 9;
+      z-index: 200;
+      /* Always above photo */
     }
 
     /* Stage 1: Initial (Start below screen, centered horizontally, large) */
@@ -142,7 +143,7 @@
       /* Move LEFT (~30vw) to align with screen center
            Move up (~-15vh) to be in vertical center visually */
       transform: translate(-30vw, -15vh) scale(1.15);
-      z-index: 1001;
+      z-index: 201;
       /* High z-index to fly together with photo */
     }
 
