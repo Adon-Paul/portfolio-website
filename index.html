@@ -313,39 +313,11 @@
         light.style.left = targetX + 'px'; light.style.top = targetY + 'px';
       })();
       // Splash Screen Logic
-      (function initSplash() {
-        if (typeof reduceMotion !== 'undefined' && reduceMotion) {
-          var o = document.getElementById('splash-overlay');
-          if (o) o.style.display = 'none';
-          return;
-        }
-        var text = "Adon Paul Tomy";
-        var speed = 100;
-        var textArea = document.getElementById("splashText");
-        var bar = document.getElementById("splashBar");
-        var overlay = document.getElementById("splash-overlay");
-
-        if (!textArea || !bar || !overlay) return;
-
-        var i = 0;
-        function typeWriter() {
-          if (i < text.length) {
-            textArea.innerHTML += text.charAt(i);
-            i++;
-            var progress = (i / text.length) * 100;
-            bar.style.width = progress + "%";
-            setTimeout(typeWriter, speed);
-          } else {
-            textArea.classList.add('glitch-active');
-            textArea.setAttribute('data-text', text);
-            setTimeout(function () {
-              overlay.classList.add('to-dashboard');
-            }, 600);
-          }
-        }
-        setTimeout(typeWriter, 500);
-      })();
+      // Splash Screen Logic handled in external file
     })();
+  </script>
+  <script src="js/splash.js"></script>
+  })();
   </script>
 </body>
 
