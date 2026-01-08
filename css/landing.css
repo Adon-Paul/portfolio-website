@@ -1017,15 +1017,37 @@
       /* Match --bg */
       z-index: 99999;
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
-      transition: height 0.8s cubic-bezier(0.77, 0, 0.175, 1);
+
+      /* GPU Acceleration & Performance Optimizations */
+      will-change: clip-path;
+      transform: translateZ(0);
+      /* Use clip-path for the wipe effect instead of height */
+      clip-path: inset(0 0 0 0);
+      transition: clip-path 1.2s cubic-bezier(0.19, 1, 0.22, 1);
     }
 
     .splash-content {
-      text-align: center;
+      width: 100%;
+      height: 100%;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* CENTERED INTRO CONTENT */
+    .splash-center {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       width: min(300px, 80vw);
-      transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.4s ease;
+      transition: opacity 0.5s ease, transform 0.8s cubic-bezier(0.19, 1, 0.22, 1);
+      /* Pivot transparency to avoid painting costs */
+      will-change: opacity, transform;
     }
 
     .typewriter-text {
@@ -1036,8 +1058,6 @@
       min-height: 2rem;
       letter-spacing: 0.1em;
       text-transform: uppercase;
-      /* Optional glitch effect on text once typed */
-      transition: opacity 0.4s ease, font-size 0.4s ease;
     }
 
     .typewriter-text.glitch-active {
@@ -1060,7 +1080,6 @@
       pointer-events: none;
     }
 
-    /* Flashing cursor effect */
     .typewriter-text::after {
       content: "|";
       animation: blink 1s infinite;
@@ -1079,40 +1098,56 @@
       background: rgba(255, 255, 255, 0.1);
       border-radius: 2px;
       overflow: hidden;
-      transition: opacity 0.4s ease;
     }
 
     .loading-bar {
       width: 0%;
       height: 100%;
       background: #00e7ff;
-      /* --accent */
       transition: width 0.1s linear;
       box-shadow: 0 0 10px rgba(0, 231, 255, 0.5);
     }
 
-    /* Push up class */
-    .slide-up {
-      transform: translateY(-100%);
+    /* HEADER DASHBOARD CONTENT (Initially Hidden) */
+    .splash-header-row {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 80px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 4vw;
+      max-width: 1400px;
+      margin: 0 auto;
+      right: 0;
+
+      opacity: 0;
+      transform: translateY(-10px);
+      transition: opacity 0.6s ease 0.4s, transform 0.6s cubic-bezier(0.19, 1, 0.22, 1) 0.4s;
+      pointer-events: none;
     }
 
-    /* Dashboard Navigation Links */
+    .brand-name {
+      font-family: "Quantico", sans-serif;
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: #fff;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
     .splash-nav {
-      opacity: 0;
-      transform: translateY(20px);
       display: flex;
-      justify-content: center;
-      gap: 1.5rem;
-      margin-top: 1rem;
-      transition: opacity 0.6s ease 0.4s, transform 0.6s ease 0.4s;
-      pointer-events: none;
+      gap: 2rem;
     }
 
     .splash-nav a {
       color: var(--muted);
       text-decoration: none;
       font-family: "Space Grotesk", sans-serif;
-      font-weight: 600;
+      font-weight: 500;
       font-size: 0.9rem;
       text-transform: uppercase;
       letter-spacing: 0.05em;
@@ -1120,62 +1155,50 @@
       transition: color 0.3s ease;
     }
 
-    .splash-nav a::after {
-      content: '';
-      position: absolute;
-      bottom: -4px;
-      left: 0;
-      width: 0;
-      height: 2px;
-      background: var(--accent);
-      transition: width 0.3s ease;
-    }
-
     .splash-nav a:hover {
       color: #fff;
     }
 
-    .splash-nav a:hover::after {
-      width: 100%;
-    }
-
-    /* Dashboard State classes */
-    .to-dashboard {
-      /* Just resize to header height */
-      height: 80px !important;
-    }
-
-    /* Better approach: using Fixed positioning we just need to move it to the top */
+    /* DASHBOARD STATE - TRIGGERED BY JS */
     #splash-overlay.to-dashboard {
-      height: 80px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(10px);
+      /* Wipe effect via clip-path: Keep only top 80px */
+      clip-path: inset(0 0 calc(100% - 80px) 0);
+
+      /* Add backdrop blur AFTER transition or keep it (lightweight on small area?) 
+           Note: Applying generic backdrop-filter on the whole overlay while full screen is expensive.
+           But now the visible area is small. */
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     }
 
-    #splash-overlay.to-dashboard .splash-content {
-      /* Re-orient content */
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
-      padding: 0 2rem;
-      align-items: center;
-      max-width: 1200px;
+    #splash-overlay.to-dashboard .splash-center {
+      opacity: 0;
+      transform: scale(0.95);
+      pointer-events: none;
     }
 
-    #splash-overlay.to-dashboard .typewriter-text {
-      font-size: 1.1rem;
-      margin-bottom: 0;
-      min-height: auto;
+    #splash-overlay.to-dashboard .splash-header-row {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
     }
 
-    /* Hide the glitch effect in dashboard mode for cleanliness, or keep small */
-    #splash-overlay.to-dashboard .typewriter-text.glitch-active::before {
-      display: none;
-    }
+    @media (max-width: 600px) {
+      .splash-header-row {
+        flex-direction: column;
+        justify-content: center;
+        gap: 0.5rem;
+        height: 100px;
+      }
 
-    #splash-overlay.to-dashboard .loading-bar-container {
-      display: none;
-      /* Hide loading bar */
+      #splash-overlay.to-dashboard {
+        clip-path: inset(0 0 calc(100% - 100px) 0);
+      }
+
+      .splash-nav {
+        gap: 1rem;
+        font-size: 0.8rem;
+      }
     }
 
     #splash-overlay.to-dashboard .splash-nav {

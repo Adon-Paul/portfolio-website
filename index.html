@@ -55,15 +55,22 @@
 <body>
   <div id="splash-overlay" aria-hidden="false">
     <div class="splash-content">
-      <div class="typewriter-text" id="splashText"></div>
-      <div class="loading-bar-container">
-        <div class="loading-bar" id="splashBar"></div>
+      <!-- Centered Intro Content -->
+      <div class="splash-center">
+        <div class="typewriter-text" id="splashText"></div>
+        <div class="loading-bar-container">
+          <div class="loading-bar" id="splashBar"></div>
+        </div>
       </div>
-      <nav class="splash-nav">
-        <a href="#about">About Me</a>
-        <a href="#projects">Projects</a>
-        <a href="#interesting">Interesting Stuff</a>
-      </nav>
+      <!-- Sticky Header Content (Revealed on Dashboard state) -->
+      <div class="splash-header-row">
+        <div class="brand-name">Adon Paul Tomy</div>
+        <nav class="splash-nav">
+          <a href="#about">About Me</a>
+          <a href="#projects">Projects</a>
+          <a href="#interesting">Interesting Stuff</a>
+        </nav>
+      </div>
     </div>
   </div>
   <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark and light mode" aria-pressed="false">
