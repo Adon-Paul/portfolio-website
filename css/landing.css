@@ -53,8 +53,20 @@
     .photo-wrap {
       position: relative;
       height: 100%;
-      transition: filter .32s cubic-bezier(.22, 1, .36, 1);
-      will-change: filter;
+      transition: filter .32s cubic-bezier(.22, 1, .36, 1), transform 1.5s cubic-bezier(0.19, 1, 0.22, 1), opacity 1.5s ease;
+      will-change: filter, transform, opacity;
+    }
+
+    /* Initial state: Hidden, pushed down and right (towards center) */
+    .photo-entry-initial {
+      opacity: 0;
+      transform: translate(15vw, 15vh) scale(0.95);
+    }
+
+    /* Final state: Normal position */
+    .photo-entry-active {
+      opacity: 1;
+      transform: translate(0, 0) scale(1);
     }
 
     .profile-photo {

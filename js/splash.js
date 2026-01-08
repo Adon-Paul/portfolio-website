@@ -76,6 +76,15 @@
 
       setTimeout(function () {
         overlay.classList.add('to-dashboard');
+
+        // Trigger Photo Entry
+        setTimeout(function () {
+          var photoWrap = document.querySelector('.photo-wrap');
+          if (photoWrap) {
+            photoWrap.classList.remove('photo-entry-initial');
+            photoWrap.classList.add('photo-entry-active');
+          }
+        }, 300); // Slight delay to overlap with wipe
       }, 600);
     } else {
       requestAnimationFrame(update);
