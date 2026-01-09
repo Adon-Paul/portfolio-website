@@ -1006,20 +1006,32 @@
     }
 
 
-    /* Splash Screen Styles */
+    /* Splash Screen Styles - Liquid Glass Effect */
     #splash-overlay {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background-color: #0b0b12;
-      /* Match --bg */
       z-index: 99999;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
+
+      /* Liquid Glass Background */
+      background:
+        /* Organic gradient blobs */
+        radial-gradient(ellipse 80% 50% at 20% 40%, rgba(0, 231, 255, 0.15) 0%, transparent 50%),
+        radial-gradient(ellipse 60% 80% at 80% 60%, rgba(255, 0, 255, 0.1) 0%, transparent 50%),
+        radial-gradient(ellipse 100% 100% at 50% 50%, rgba(0, 180, 255, 0.05) 0%, transparent 70%),
+        /* Base with slight transparency */
+        rgba(11, 11, 18, 0.85);
+      backdrop-filter: blur(20px) saturate(1.2);
+      -webkit-backdrop-filter: blur(20px) saturate(1.2);
+
+      /* Subtle glass border effect */
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 
       /* GPU Acceleration & Performance Optimizations */
       will-change: clip-path;
@@ -1027,6 +1039,46 @@
       /* Use clip-path for the wipe effect instead of height */
       clip-path: inset(0 0 0 0);
       transition: clip-path 1.2s cubic-bezier(0.19, 1, 0.22, 1);
+    }
+
+    /* Add subtle animated gradient movement for "liquid" feel */
+    #splash-overlay::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at 30% 40%, rgba(0, 231, 255, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 70% 60%, rgba(255, 0, 255, 0.06) 0%, transparent 40%);
+      animation: liquidFlow 15s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    @keyframes liquidFlow {
+
+      0%,
+      100% {
+        transform: translate(0, 0) rotate(0deg);
+      }
+
+      25% {
+        transform: translate(5%, -5%) rotate(2deg);
+      }
+
+      50% {
+        transform: translate(-3%, 3%) rotate(-1deg);
+      }
+
+      75% {
+        transform: translate(-5%, -3%) rotate(1deg);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      #splash-overlay::before {
+        animation: none;
+      }
     }
 
     .splash-content {
