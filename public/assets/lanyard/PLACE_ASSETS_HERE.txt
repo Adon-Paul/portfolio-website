@@ -1,0 +1,7 @@
+Place these files in this folder:
+- card.glb
+- lanyard.png
+
+They will be loaded at runtime from:
+- /assets/lanyard/card.glb
+- /assets/lanyard/lanyard.png

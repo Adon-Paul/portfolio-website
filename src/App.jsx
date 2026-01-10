@@ -1,12 +1,18 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import SplashScreen from './components/SplashScreen'
 import LandingPage from './components/LandingPage'
-import FluidGlass from './components/FluidGlass'
 import Header from './components/Header'
 import DarkVeil from './components/DarkVeil'
+import AboutPage from './components/AboutPage'
+import ProjectsPage from './components/ProjectsPage'
+import InterestingPage from './components/InterestingPage'
+import './App.css'
 
 function App() {
     const [splashState, setSplashState] = useState('intro') // 'intro' | 'dashboard'
+    const [currentPage, setCurrentPage] = useState('home') // 'home' | 'about' | 'projects' | 'interesting'
+    const [pendingPage, setPendingPage] = useState(null)
+    const [isTransitioning, setIsTransitioning] = useState(false)
     const [theme, setTheme] = useState('dark')
     const [reduceMotion, setReduceMotion] = useState(false)
 
@@ -34,13 +40,39 @@ function App() {
         setSplashState('dashboard')
     }
 
+    // Handle page navigation with slide transition
+    const handleNavigate = useCallback((page) => {
+        if (page === currentPage || isTransitioning) {
+            return
+        }
+        
+        if (reduceMotion) {
+            setCurrentPage(page)
+            return
+        }
+        
+        setPendingPage(page)
+        setIsTransitioning(true)
+        
+        // After animation completes, update current page
+        setTimeout(() => {
+            setCurrentPage(page)
+            setPendingPage(null)
+            setIsTransitioning(false)
+        }, 500)
+    }, [reduceMotion, currentPage, isTransitioning])
+
     return (
         <>
             {/* Background - DarkVeil only in dark mode */}
             {theme === 'dark' && !reduceMotion && (
                 <div style={{ position: 'fixed', inset: 0, zIndex: 0, backgroundColor: '#0b0b12' }}>
                     <DarkVeil
-                        hueShift={35} // Adjusted for Blue (was 215 which was Yellow)
+                        hueShift={35} // Base hue
+                        animateHue
+                        hueSpeed={3}
+                        hueMin={320}
+                        hueMax={40}
                         noiseIntensity={0.02}
                         scanlineIntensity={0} // Removed scanlines
                         scanlineFrequency={0}
@@ -49,13 +81,6 @@ function App() {
                 </div>
             )}
 
-            {/* Persistent Header - appears on dashboard */}
-            <Header
-                visible={splashState === 'dashboard'}
-                theme={theme}
-                onToggle={toggleTheme}
-            />
-
             {/* Splash Screen */}
             <SplashScreen
                 state={splashState}
@@ -63,23 +88,82 @@ function App() {
                 reduceMotion={reduceMotion}
             />
 
-            {/* Main Content */}
+            {/* Persistent Header - appears on dashboard */}
+            <Header
+                visible={splashState === 'dashboard'}
+                activePage={currentPage}
+                onNavigate={handleNavigate}
+                theme={theme}
+                onToggleTheme={toggleTheme}
+                reduceMotion={reduceMotion}
+            />
+
+            {/* Main Content with Slide Transitions */}
             {splashState === 'dashboard' && (
-                <LandingPage
-                    theme={theme}
-                    // onThemeToggle removed (moved to header)
-                    reduceMotion={reduceMotion}
-                />
+                <div className="page-container">
+                    {/* Current Page - slides out */}
+                    <div className={`page-wrapper ${isTransitioning ? 'page-wrapper--exiting' : ''}`}>
+                        {currentPage === 'home' && (
+                            <LandingPage
+                                theme={theme}
+                                reduceMotion={reduceMotion}
+                                onNavigate={handleNavigate}
+                            />
+                        )}
+                        {currentPage === 'about' && (
+                            <AboutPage
+                                theme={theme}
+                                reduceMotion={reduceMotion}
+                            />
+                        )}
+                        {currentPage === 'projects' && (
+                            <ProjectsPage
+                                theme={theme}
+                                reduceMotion={reduceMotion}
+                            />
+                        )}
+                        {currentPage === 'interesting' && (
+                            <InterestingPage
+                                theme={theme}
+                                reduceMotion={reduceMotion}
+                            />
+                        )}
+                    </div>
+                    
+                    {/* Incoming Page - slides in */}
+                    {isTransitioning && pendingPage && (
+                        <div className="page-wrapper page-wrapper--entering">
+                            {pendingPage === 'home' && (
+                                <LandingPage
+                                    theme={theme}
+                                    reduceMotion={reduceMotion}
+                                    onNavigate={handleNavigate}
+                                />
+                            )}
+                            {pendingPage === 'about' && (
+                                <AboutPage
+                                    theme={theme}
+                                    reduceMotion={reduceMotion}
+                                />
+                            )}
+                            {pendingPage === 'projects' && (
+                                <ProjectsPage
+                                    theme={theme}
+                                    reduceMotion={reduceMotion}
+                                />
+                            )}
+                            {pendingPage === 'interesting' && (
+                                <InterestingPage
+                                    theme={theme}
+                                    reduceMotion={reduceMotion}
+                                />
+                            )}
+                        </div>
+                    )}
+                </div>
             )}
 
-            {/* Fluid Glass Lens - Only in dark mode after splash */}
-            {splashState === 'dashboard' && !reduceMotion && theme === 'dark' && (
-                <FluidGlass
-                    size={180}
-                    distortion={40}
-                    blur={0.5}
-                />
-            )}
+
         </>
     )
 }

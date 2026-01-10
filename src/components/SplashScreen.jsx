@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
+import AutoVariableProximity from './AutoVariableProximity'
 
 function SplashScreen({ state, onComplete, reduceMotion }) {
     const [displayText, setDisplayText] = useState('')
@@ -132,32 +133,34 @@ function SplashScreen({ state, onComplete, reduceMotion }) {
             }}
             aria-hidden={state === 'dashboard'}
         >
-            {/* Animated gradient orbs for depth */}
-            <div className="splash-orbs" aria-hidden="true">
-                <div className="orb orb-1"></div>
-                <div className="orb orb-2"></div>
-                <div className="orb orb-3"></div>
-            </div>
-
-            <div className="splash-content">
-                <div
-                    className="splash-center"
-                    style={{ cursor: 'pointer' }}
-                    onClick={handleClick}
-                    title="Click to enter"
-                >
-                    <div className={`typewriter-text ${isGlitchActive ? 'glitch-active' : ''}`} data-text={targetText}>
-                        {displayText}
-                    </div>
-                    <div className="loading-bar-container">
-                        <div className="loading-bar" style={{ width: `${progress}%` }}></div>
-                    </div>
-
-                    {isGlitchActive && (
-                        <p className="splash-hint">Click or scroll to continue</p>
-                    )}
+            <AutoVariableProximity containerRef={overlayRef} enabled={!reduceMotion}>
+                {/* Animated gradient orbs for depth */}
+                <div className="splash-orbs" aria-hidden="true">
+                    <div className="orb orb-1"></div>
+                    <div className="orb orb-2"></div>
+                    <div className="orb orb-3"></div>
                 </div>
-            </div>
+
+                <div className="splash-content">
+                    <div
+                        className="splash-center"
+                        style={{ cursor: 'pointer' }}
+                        onClick={handleClick}
+                        title="Click to enter"
+                    >
+                        <div className={`typewriter-text ${isGlitchActive ? 'glitch-active' : ''}`} data-text={targetText}>
+                            {displayText}
+                        </div>
+                        <div className="loading-bar-container">
+                            <div className="loading-bar" style={{ width: `${progress}%` }}></div>
+                        </div>
+
+                        {isGlitchActive && (
+                            <p className="splash-hint">Click or scroll to continue</p>
+                        )}
+                    </div>
+                </div>
+            </AutoVariableProximity>
         </div>
     )
 }
