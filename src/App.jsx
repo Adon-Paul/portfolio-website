@@ -6,6 +6,7 @@ import DarkVeil from './components/DarkVeil'
 import AboutPage from './components/AboutPage'
 import ProjectsPage from './components/ProjectsPage'
 import InterestingPage from './components/InterestingPage'
+import GradualBlur from './components/GradualBlur'
 import './App.css'
 
 function App() {
@@ -101,6 +102,17 @@ function App() {
             {/* Main Content with Slide Transitions */}
             {splashState === 'dashboard' && (
                 <div className="page-container">
+                    <GradualBlur
+                        target="page"
+                        position="bottom"
+                        height="6rem"
+                        strength={2}
+                        divCount={6}
+                        curve="bezier"
+                        exponential
+                        opacity={1}
+                        zIndex={5}
+                    />
                     {/* Current Page - slides out */}
                     <div className={`page-wrapper ${isTransitioning ? 'page-wrapper--exiting' : ''}`}>
                         {currentPage === 'home' && (
