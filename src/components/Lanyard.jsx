@@ -23,8 +23,8 @@ export default function Lanyard({
   gravity = [0, -40, 0],
   fov = 20,
   transparent = true,
-  cardUrl = '/assets/lanyard/card.glb',
-  lanyardTextureUrl = '/assets/lanyard/lanyard.png',
+  cardUrl = `${import.meta.env.BASE_URL}assets/lanyard/card.glb`,
+  lanyardTextureUrl = `${import.meta.env.BASE_URL}assets/lanyard/lanyard.png`,
 }) {
   const [isMobile, setIsMobile] = useState(
     () => typeof window !== 'undefined' && window.matchMedia('(max-width: 768px)').matches
@@ -273,4 +273,4 @@ function Band({
   );
 }
 
-useGLTF.preload('/assets/lanyard/card.glb');
+useGLTF.preload(`${import.meta.env.BASE_URL}assets/lanyard/card.glb`);

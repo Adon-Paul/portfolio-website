@@ -108,7 +108,7 @@ export default function ProjectsPage({ theme, reduceMotion }) {
                                             <h3>style-transfer-ai</h3>
                                             <div className="projects-card__media" aria-label="style-transfer-ai demo video">
                                                 <video
-                                                    src="/videos/style-transfer-ai.mp4"
+                                                    src={`${import.meta.env.BASE_URL}videos/style-transfer-ai.mp4`}
                                                     autoPlay
                                                     muted
                                                     loop

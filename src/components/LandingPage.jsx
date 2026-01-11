@@ -20,7 +20,7 @@ function LandingPage({ theme, reduceMotion, onNavigate }) {
                                 <img
                                     className="profile-photo"
                                     id="heroPhoto"
-                                    src="/images/profile/WEWSITEDARK.png"
+                                    src={`${import.meta.env.BASE_URL}images/profile/WEWSITEDARK.png`}
                                     alt="Portrait of Adon Paul Tomy"
                                     loading="lazy"
                                     decoding="async"
