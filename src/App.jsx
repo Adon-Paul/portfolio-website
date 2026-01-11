@@ -106,11 +106,11 @@ function App() {
                         target="page"
                         position="bottom"
                         height="6rem"
-                        strength={2}
+                        strength={1.2}
                         divCount={6}
                         curve="bezier"
                         exponential
-                        opacity={1}
+                        opacity={0.45}
                         zIndex={5}
                     />
                     {/* Current Page - slides out */}
