@@ -1,0 +1,199 @@
+#splash-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 99999;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  background: rgba(8, 8, 14, 0.75);
+  backdrop-filter: blur(40px) saturate(1.6);
+  -webkit-backdrop-filter: blur(60px) saturate(1.8);
+  will-change: clip-path, opacity;
+  transform: translateZ(0);
+  transition: clip-path 0.08s linear, opacity 0.3s ease-out;
+}
+
+.splash-orbs {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.6;
+  animation: orbFloat 20s ease-in-out infinite;
+}
+
+.orb-1 {
+  width: 60vw;
+  height: 60vw;
+  max-width: 800px;
+  max-height: 800px;
+  background: radial-gradient(circle, rgba(0, 180, 255, 0.4) 0%, transparent 70%);
+  top: -20%;
+  left: -10%;
+  animation-delay: 0s;
+}
+
+.orb-2 {
+  width: 50vw;
+  height: 50vw;
+  max-width: 600px;
+  max-height: 600px;
+  background: radial-gradient(circle, rgba(120, 0, 255, 0.35) 0%, transparent 70%);
+  bottom: -15%;
+  right: -5%;
+  animation-delay: -7s;
+}
+
+.orb-3 {
+  width: 40vw;
+  height: 40vw;
+  max-width: 500px;
+  max-height: 500px;
+  background: radial-gradient(circle, rgba(0, 255, 200, 0.25) 0%, transparent 70%);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation-delay: -14s;
+}
+
+@keyframes orbFloat {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  25% { transform: translate(5%, -8%) scale(1.05); }
+  50% { transform: translate(-3%, 5%) scale(0.95); }
+  75% { transform: translate(-6%, -3%) scale(1.02); }
+}
+
+.splash-content {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+}
+
+.splash-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.typewriter-text {
+  font-family: "Quantico", sans-serif;
+  font-size: clamp(1.8rem, 4vw, 3.5rem);
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-shadow: 0 0 40px rgba(0, 200, 255, 0.5), 0 0 80px rgba(0, 200, 255, 0.2);
+}
+
+.cursor-blink {
+  color: var(--accent);
+  animation: blink 1s step-end infinite;
+  margin-left: 2px;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.splash-hint {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.45);
+  letter-spacing: 0.08em;
+  margin-top: 24px;
+  animation: fadeInUp 0.6s ease forwards;
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.typewriter-text.glitch-active {
+  position: relative;
+}
+
+.typewriter-text.glitch-active::before {
+  content: attr(data-text);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(165deg, #00e7ff 0%, #ff00ff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  opacity: 0;
+  animation: glitchText 3s infinite;
+  pointer-events: none;
+}
+
+.loading-bar-container {
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.loading-bar {
+  width: 0%;
+  height: 100%;
+  background: #00e7ff;
+  transition: width 0.1s linear;
+  box-shadow: 0 0 10px rgba(0, 231, 255, 0.5);
+}
+
+#splash-overlay.to-dashboard {
+  clip-path: inset(0 0 calc(100% - 80px) 0);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+#splash-overlay.to-dashboard .splash-center {
+  opacity: 0;
+  transform: scale(0.95);
+  pointer-events: none;
+}
+
+#splash-overlay.to-dashboard .splash-header-row {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+#splash-overlay.to-dashboard .splash-nav {
+  opacity: 1;
+  transform: translateY(0);
+  margin-top: 0;
+  pointer-events: auto;
+}
+
+@media (max-width: 600px) {
+  #splash-overlay.to-dashboard {
+    clip-path: inset(0 0 calc(100% - 100px) 0);
+    height: 100px;
+  }
+  
+  #splash-overlay.to-dashboard .splash-content {
+    flex-direction: column;
+    padding: 0.5rem;
+  }
+}

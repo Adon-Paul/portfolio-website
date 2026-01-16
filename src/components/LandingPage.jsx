@@ -1,16 +1,29 @@
-import { useRef, useState } from 'react'
+import { useRef, useState, useMemo } from 'react'
 import ShootingStars from './ShootingStars'
 import Antigravity from './Antigravity'
 import AutoVariableProximity from './AutoVariableProximity'
 
-function LandingPage({ theme, reduceMotion, onNavigate }) {
+// Available profile images
+const PROFILE_IMAGES = [
+    'WEWSITEDARK.png',
+    'WEWSITELIGHT.png',
+    'wewsite.png'
+]
+
+function LandingPage({ theme, reduceMotion, onNavigate, showShootingStars = true }) {
     const [year] = useState(new Date().getFullYear())
     const containerRef = useRef(null)
+
+    // Randomly select a profile image once on mount
+    const profileImage = useMemo(() => {
+        const randomIndex = Math.floor(Math.random() * PROFILE_IMAGES.length)
+        return PROFILE_IMAGES[randomIndex]
+    }, [])
 
     return (
         <>
             {/* Shooting Stars (dark mode only) */}
-            {theme === 'dark' && !reduceMotion && <ShootingStars />}
+            {theme === 'dark' && !reduceMotion && showShootingStars && <ShootingStars />}
 
             <main ref={containerRef} className="landing-page">
                 <AutoVariableProximity containerRef={containerRef} enabled={!reduceMotion}>
@@ -20,7 +33,7 @@ function LandingPage({ theme, reduceMotion, onNavigate }) {
                                 <img
                                     className="profile-photo"
                                     id="heroPhoto"
-                                    src={`${import.meta.env.BASE_URL}images/profile/WEWSITEDARK.png`}
+                                    src={`${import.meta.env.BASE_URL}images/profile/${profileImage}`}
                                     alt="Portrait of Adon Paul Tomy"
                                     loading="lazy"
                                     decoding="async"

@@ -1,0 +1,357 @@
+/* ========================================
+   Header - Modern Floating Navigation
+   ======================================== */
+.app-header {
+  position: fixed;
+  top: 16px;
+  left: 50%;
+  width: min(1200px, calc(100% - 32px));
+  padding: 14px 24px;
+  border-radius: var(--radius-xl);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  opacity: 0;
+  transform: translate(-50%, -16px);
+  pointer-events: none;
+  transition: 
+    opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1), 
+    transform 0.5s cubic-bezier(0.19, 1, 0.22, 1),
+    background 0.3s ease,
+    border-color 0.3s ease;
+  background: linear-gradient(
+    135deg, 
+    rgba(10, 10, 15, 0.75) 0%, 
+    rgba(18, 18, 26, 0.65) 100%
+  );
+  backdrop-filter: blur(24px) saturate(1.6);
+  -webkit-backdrop-filter: blur(24px) saturate(1.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.35),
+    0 0 0 1px rgba(255, 255, 255, 0.03) inset,
+    0 1px 0 rgba(255, 255, 255, 0.05) inset;
+  z-index: var(--z-header);
+}
+
+/* Light theme header */
+html[data-theme="light"] .app-header {
+  background: linear-gradient(
+    135deg, 
+    rgba(255, 255, 255, 0.85) 0%, 
+    rgba(248, 250, 252, 0.75) 100%
+  );
+  border-color: rgba(0, 0, 0, 0.06);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.08),
+    0 0 0 1px rgba(255, 255, 255, 0.5) inset;
+}
+
+.app-header.visible {
+  opacity: 1;
+  transform: translate(-50%, 0);
+  pointer-events: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-header {
+    transition: none;
+    transform: translate(-50%, 0);
+  }
+}
+
+/* ========================================
+   Brand Name
+   ======================================== */
+.brand-name {
+  font-family: "Quantico", sans-serif;
+  font-weight: 700;
+  font-size: 1.15rem;
+  color: var(--fg);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+  background: linear-gradient(135deg, var(--fg) 0%, var(--fg-muted) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  transition: color 0.2s ease;
+}
+
+.brand-name:hover {
+  color: var(--accent);
+}
+
+html[data-theme="light"] .brand-name {
+  background: linear-gradient(135deg, var(--fg) 0%, var(--fg-muted) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+.brand-button {
+  background: transparent;
+  border: none;
+  padding: 8px 4px;
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: transform 0.2s ease;
+}
+
+.brand-button:hover {
+  transform: scale(1.02);
+}
+
+/* ========================================
+   Navigation
+   ======================================== */
+.header-nav {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.header-btn {
+  color: var(--fg-muted);
+  background: transparent;
+  border: none;
+  padding: 10px 16px;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-family: "Space Grotesk", sans-serif;
+  font-weight: 500;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  transition: 
+    color 0.2s ease, 
+    background 0.2s ease,
+    transform 0.15s ease;
+  position: relative;
+}
+
+.header-btn:hover {
+  color: var(--fg);
+  background: var(--glass-bg-hover);
+  transform: translateY(-1px);
+}
+
+.header-btn.active {
+  color: var(--accent);
+  background: var(--accent-muted);
+  font-weight: 600;
+}
+
+.header-btn.active::after {
+  content: '';
+  position: absolute;
+  bottom: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20px;
+  height: 2px;
+  background: var(--accent);
+  border-radius: var(--radius-full);
+}
+
+.header-actions {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 8px;
+  padding-left: 8px;
+  border-left: 1px solid var(--glass-border);
+}
+
+/* ========================================
+   Theme Toggle - Premium Design
+   ======================================== */
+.theme-toggle {
+  position: relative;
+  width: 72px;
+  height: 36px;
+  border-radius: var(--radius-full);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: linear-gradient(180deg, #1a1a2e 0%, #0f0f1a 100%);
+  box-shadow: 
+    0 4px 12px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  display: inline-flex;
+  align-items: center;
+  padding: 3px;
+  cursor: pointer;
+  transition: 
+    background 0.3s ease, 
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+  overflow: hidden;
+}
+
+/* Night sky stars effect */
+.theme-toggle::before {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border-radius: var(--radius-full);
+  background:
+    radial-gradient(1.5px 1.5px at 20% 35%, rgba(255, 255, 255, 0.6), transparent),
+    radial-gradient(1.2px 1.2px at 55% 25%, rgba(255, 255, 255, 0.5), transparent),
+    radial-gradient(1.8px 1.8px at 75% 55%, rgba(255, 255, 255, 0.4), transparent),
+    radial-gradient(1px 1px at 40% 60%, rgba(255, 255, 255, 0.3), transparent),
+    linear-gradient(180deg, #1f2436 0%, #252b3f 100%);
+  opacity: 0.9;
+  transition: opacity 0.3s ease;
+}
+
+.theme-toggle .knob {
+  position: relative;
+  z-index: 1;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: 
+    radial-gradient(circle at 35% 35%, #c4d0ff 0%, #8b9ce8 40%, #6b7ac9 100%);
+  box-shadow: 
+    0 2px 8px rgba(0, 0, 0, 0.3),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.1),
+    inset 0 2px 4px rgba(255, 255, 255, 0.2);
+  transform: translateX(0);
+  transition: 
+    transform 0.35s cubic-bezier(0.68, -0.2, 0.32, 1.2),
+    background 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+/* Moon craters effect */
+.theme-toggle .knob::before {
+  content: '';
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: rgba(0, 0, 0, 0.08);
+  border-radius: 50%;
+  top: 8px;
+  left: 6px;
+}
+
+.theme-toggle .knob::after {
+  content: '';
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: rgba(0, 0, 0, 0.06);
+  border-radius: 50%;
+  top: 14px;
+  left: 14px;
+}
+
+/* Light mode styles */
+html[data-theme="light"] .theme-toggle {
+  background: linear-gradient(180deg, #c9e4ff 0%, #a3d5ff 100%);
+  border-color: rgba(0, 0, 0, 0.08);
+  box-shadow: 
+    0 4px 12px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+html[data-theme="light"] .theme-toggle::before {
+  background:
+    radial-gradient(30px 30px at 15% 45%, #ffe066, transparent 50%),
+    radial-gradient(50px 30px at 70% 75%, rgba(255, 255, 255, 0.9), transparent 50%),
+    linear-gradient(180deg, #87ceeb 0%, #b3e0f7 100%);
+  opacity: 1;
+}
+
+html[data-theme="light"] .theme-toggle .knob {
+  transform: translateX(36px);
+  background: 
+    radial-gradient(circle at 35% 35%, #fff9c4 0%, #ffd54f 50%, #ffb300 100%);
+  box-shadow: 
+    0 2px 8px rgba(255, 170, 0, 0.4),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.05),
+    inset 0 2px 4px rgba(255, 255, 255, 0.4);
+}
+
+html[data-theme="light"] .theme-toggle .knob::before,
+html[data-theme="light"] .theme-toggle .knob::after {
+  display: none;
+}
+
+/* ========================================
+   Mobile Responsive
+   ======================================== */
+@media (max-width: 900px) {
+  .header-nav {
+    gap: 0.25rem;
+  }
+  
+  .header-btn {
+    padding: 8px 12px;
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .app-header {
+    top: 12px;
+    width: calc(100% - 24px);
+    padding: 12px 16px;
+    border-radius: var(--radius-lg);
+    flex-wrap: wrap;
+  }
+
+  .brand-name {
+    font-size: 1rem;
+  }
+
+  .header-nav {
+    gap: 0.15rem;
+    order: 3;
+    width: 100%;
+    justify-content: center;
+    padding-top: 8px;
+    margin-top: 8px;
+    border-top: 1px solid var(--glass-border);
+  }
+  
+  .header-btn {
+    padding: 8px 10px;
+    font-size: 0.75rem;
+  }
+  
+  .header-actions {
+    border-left: none;
+    padding-left: 0;
+    margin-left: auto;
+  }
+  
+  .theme-toggle {
+    width: 64px;
+    height: 32px;
+  }
+  
+  .theme-toggle .knob {
+    width: 24px;
+    height: 24px;
+  }
+  
+  html[data-theme="light"] .theme-toggle .knob {
+    transform: translateX(32px);
+  }
+}
+
+@media (max-width: 480px) {
+  .app-header {
+    top: 8px;
+    width: calc(100% - 16px);
+    padding: 10px 12px;
+  }
+
+  .header-btn {
+    padding: 6px 8px;
+    font-size: 0.7rem;
+    letter-spacing: 0.02em;
+  }
+  
+  .header-btn.active::after {
+    display: none;
+  }
+}

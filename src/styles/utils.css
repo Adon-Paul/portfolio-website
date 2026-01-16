@@ -1,0 +1,176 @@
+/* ========================================
+   Animation Utilities
+   ======================================== */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: 
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.reveal-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.stagger-item {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.stagger-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ========================================
+   Link Animations
+   ======================================== */
+.animated-link {
+  position: relative;
+  text-decoration: none;
+  color: inherit;
+}
+
+.animated-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--gradient-primary);
+  transition: width 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.animated-link:hover::after {
+  width: 100%;
+}
+
+/* ========================================
+   Gradient Text
+   ======================================== */
+.gradient-text {
+  background: var(--gradient-text);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  background-size: 200% 200%;
+  animation: gradientFlow 8s ease infinite;
+}
+
+@keyframes gradientFlow {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* ========================================
+   Glow Effects
+   ======================================== */
+.glow-accent {
+  box-shadow: var(--shadow-glow);
+  transition: box-shadow var(--transition-base);
+}
+
+.glow-accent:hover {
+  box-shadow: var(--shadow-glow-strong);
+}
+
+/* ========================================
+   Glass Morphism Utilities
+   ======================================== */
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--blur-amount)) saturate(1.5);
+  -webkit-backdrop-filter: blur(var(--blur-amount)) saturate(1.5);
+  border: 1px solid var(--glass-border);
+}
+
+.glass-heavy {
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--blur-heavy)) saturate(1.8);
+  -webkit-backdrop-filter: blur(var(--blur-heavy)) saturate(1.8);
+  border: 1px solid var(--glass-border);
+}
+
+/* ========================================
+   Button Animations
+   ======================================== */
+@keyframes subtlePulse {
+  0%, 100% { 
+    box-shadow: 
+      0 0 0 0 rgba(var(--accent-rgb), 0.4),
+      var(--shadow-md);
+  }
+  50% { 
+    box-shadow: 
+      0 0 0 10px rgba(var(--accent-rgb), 0),
+      var(--shadow-md);
+  }
+}
+
+.pulse-cta {
+  animation: subtlePulse 2.5s infinite;
+}
+
+.pulse-cta:hover {
+  animation: none;
+}
+
+/* ========================================
+   Shimmer Effect
+   ======================================== */
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--gradient-shine);
+  animation: shimmer 2.5s infinite;
+}
+
+/* ========================================
+   Float Animation
+   ======================================== */
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  25% { transform: translateY(-8px) rotate(1deg); }
+  75% { transform: translateY(8px) rotate(-1deg); }
+}
+
+.float {
+  animation: float 6s ease-in-out infinite;
+}
+
+/* ========================================
+   Reduced Motion
+   ======================================== */
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .stagger-item {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  
+  .gradient-text {
+    animation: none;
+  }
+  
+  .pulse-cta,
+  .shimmer::after,
+  .float {
+    animation: none;
+  }
+}
