@@ -16,6 +16,7 @@ const useAppStore = create((set) => ({
   fontSize: 'medium',
   highContrast: false,
   showBackground: true,
+  navPosition: 'bottom', // 'top' or 'bottom' for mobile
 
   // Actions
   setSplashState: (state) => set({ splashState: state }),
@@ -67,6 +68,17 @@ const useAppStore = create((set) => ({
     localStorage.setItem('showBackground', showBackground)
   },
 
+  setNavPosition: (navPosition) => {
+    set({ navPosition })
+    localStorage.setItem('navPosition', navPosition)
+  },
+
+  toggleNavPosition: () => set((state) => {
+    const newPosition = state.navPosition === 'top' ? 'bottom' : 'top'
+    localStorage.setItem('navPosition', newPosition)
+    return { navPosition: newPosition }
+  }),
+
   // Initializer to read from localStorage/Media Query
   initializeSettings: () => {
     const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
@@ -103,6 +115,9 @@ const useAppStore = create((set) => ({
 
     const savedShowBackground = localStorage.getItem('showBackground')
     if (savedShowBackground !== null) set({ showBackground: savedShowBackground === 'true' })
+
+    const savedNavPosition = localStorage.getItem('navPosition')
+    if (savedNavPosition) set({ navPosition: savedNavPosition })
   }
 }))
 

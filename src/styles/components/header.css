@@ -127,6 +127,24 @@ html[data-theme="light"] .brand-name {
     background 0.2s ease,
     transform 0.15s ease;
   position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+/* Icon styles - hidden on desktop by default */
+.header-btn-icon {
+  display: none;
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+/* Text visible by default */
+.header-btn-text {
+  display: inline;
 }
 
 .header-btn:hover {
@@ -156,9 +174,43 @@ html[data-theme="light"] .brand-name {
 .header-actions {
   display: inline-flex;
   align-items: center;
+  gap: 8px;
   margin-left: 8px;
   padding-left: 8px;
   border-left: 1px solid var(--glass-border);
+}
+
+/* Nav Position Toggle Button */
+.nav-position-toggle {
+  display: inline-flex;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-md);
+  background: var(--glass-bg-hover);
+  border: 1px solid var(--glass-border);
+  color: var(--fg-muted);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-position-toggle:hover {
+  background: var(--accent-muted);
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+/* Bottom positioning for desktop */
+.app-header.nav-bottom {
+  top: auto;
+  bottom: 16px;
+  transform: translate(-50%, 16px);
+}
+
+.app-header.nav-bottom.visible {
+  transform: translate(-50%, 0);
 }
 
 /* ========================================
@@ -292,29 +344,59 @@ html[data-theme="light"] .theme-toggle .knob::after {
 @media (max-width: 768px) {
   .app-header {
     top: 12px;
+    bottom: auto;
     width: calc(100% - 24px);
     padding: 12px 16px;
     border-radius: var(--radius-lg);
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+    justify-content: center;
+    transition: 
+      opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1), 
+      transform 0.5s cubic-bezier(0.19, 1, 0.22, 1),
+      top 0.3s ease,
+      bottom 0.3s ease,
+      background 0.3s ease,
+      border-color 0.3s ease;
+  }
+
+  /* Bottom positioning on mobile */
+  .app-header.nav-bottom {
+    top: auto;
+    bottom: 12px;
+    transform: translate(-50%, 16px);
+  }
+
+  .app-header.nav-bottom.visible {
+    transform: translate(-50%, 0);
   }
 
   .brand-name {
-    font-size: 1rem;
+    display: none;
   }
 
   .header-nav {
-    gap: 0.15rem;
-    order: 3;
-    width: 100%;
-    justify-content: center;
-    padding-top: 8px;
-    margin-top: 8px;
-    border-top: 1px solid var(--glass-border);
+    gap: 0.5rem;
+  }
+  
+  /* Show icons, hide text on mobile */
+  .header-btn-icon {
+    display: block;
+    width: 24px;
+    height: 24px;
+  }
+  
+  .header-btn-text {
+    display: none;
   }
   
   .header-btn {
     padding: 8px 10px;
-    font-size: 0.75rem;
+    border-radius: var(--radius-md);
+  }
+  
+  .header-btn:hover .header-btn-icon,
+  .header-btn.active .header-btn-icon {
+    transform: scale(1.1);
   }
   
   .header-actions {
@@ -345,13 +427,27 @@ html[data-theme="light"] .theme-toggle .knob::after {
     padding: 10px 12px;
   }
 
+  .app-header.nav-bottom {
+    top: auto;
+    bottom: 8px;
+  }
+
   .header-btn {
-    padding: 6px 8px;
-    font-size: 0.7rem;
-    letter-spacing: 0.02em;
+    padding: 8px;
+  }
+  
+  .header-btn-icon {
+    width: 22px;
+    height: 22px;
   }
   
   .header-btn.active::after {
     display: none;
+  }
+
+  .nav-position-toggle {
+    width: 28px;
+    height: 28px;
+    font-size: 0.9rem;
   }
 }

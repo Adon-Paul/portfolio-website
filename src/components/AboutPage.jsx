@@ -14,13 +14,18 @@ export default function AboutPage({ theme, reduceMotion, showShootingStars = tru
             <div ref={containerRef}>
                 <AutoVariableProximity containerRef={containerRef} enabled={!reduceMotion}>
                     <main className="about-page">
-                        {!reduceMotion && (
-                            <aside className="about-lanyard-float" aria-hidden="true">
-                                <Lanyard cameraDistance={9} fov={30} />
-                            </aside>
-                        )}
+                        <div className="about-split-layout">
+                            {/* Lanyard on the left - sticky */}
+                            {!reduceMotion && (
+                                <aside className="about-lanyard-side" aria-hidden="true">
+                                    <div className="about-lanyard-sticky">
+                                        <Lanyard cameraDistance={9} fov={30} />
+                                    </div>
+                                </aside>
+                            )}
 
-                        <div className="content-container about-content">
+                            {/* Content on the right */}
+                            <div className="about-content-side">
                             {/* Hero Header */}
                             <header className="about-hero glass-panel">
                                 <p className="about-tagline">Mobile Developer. Security-Conscious. Currently Shipping.</p>
@@ -188,6 +193,7 @@ export default function AboutPage({ theme, reduceMotion, showShootingStars = tru
                                     </a>
                                 </div>
                             </section>
+                            </div>
                         </div>
                     </main>
 

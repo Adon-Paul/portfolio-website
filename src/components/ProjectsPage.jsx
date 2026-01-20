@@ -72,7 +72,17 @@ export default function ProjectsPage({ theme, reduceMotion, showShootingStars = 
                                                     </div>
                                                 </Card>
                                                 <Card className="projects-card">
-                                                    <h3>Card 2</h3>
+                                                    <h3>Melody Music Player</h3>
+                                                    <div className="projects-card__media" aria-label="Melody Music Player demo video">
+                                                        <video
+                                                            src={`${import.meta.env.BASE_URL}videos/melody music player.mp4`}
+                                                            autoPlay
+                                                            muted
+                                                            loop
+                                                            playsInline
+                                                            preload="metadata"
+                                                        />
+                                                    </div>
                                                 </Card>
                                                 <Card className="projects-card">
                                                     <h3>Card 3</h3>

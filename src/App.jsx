@@ -27,6 +27,7 @@ function App() {
         fontSize, setFontSize,
         highContrast, setHighContrast,
         showBackground, setShowBackground,
+        navPosition, toggleNavPosition,
         initializeSettings
     } = useAppStore()
 
@@ -132,6 +133,8 @@ function App() {
                 theme={theme}
                 onToggleTheme={toggleTheme}
                 reduceMotion={reduceMotion}
+                navPosition={navPosition}
+                onToggleNavPosition={toggleNavPosition}
             />
 
             {/* Main Content with Slide Transitions */}
