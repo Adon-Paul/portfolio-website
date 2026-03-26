@@ -23,10 +23,16 @@ export default function ProjectsPage({ theme, reduceMotion, showShootingStars = 
                                     </div>
 
                                     <div className="glass-panel page-section">
-                                        <h2>What you'll find here</h2>
+                                        <h2>How I Build</h2>
                                         <p>
-                                            I'm currently curating write-ups, screenshots, and technical breakdowns for my best work.
-                                            For now, you can browse my repositories on GitHub.
+                                            Every project starts with a real problem. I architect for production from day one
+                                            — proper state management, secure auth flows, and edge-case handling. No tutorials,
+                                            no toy demos.
+                                        </p>
+                                        <p>
+                                            My stack centers on <strong>Flutter + Dart</strong> for mobile, with
+                                            <strong> Supabase</strong> and <strong>Firebase</strong> on the backend.
+                                            For AI work, I reach for <strong>Python</strong> with local LLM integration.
                                         </p>
                                         <div className="links">
                                             <a
@@ -34,7 +40,7 @@ export default function ProjectsPage({ theme, reduceMotion, showShootingStars = 
                                                 target="_blank"
                                                 rel="noreferrer"
                                             >
-                                                View repositories →
+                                                Browse all repositories →
                                             </a>
                                         </div>
                                     </div>
@@ -85,10 +91,15 @@ export default function ProjectsPage({ theme, reduceMotion, showShootingStars = 
                                                     </div>
                                                 </Card>
                                                 <Card className="projects-card">
-                                                    <h3>Card 3</h3>
-                                                </Card>
-                                                <Card className="projects-card">
-                                                    <h3>Card 4</h3>
+                                                    <h3>E-Commerce Platform</h3>
+                                                    <div className="projects-card__description">
+                                                        <p>Full-stack Flutter marketplace with Razorpay payments, Google OAuth, and real-time Supabase sync.</p>
+                                                        <div className="projects-card__tags">
+                                                            <span className="tag">Flutter</span>
+                                                            <span className="tag">Supabase</span>
+                                                            <span className="tag">Razorpay</span>
+                                                        </div>
+                                                    </div>
                                                 </Card>
                                             </CardSwap>
                                         </div>

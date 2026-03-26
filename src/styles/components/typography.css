@@ -93,7 +93,158 @@ p {
 }
 
 .enter {
-  margin-top: 52px;
+  margin-top: 32px;
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* Hero tagline on landing */
+.hero-tagline {
+  font-size: clamp(1rem, 0.95rem + 0.3vw, 1.1rem);
+  color: var(--fg-muted);
+  font-style: italic;
+  max-width: 420px;
+  margin: 0 auto 1.5rem;
+  line-height: 1.6;
+}
+
+html[data-theme="light"] .hero-tagline {
+  color: #475569;
+}
+
+/* CTA Primary Button */
+.cta-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 28px;
+  border-radius: 14px;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: #fff;
+  background: linear-gradient(135deg, rgba(0, 212, 255, 0.85), rgba(168, 85, 247, 0.8));
+  box-shadow: 0 4px 20px rgba(0, 212, 255, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+  transition: transform 0.28s cubic-bezier(.22, 1, .36, 1), box-shadow 0.28s cubic-bezier(.22, 1, .36, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-primary::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(135deg, transparent 30%, rgba(255, 255, 255, 0.15) 50%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.cta-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(0, 212, 255, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.15) inset;
+}
+
+.cta-primary:hover::before {
+  opacity: 1;
+}
+
+.cta-primary:active {
+  transform: translateY(0);
+}
+
+.cta-primary svg {
+  transition: transform 0.2s ease;
+}
+
+.cta-primary:hover svg {
+  transform: translateX(3px);
+}
+
+/* CTA Secondary Button */
+.cta-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 28px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  color: var(--fg);
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(8px);
+  transition: transform 0.28s cubic-bezier(.22, 1, .36, 1), box-shadow 0.28s ease, border-color 0.28s ease, background 0.28s ease;
+}
+
+.cta-secondary:hover {
+  transform: translateY(-2px);
+  border-color: rgba(0, 212, 255, 0.4);
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+.cta-secondary:active {
+  transform: translateY(0);
+}
+
+html[data-theme="light"] .cta-primary {
+  background: linear-gradient(135deg, rgba(14, 165, 233, 0.9), rgba(139, 92, 246, 0.85));
+  box-shadow: 0 4px 20px rgba(14, 165, 233, 0.25);
+}
+
+html[data-theme="light"] .cta-primary:hover {
+  box-shadow: 0 8px 32px rgba(14, 165, 233, 0.35);
+}
+
+html[data-theme="light"] .cta-secondary {
+  border-color: rgba(0, 0, 0, 0.12);
+  background: rgba(255, 255, 255, 0.6);
+  color: #0f172a;
+}
+
+html[data-theme="light"] .cta-secondary:hover {
+  border-color: rgba(14, 165, 233, 0.4);
+  background: rgba(255, 255, 255, 0.8);
+}
+
+/* ========================================
+   Stagger Entrance Animations
+   ======================================== */
+@keyframes fadeSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.stagger-1, .stagger-2, .stagger-3, .stagger-4, .stagger-5 {
+  animation: fadeSlideUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.stagger-1 { animation-delay: 0.08s; }
+.stagger-2 { animation-delay: 0.18s; }
+.stagger-3 { animation-delay: 0.28s; }
+.stagger-4 { animation-delay: 0.38s; }
+.stagger-5 { animation-delay: 0.50s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .stagger-1, .stagger-2, .stagger-3, .stagger-4, .stagger-5 {
+    animation: none;
+    opacity: 1;
+  }
 }
 
 .enter a {
@@ -263,8 +414,18 @@ html[data-theme="light"] .links a[href*="github.com"]:hover {
     box-shadow: 0 6px 20px rgba(var(--accent-rgb), 0.3);
   }
 
-  .enter { margin-top: 1.25rem; }
+  .enter {
+    margin-top: 1.25rem;
+    flex-direction: column;
+    gap: 10px;
+  }
   .enter a { font-size: .82rem; opacity: 0.8; }
+  .cta-primary, .cta-secondary {
+    width: 100%;
+    justify-content: center;
+    padding: 12px 24px;
+    font-size: 0.9rem;
+  }
   footer {
     position: relative;
     margin-top: 1.75rem;

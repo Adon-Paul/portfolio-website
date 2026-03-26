@@ -79,6 +79,7 @@ main.landing-page {
 
 .landing-page .content-card {
   padding: clamp(28px, 3.2vw, 52px) clamp(20px, 2.6vw, 42px);
+  overflow: visible;
 }
 
 .landing-page .right.content-card {

@@ -36,7 +36,7 @@ export default function AboutPage({ theme, reduceMotion, showShootingStars = tru
                             </header>
 
                             {/* Bio Section */}
-                            <section className="about-section glass-panel">
+                            <section className="about-section glass-panel accent-blue">
                                 <p>
                                     I'm <strong>Adon Paul Tomy</strong>, a final-year Computer Science student at
                                     <strong> VISAT Engineering College</strong> with a focus that has always been clear:
@@ -54,7 +54,7 @@ export default function AboutPage({ theme, reduceMotion, showShootingStars = tru
                             </section>
 
                             {/* What I've Built */}
-                            <section className="about-section glass-panel">
+                            <section className="about-section glass-panel accent-purple">
                                 <h2>What I've Built</h2>
                                 <p className="lead">
                                     My GitHub isn't a graveyard of "Hello World" tutorials. It is a collection of
@@ -98,7 +98,7 @@ export default function AboutPage({ theme, reduceMotion, showShootingStars = tru
                             </section>
 
                             {/* Security */}
-                            <section className="about-section glass-panel">
+                            <section className="about-section glass-panel accent-cyan">
                                 <h2>Why Security Matters to Me</h2>
                                 <p>
                                     I came to mobile development through an unconventional route: <strong>Cybersecurity</strong>.
@@ -117,7 +117,7 @@ export default function AboutPage({ theme, reduceMotion, showShootingStars = tru
                             </section>
 
                             {/* The Reality */}
-                            <section className="about-section glass-panel about-reality">
+                            <section className="about-section glass-panel about-reality accent-warm">
                                 <h2>The Reality of My Path</h2>
                                 <p>
                                     I'm graduating in 2026, but I'll be honest: my academic record doesn't reflect my
@@ -137,7 +137,7 @@ export default function AboutPage({ theme, reduceMotion, showShootingStars = tru
                             </section>
 
                             {/* What I'm Looking For */}
-                            <section className="about-section glass-panel">
+                            <section className="about-section glass-panel accent-gold">
                                 <h2>What I'm Looking For</h2>
                                 <p className="lead">
                                     I am not looking for a company that cares about my CGPA. I am looking for a team
@@ -178,13 +178,7 @@ export default function AboutPage({ theme, reduceMotion, showShootingStars = tru
                                         View My GitHub
                                     </a>
                                     <a
-                                        href="mailto:adonpaul@example.com"
-                                        className="about-link-secondary"
-                                    >
-                                        Email Me
-                                    </a>
-                                    <a
-                                        href="https://linkedin.com/in/adon-paul"
+                                        href="https://linkedin.com/in/adon-paul-tomy"
                                         target="_blank"
                                         rel="noreferrer"
                                         className="about-link-secondary"

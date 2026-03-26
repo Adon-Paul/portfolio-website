@@ -4,7 +4,21 @@ import AutoVariableProximity from './AutoVariableProximity'
 import useAppStore from '../store/useAppStore'
 
 const FONT_SIZE_OPTIONS = ['small', 'medium', 'large']
-const FONT_SIZE_LABELS = { small: 'Small', medium: 'Medium', large: 'Large' }
+const FONT_SIZE_LABELS = { small: 'S', medium: 'M', large: 'L' }
+
+function ToggleSwitch({ isOn, onToggle, ariaLabel }) {
+    return (
+        <button
+            className={`toggle-switch ${isOn ? 'toggle-on' : ''}`}
+            onClick={onToggle}
+            aria-label={ariaLabel}
+            role="switch"
+            aria-checked={isOn}
+        >
+            <span className="toggle-knob" />
+        </button>
+    )
+}
 
 export default function InterestingPage() {
     const containerRef = useRef(null)
@@ -20,12 +34,6 @@ export default function InterestingPage() {
         showBackground, setShowBackground,
     } = useAppStore()
 
-    const nextFontSize = () => {
-        const currentIndex = FONT_SIZE_OPTIONS.indexOf(fontSize)
-        const nextIndex = (currentIndex + 1) % FONT_SIZE_OPTIONS.length
-        setFontSize(FONT_SIZE_OPTIONS[nextIndex])
-    }
-
     return (
         <>
             {theme === 'dark' && !reduceMotion && showShootingStars && <ShootingStars />}
@@ -35,15 +43,16 @@ export default function InterestingPage() {
                     <main className="interesting-page">
                         <div className="content-container">
                             <div className="page-header glass-panel">
-                                <h1>Interesting Stuff</h1>
-                                <p className="lead">Experiments, notes, and small builds — coming soon.</p>
+                                <h1>Experiments & Customization</h1>
+                                <p className="lead">Quick demos, visual experiments, and site personalization.</p>
                             </div>
 
                             <div className="glass-panel page-section">
-                                <h2>In progress</h2>
+                                <h2>About This Site</h2>
                                 <p>
-                                    This section will include quick demos, learning notes, and visual experiments.
-                                    Until then, the latest updates will be on GitHub.
+                                    This portfolio is built with React, Vite, and cutting-edge web tech including
+                                    Three.js for 3D physics, OGL for generative WebGL shaders, and GSAP for card animations.
+                                    It's designed to be fast, accessible, and visually engaging.
                                 </p>
                                 <div className="links">
                                     <a
@@ -58,113 +67,119 @@ export default function InterestingPage() {
 
                             {/* Settings Section */}
                             <div className="glass-panel page-section settings-section">
-                                <h2>Settings</h2>
-                                <p className="lead">Customize your experience</p>
+                                <h2>Personalize</h2>
+                                <p className="lead">Make this site yours</p>
 
-                                <div className="settings-grid">
-                                    <div className="setting-item">
-                                        <div className="setting-info">
-                                            <span className="setting-label">Theme</span>
-                                            <span className="setting-description">Switch between dark and light mode</span>
+                                <div className="settings-group">
+                                    <h3 className="settings-group-title">Appearance</h3>
+                                    <div className="settings-grid">
+                                        <div className="setting-item">
+                                            <div className="setting-info">
+                                                <span className="setting-label">Dark Mode</span>
+                                                <span className="setting-description">Switch between dark and light</span>
+                                            </div>
+                                            <ToggleSwitch
+                                                isOn={theme === 'dark'}
+                                                onToggle={toggleTheme}
+                                                ariaLabel={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
+                                            />
                                         </div>
-                                        <button
-                                            className="setting-toggle"
-                                            onClick={toggleTheme}
-                                            aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
-                                        >
-                                            <span className="toggle-text">{theme === 'dark' ? 'Dark' : 'Light'}</span>
-                                        </button>
+
+                                        <div className="setting-item">
+                                            <div className="setting-info">
+                                                <span className="setting-label">High Contrast</span>
+                                                <span className="setting-description">Increase text visibility</span>
+                                            </div>
+                                            <ToggleSwitch
+                                                isOn={highContrast}
+                                                onToggle={() => setHighContrast(!highContrast)}
+                                                ariaLabel={`${highContrast ? 'Disable' : 'Enable'} high contrast`}
+                                            />
+                                        </div>
+
+                                        <div className="setting-item">
+                                            <div className="setting-info">
+                                                <span className="setting-label">Font Size</span>
+                                                <span className="setting-description">Adjust text size</span>
+                                            </div>
+                                            <div className="font-size-selector">
+                                                {FONT_SIZE_OPTIONS.map((size) => (
+                                                    <button
+                                                        key={size}
+                                                        className={`font-size-btn ${fontSize === size ? 'active' : ''}`}
+                                                        onClick={() => setFontSize(size)}
+                                                        aria-label={`Set font size to ${size}`}
+                                                    >
+                                                        {FONT_SIZE_LABELS[size]}
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        </div>
                                     </div>
+                                </div>
 
-                                    <div className="setting-item">
-                                        <div className="setting-info">
-                                            <span className="setting-label">Reduce Motion</span>
-                                            <span className="setting-description">Disable animations for accessibility</span>
+                                <div className="settings-group">
+                                    <h3 className="settings-group-title">Effects</h3>
+                                    <div className="settings-grid">
+                                        <div className="setting-item">
+                                            <div className="setting-info">
+                                                <span className="setting-label">Background Effects</span>
+                                                <span className="setting-description">Animated gradient background</span>
+                                            </div>
+                                            <ToggleSwitch
+                                                isOn={showBackground}
+                                                onToggle={() => setShowBackground(!showBackground)}
+                                                ariaLabel={`${showBackground ? 'Disable' : 'Enable'} background effects`}
+                                            />
                                         </div>
-                                        <button
-                                            className="setting-toggle"
-                                            onClick={toggleReduceMotion}
-                                            aria-label={`${reduceMotion ? 'Enable' : 'Disable'} animations`}
-                                        >
-                                            <span className="toggle-text">{reduceMotion ? 'Off' : 'On'}</span>
-                                        </button>
+
+                                        <div className="setting-item">
+                                            <div className="setting-info">
+                                                <span className="setting-label">Shooting Stars</span>
+                                                <span className="setting-description">Animated stars in dark mode</span>
+                                            </div>
+                                            <ToggleSwitch
+                                                isOn={showShootingStars}
+                                                onToggle={() => setShowShootingStars(!showShootingStars)}
+                                                ariaLabel={`${showShootingStars ? 'Disable' : 'Enable'} shooting stars`}
+                                            />
+                                        </div>
+
+                                        <div className="setting-item">
+                                            <div className="setting-info">
+                                                <span className="setting-label">Cursor Glow</span>
+                                                <span className="setting-description">Glass lens following cursor</span>
+                                            </div>
+                                            <ToggleSwitch
+                                                isOn={cursorGlow}
+                                                onToggle={() => setCursorGlow(!cursorGlow)}
+                                                ariaLabel={`${cursorGlow ? 'Disable' : 'Enable'} cursor glow`}
+                                            />
+                                        </div>
                                     </div>
+                                </div>
 
-                                    <div className="setting-item">
-                                        <div className="setting-info">
-                                            <span className="setting-label">Cursor Glow</span>
-                                            <span className="setting-description">Glass lens effect following cursor</span>
+                                <div className="settings-group">
+                                    <h3 className="settings-group-title">Accessibility</h3>
+                                    <div className="settings-grid">
+                                        <div className="setting-item">
+                                            <div className="setting-info">
+                                                <span className="setting-label">Reduce Motion</span>
+                                                <span className="setting-description">Disable animations</span>
+                                            </div>
+                                            <ToggleSwitch
+                                                isOn={reduceMotion}
+                                                onToggle={toggleReduceMotion}
+                                                ariaLabel={`${reduceMotion ? 'Enable' : 'Disable'} animations`}
+                                            />
                                         </div>
-                                        <button
-                                            className="setting-toggle"
-                                            onClick={() => setCursorGlow(!cursorGlow)}
-                                            aria-label={`${cursorGlow ? 'Disable' : 'Enable'} cursor glow`}
-                                        >
-                                            <span className="toggle-text">{cursorGlow ? 'On' : 'Off'}</span>
-                                        </button>
-                                    </div>
-
-                                    <div className="setting-item">
-                                        <div className="setting-info">
-                                            <span className="setting-label">Shooting Stars</span>
-                                            <span className="setting-description">Animated stars in dark mode</span>
-                                        </div>
-                                        <button
-                                            className="setting-toggle"
-                                            onClick={() => setShowShootingStars(!showShootingStars)}
-                                            aria-label={`${showShootingStars ? 'Disable' : 'Enable'} shooting stars`}
-                                        >
-                                            <span className="toggle-text">{showShootingStars ? 'On' : 'Off'}</span>
-                                        </button>
-                                    </div>
-
-                                    <div className="setting-item">
-                                        <div className="setting-info">
-                                            <span className="setting-label">Background Effects</span>
-                                            <span className="setting-description">Animated gradient background</span>
-                                        </div>
-                                        <button
-                                            className="setting-toggle"
-                                            onClick={() => setShowBackground(!showBackground)}
-                                            aria-label={`${showBackground ? 'Disable' : 'Enable'} background effects`}
-                                        >
-                                            <span className="toggle-text">{showBackground ? 'On' : 'Off'}</span>
-                                        </button>
-                                    </div>
-
-                                    <div className="setting-item">
-                                        <div className="setting-info">
-                                            <span className="setting-label">Font Size</span>
-                                            <span className="setting-description">Adjust text size for readability</span>
-                                        </div>
-                                        <button
-                                            className="setting-toggle"
-                                            onClick={nextFontSize}
-                                            aria-label={`Change font size, current: ${fontSize}`}
-                                        >
-                                            <span className="toggle-text">{FONT_SIZE_LABELS[fontSize]}</span>
-                                        </button>
-                                    </div>
-
-                                    <div className="setting-item">
-                                        <div className="setting-info">
-                                            <span className="setting-label">High Contrast</span>
-                                            <span className="setting-description">Increase text visibility</span>
-                                        </div>
-                                        <button
-                                            className="setting-toggle"
-                                            onClick={() => setHighContrast(!highContrast)}
-                                            aria-label={`${highContrast ? 'Disable' : 'Enable'} high contrast`}
-                                        >
-                                            <span className="toggle-text">{highContrast ? 'On' : 'Off'}</span>
-                                        </button>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </main>
 
-                    <footer className="page-footer">© {year} Adon Paul</footer>
+                    <footer className="page-footer">&copy; {year} Adon Paul</footer>
                 </AutoVariableProximity>
             </div>
         </>

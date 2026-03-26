@@ -65,12 +65,11 @@ function LandingPage({ theme, reduceMotion, onNavigate, showShootingStars = true
                                     />
                                 </div>
                             )}
-                            <h1 id="mainHeading" data-text="ADON PAUL TOMY" style={{ position: 'relative', zIndex: 1 }}>Adon Paul Tomy</h1>
-                            <div className="subtitle">Flutter Developer | Computer Science Student</div>
-                            <p>Website is currently under development.</p>
-                            <p>In the meantime, you can find me on:</p>
+                            <h1 id="mainHeading" data-text="ADON PAUL TOMY" className="stagger-1" style={{ position: 'relative', zIndex: 1 }}>Adon Paul Tomy</h1>
+                            <div className="subtitle stagger-2">Flutter Developer | Computer Science Student</div>
+                            <p className="hero-tagline stagger-3">I build Flutter apps that ship, and break things that shouldn't be breakable.</p>
 
-                            <div className="links">
+                            <div className="links stagger-4">
                                 <a href="https://linkedin.com/in/adon-paul-tomy" target="_blank" rel="noreferrer" aria-label="LinkedIn">
                                     <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                                         <path d="M4.98 3.5C4.98 4.88 3.86 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.5 8.5h4V24h-4V8.5zM8.5 8.5h3.8v2.1h.05c.53-1 1.83-2.1 3.77-2.1 4.03 0 4.78 2.65 4.78 6.1V24h-4v-7.1c0-1.7-.03-3.9-2.38-3.9-2.38 0-2.75 1.86-2.75 3.77V24h-4V8.5z" />
@@ -85,13 +84,23 @@ function LandingPage({ theme, reduceMotion, onNavigate, showShootingStars = true
                                 </a>
                             </div>
 
-                            <div className="enter">
+                            <div className="enter stagger-5">
                                 <button
                                     type="button"
-                                    className="text-link"
+                                    className="cta-primary"
                                     onClick={() => onNavigate('about')}
                                 >
-                                    about me →
+                                    About Me
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                                        <path d="M5 12h14M12 5l7 7-7 7" />
+                                    </svg>
+                                </button>
+                                <button
+                                    type="button"
+                                    className="cta-secondary"
+                                    onClick={() => onNavigate('projects')}
+                                >
+                                    View Projects
                                 </button>
                             </div>
                         </div>
