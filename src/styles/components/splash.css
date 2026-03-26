@@ -1,3 +1,6 @@
+/* ========================================
+   Splash Screen — Immersive & Skeuomorphic
+   ======================================== */
 #splash-overlay {
   position: fixed;
   top: 0;
@@ -10,22 +13,105 @@
   justify-content: center;
   align-items: center;
   overflow: hidden;
-  background: rgba(8, 8, 14, 0.75);
-  backdrop-filter: blur(40px) saturate(1.6);
-  -webkit-backdrop-filter: blur(60px) saturate(1.8);
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 45%, rgba(0, 180, 255, 0.06) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 40% at 30% 70%, rgba(120, 0, 255, 0.04) 0%, transparent 60%),
+    rgba(6, 6, 12, 0.92);
+  backdrop-filter: blur(48px) saturate(1.6);
+  -webkit-backdrop-filter: blur(48px) saturate(1.6);
   will-change: clip-path, opacity;
   transform: translateZ(0);
-  -webkit-transition: -webkit-clip-path 0.08s linear, clip-path 0.08s linear, opacity 0.3s ease-out;
-  transition: -webkit-clip-path 0.08s linear, clip-path 0.08s linear, opacity 0.3s ease-out;
+  transition: clip-path 0.08s linear, -webkit-clip-path 0.08s linear, opacity 0.3s ease-out;
 }
 
-/* Fallback for browsers without backdrop-filter */
 @supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
   #splash-overlay {
-    background: rgba(8, 8, 14, 0.96);
+    background: rgba(6, 6, 12, 0.98);
   }
 }
 
+/* ========================================
+   Floating Particles
+   ======================================== */
+.splash-particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.splash-particle {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0, 212, 255, 0.8), transparent 70%);
+  animation: particleDrift linear infinite;
+  will-change: transform, opacity;
+}
+
+@keyframes particleDrift {
+  0%, 100% {
+    transform: translateY(0) translateX(0) scale(1);
+    opacity: var(--particle-opacity, 0.2);
+  }
+  25% {
+    transform: translateY(-30px) translateX(15px) scale(1.3);
+    opacity: calc(var(--particle-opacity, 0.2) * 1.5);
+  }
+  50% {
+    transform: translateY(-10px) translateX(-20px) scale(0.8);
+    opacity: var(--particle-opacity, 0.2);
+  }
+  75% {
+    transform: translateY(-50px) translateX(10px) scale(1.1);
+    opacity: calc(var(--particle-opacity, 0.2) * 0.7);
+  }
+}
+
+/* ========================================
+   Light Beams
+   ======================================== */
+.splash-beams {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.splash-beam {
+  position: absolute;
+  width: 2px;
+  height: 100%;
+  opacity: 0;
+  animation: beamSweep 12s ease-in-out infinite;
+}
+
+.splash-beam-1 {
+  left: 20%;
+  background: linear-gradient(180deg, transparent, rgba(0, 212, 255, 0.15), transparent);
+  animation-delay: 0s;
+}
+
+.splash-beam-2 {
+  left: 55%;
+  background: linear-gradient(180deg, transparent, rgba(168, 85, 247, 0.1), transparent);
+  animation-delay: -4s;
+}
+
+.splash-beam-3 {
+  left: 80%;
+  background: linear-gradient(180deg, transparent, rgba(244, 114, 182, 0.08), transparent);
+  animation-delay: -8s;
+}
+
+@keyframes beamSweep {
+  0%, 100% { opacity: 0; transform: translateX(0) scaleX(1); }
+  15% { opacity: 0.6; transform: translateX(20px) scaleX(2.5); }
+  30% { opacity: 0; transform: translateX(80px) scaleX(1); }
+}
+
+/* ========================================
+   Gradient Orbs (Atmospheric Depth)
+   ======================================== */
 .splash-orbs {
   position: absolute;
   inset: 0;
@@ -36,52 +122,52 @@
 .orb {
   position: absolute;
   border-radius: 50%;
-  filter: blur(80px);
-  opacity: 0.6;
-  animation: orbFloat 20s ease-in-out infinite;
+  filter: blur(100px);
+  opacity: 0.4;
+  animation: orbFloat 24s ease-in-out infinite;
 }
 
 .orb-1 {
-  width: 60vw;
-  height: 60vw;
-  max-width: 800px;
-  max-height: 800px;
-  background: radial-gradient(circle, rgba(0, 180, 255, 0.4) 0%, transparent 70%);
-  top: -20%;
-  left: -10%;
-  animation-delay: 0s;
+  width: 50vw;
+  height: 50vw;
+  max-width: 700px;
+  max-height: 700px;
+  background: radial-gradient(circle, rgba(0, 140, 255, 0.25) 0%, transparent 70%);
+  top: -25%;
+  left: -15%;
 }
 
 .orb-2 {
-  width: 50vw;
-  height: 50vw;
-  max-width: 600px;
-  max-height: 600px;
-  background: radial-gradient(circle, rgba(120, 0, 255, 0.35) 0%, transparent 70%);
-  bottom: -15%;
-  right: -5%;
-  animation-delay: -7s;
+  width: 45vw;
+  height: 45vw;
+  max-width: 550px;
+  max-height: 550px;
+  background: radial-gradient(circle, rgba(100, 0, 220, 0.2) 0%, transparent 70%);
+  bottom: -20%;
+  right: -10%;
+  animation-delay: -8s;
 }
 
 .orb-3 {
-  width: 40vw;
-  height: 40vw;
-  max-width: 500px;
-  max-height: 500px;
-  background: radial-gradient(circle, rgba(0, 255, 200, 0.25) 0%, transparent 70%);
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  animation-delay: -14s;
+  width: 30vw;
+  height: 30vw;
+  max-width: 380px;
+  max-height: 380px;
+  background: radial-gradient(circle, rgba(0, 255, 180, 0.12) 0%, transparent 70%);
+  top: 45%;
+  left: 55%;
+  animation-delay: -16s;
 }
 
 @keyframes orbFloat {
   0%, 100% { transform: translate(0, 0) scale(1); }
-  25% { transform: translate(5%, -8%) scale(1.05); }
-  50% { transform: translate(-3%, 5%) scale(0.95); }
-  75% { transform: translate(-6%, -3%) scale(1.02); }
+  33% { transform: translate(4%, -6%) scale(1.04); }
+  66% { transform: translate(-3%, 4%) scale(0.96); }
 }
 
+/* ========================================
+   Splash Content Layout
+   ======================================== */
 .splash-content {
   width: 100%;
   height: 100%;
@@ -96,79 +182,291 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 20px;
+  gap: 28px;
+  cursor: pointer;
+  outline: none;
+  padding: 40px;
+  border-radius: 32px;
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.typewriter-text {
-  font-family: "Quantico", sans-serif;
-  font-size: clamp(1.8rem, 4vw, 3.5rem);
+.splash-center:hover {
+  transform: scale(1.01);
+}
+
+.splash-center:active {
+  transform: scale(0.99);
+}
+
+/* ========================================
+   Progress Ring — Skeuomorphic Gauge
+   ======================================== */
+.splash-ring {
+  position: relative;
+  width: 128px;
+  height: 128px;
+  margin-bottom: 8px;
+  animation: ringAppear 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes ringAppear {
+  from { opacity: 0; transform: scale(0.8) rotate(-20deg); }
+  to { opacity: 1; transform: scale(1) rotate(0); }
+}
+
+.splash-ring-svg {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 0 12px rgba(0, 212, 255, 0.2));
+  transition: filter 0.5s ease;
+}
+
+.ring-complete .splash-ring-svg {
+  filter: drop-shadow(0 0 24px rgba(0, 212, 255, 0.4)) drop-shadow(0 0 48px rgba(168, 85, 247, 0.2));
+}
+
+.progress-ring-circle {
+  transition: stroke-dashoffset 0.15s ease;
+}
+
+.ring-complete .progress-ring-circle {
+  filter: url(#ringGlow);
+}
+
+/* Ring pulse on completion */
+.ring-complete::after {
+  content: '';
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 212, 255, 0.2);
+  animation: ringPulse 2.5s ease-in-out infinite;
+}
+
+@keyframes ringPulse {
+  0%, 100% { transform: scale(1); opacity: 0.5; }
+  50% { transform: scale(1.08); opacity: 0; }
+}
+
+/* Initials inside ring */
+.splash-ring-initials {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  font-family: 'Quantico', sans-serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.1);
+}
+
+.splash-ring-initials span {
+  transition: color 0.6s ease, text-shadow 0.6s ease, transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  transform: translateY(4px);
+}
+
+.splash-ring-initials span.visible {
+  color: rgba(255, 255, 255, 0.85);
+  text-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
+  transform: translateY(0);
+}
+
+/* ========================================
+   Name Typography — Metallic & Embossed
+   ======================================== */
+.splash-name-container {
+  text-align: center;
+}
+
+.splash-name {
+  font-family: 'Quantico', sans-serif;
+  font-size: clamp(1.6rem, 3.5vw, 3rem);
   font-weight: 700;
   color: #fff;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  text-shadow: 0 0 40px rgba(0, 200, 255, 0.5), 0 0 80px rgba(0, 200, 255, 0.2);
-}
-
-.cursor-blink {
-  color: var(--accent);
-  animation: blink 1s step-end infinite;
-  margin-left: 2px;
-}
-
-@keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
-}
-
-.splash-hint {
-  font-size: 0.85rem;
-  color: rgba(255, 255, 255, 0.45);
-  letter-spacing: 0.08em;
-  margin-top: 24px;
-  animation: fadeInUp 0.6s ease forwards;
-}
-
-@keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.typewriter-text.glitch-active {
+  margin: 0;
   position: relative;
+  /* Skeuomorphic embossed text effect */
+  text-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.15),
+    0 -1px 0 rgba(0, 0, 0, 0.4),
+    0 0 30px rgba(0, 200, 255, 0.25),
+    0 0 60px rgba(0, 200, 255, 0.1);
+  line-height: 1.2;
 }
 
-.typewriter-text.glitch-active::before {
+/* Gradient overlay on completion */
+.splash-name.name-complete {
+  background: linear-gradient(
+    135deg,
+    #ffffff 0%,
+    #e0e8ff 25%,
+    #00d4ff 50%,
+    #e0e8ff 75%,
+    #ffffff 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmerText 4s linear infinite;
+}
+
+@keyframes shimmerText {
+  0% { background-position: 0% center; }
+  100% { background-position: 200% center; }
+}
+
+.splash-name.name-complete::after {
   content: attr(data-text);
   position: absolute;
   left: 0;
   top: 0;
   width: 100%;
-  height: 100%;
-  background: linear-gradient(165deg, #00e7ff 0%, #ff00ff 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
   color: transparent;
-  opacity: 0;
-  animation: glitchText 3s infinite;
-  pointer-events: none;
+  -webkit-text-fill-color: transparent;
+  text-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.5),
+    0 -1px 0 rgba(255, 255, 255, 0.08);
+  z-index: -1;
 }
 
-.loading-bar-container {
+/* Blinking cursor */
+.splash-cursor {
+  color: var(--accent, #00d4ff);
+  animation: cursorBlink 0.8s step-end infinite;
+  margin-left: 2px;
+  font-weight: 300;
+}
+
+@keyframes cursorBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* ========================================
+   Metallic Underline
+   ======================================== */
+.splash-underline {
   width: 100%;
-  height: 4px;
-  background: rgba(255, 255, 255, 0.1);
+  height: 3px;
+  margin-top: 12px;
   border-radius: 2px;
+  /* Skeuomorphic inset track */
+  background: rgba(255, 255, 255, 0.04);
+  box-shadow:
+    inset 0 1px 2px rgba(0, 0, 0, 0.5),
+    0 1px 0 rgba(255, 255, 255, 0.03);
   overflow: hidden;
+  position: relative;
 }
 
-.loading-bar {
-  width: 0%;
+.splash-underline-fill {
   height: 100%;
-  background: #00e7ff;
-  transition: width 0.1s linear;
-  box-shadow: 0 0 10px rgba(0, 231, 255, 0.5);
+  border-radius: inherit;
+  transition: width 0.12s ease;
+  /* Metallic gradient fill */
+  background: linear-gradient(90deg, #00d4ff 0%, #a855f7 60%, #f472b6 100%);
+  box-shadow:
+    0 0 8px rgba(0, 212, 255, 0.5),
+    0 0 20px rgba(0, 212, 255, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  position: relative;
 }
 
+/* Shine sweep on the underline fill */
+.splash-underline-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  animation: underlineSweep 2.5s ease-in-out infinite;
+  animation-delay: 1s;
+}
+
+@keyframes underlineSweep {
+  0% { left: -60%; }
+  100% { left: 160%; }
+}
+
+/* ========================================
+   Subtitle
+   ======================================== */
+.splash-subtitle {
+  font-size: clamp(0.8rem, 1.2vw, 0.95rem);
+  color: rgba(255, 255, 255, 0.35);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 500;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.6s ease 0.1s, transform 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.1s;
+}
+
+.splash-subtitle.subtitle-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ========================================
+   Enter Prompt
+   ======================================== */
+.splash-enter-prompt {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-top: 8px;
+  animation: promptFadeIn 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.3s both;
+}
+
+@keyframes promptFadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.splash-enter-icon {
+  color: rgba(255, 255, 255, 0.4);
+  animation: bounceDown 2s ease-in-out infinite;
+}
+
+@keyframes bounceDown {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(6px); }
+}
+
+.splash-enter-prompt span {
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.28);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+/* ========================================
+   Exiting State
+   ======================================== */
+.splash-exiting .splash-particles {
+  transition: opacity 0.5s ease;
+  opacity: 0;
+}
+
+.splash-exiting .splash-center {
+  transition: transform 0.4s ease, opacity 0.3s ease;
+  transform: scale(0.96);
+  opacity: 0.8;
+}
+
+/* ========================================
+   Dashboard state (legacy support)
+   ======================================== */
 #splash-overlay.to-dashboard {
   -webkit-clip-path: inset(0 0 calc(100% - 80px) 0);
   clip-path: inset(0 0 calc(100% - 80px) 0);
@@ -183,28 +481,62 @@
   pointer-events: none;
 }
 
-#splash-overlay.to-dashboard .splash-header-row {
-  opacity: 1;
-  transform: translateY(0);
-  pointer-events: auto;
+/* ========================================
+   Reduced Motion
+   ======================================== */
+@media (prefers-reduced-motion: reduce) {
+  .splash-particle,
+  .splash-beam,
+  .orb,
+  .splash-ring-initials span,
+  .splash-enter-icon,
+  .splash-underline-fill::after {
+    animation: none !important;
+  }
+
+  .splash-name.name-complete {
+    animation: none;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
 }
 
-#splash-overlay.to-dashboard .splash-nav {
-  opacity: 1;
-  transform: translateY(0);
-  margin-top: 0;
-  pointer-events: auto;
-}
-
+/* ========================================
+   Mobile Responsive
+   ======================================== */
 @media (max-width: 600px) {
+  .splash-center {
+    padding: 24px;
+    gap: 20px;
+  }
+
+  .splash-ring {
+    width: 96px;
+    height: 96px;
+  }
+
+  .splash-ring-initials {
+    font-size: 1.2rem;
+  }
+
+  .splash-name {
+    font-size: clamp(1.3rem, 6vw, 1.8rem);
+    letter-spacing: 0.08em;
+  }
+
+  .splash-subtitle {
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+  }
+
+  .splash-beam {
+    display: none;
+  }
+
   #splash-overlay.to-dashboard {
     -webkit-clip-path: inset(0 0 calc(100% - 100px) 0);
     clip-path: inset(0 0 calc(100% - 100px) 0);
     height: 100px;
-  }
-  
-  #splash-overlay.to-dashboard .splash-content {
-    flex-direction: column;
-    padding: 0.5rem;
   }
 }

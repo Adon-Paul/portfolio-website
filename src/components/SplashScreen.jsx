@@ -1,34 +1,49 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
-import AutoVariableProximity from './AutoVariableProximity'
 
 function SplashScreen({ state, onComplete, reduceMotion }) {
     const [displayText, setDisplayText] = useState('')
     const [progress, setProgress] = useState(0)
-    const [isGlitchActive, setIsGlitchActive] = useState(false)
-    const [showScrollHint, setShowScrollHint] = useState(false)
+    const [phase, setPhase] = useState('typing') // typing | ready | exiting
+    const [particles, setParticles] = useState([])
 
     // Direct DOM manipulation for ultra-smooth animation
     const overlayRef = useRef(null)
     const currentRadius = useRef(150)
     const targetRadius = useRef(150)
     const velocity = useRef(0)
+    const ringRef = useRef(null)
+    const progressRingRef = useRef(null)
 
     const targetText = "Adon Paul Tomy"
-    const speed = 100
+    const speed = 85
 
-    // Typewriter effect
+    // Generate scattered particles on mount
+    useEffect(() => {
+        const pts = Array.from({ length: 40 }, (_, i) => ({
+            id: i,
+            x: Math.random() * 100,
+            y: Math.random() * 100,
+            size: Math.random() * 3 + 1,
+            delay: Math.random() * 4,
+            duration: Math.random() * 6 + 8,
+            opacity: Math.random() * 0.4 + 0.1
+        }))
+        setParticles(pts)
+    }, [])
+
+    // Typewriter effect with progress ring
     useEffect(() => {
         if (reduceMotion) {
             setDisplayText(targetText)
             setProgress(100)
-            setIsGlitchActive(true)
+            setPhase('ready')
             onComplete()
             return
         }
 
         let index = 0
         let lastTime = 0
-        let rafId;
+        let rafId
 
         const animate = (timestamp) => {
             if (!lastTime) lastTime = timestamp
@@ -36,15 +51,22 @@ function SplashScreen({ state, onComplete, reduceMotion }) {
             if (timestamp - lastTime > speed && index < targetText.length) {
                 index++
                 setDisplayText(targetText.substring(0, index))
-                setProgress((index / targetText.length) * 100)
+                const pct = (index / targetText.length) * 100
+                setProgress(pct)
+
+                // Update progress ring via DOM
+                if (progressRingRef.current) {
+                    const circumference = 2 * Math.PI * 58
+                    const offset = circumference - (pct / 100) * circumference
+                    progressRingRef.current.style.strokeDashoffset = offset
+                }
                 lastTime = timestamp
             }
 
             if (index < targetText.length) {
                 rafId = requestAnimationFrame(animate)
             } else {
-                setIsGlitchActive(true)
-                setTimeout(() => setShowScrollHint(true), 500)
+                setPhase('ready')
             }
         }
 
@@ -63,23 +85,20 @@ function SplashScreen({ state, onComplete, reduceMotion }) {
     }, [state])
 
     // ULTRA-SMOOTH SPRING PHYSICS ANIMATION
-    // Directly manipulates DOM to bypass React's render cycle
     useEffect(() => {
         if (!overlayRef.current) return
 
-        const stiffness = 0.015  // Lower = slower, smoother
-        const damping = 0.85     // Higher = more resistance, smoother stop
+        const stiffness = 0.012
+        const damping = 0.87
 
         let animationId
 
         const animate = () => {
-            // Spring physics
             const displacement = targetRadius.current - currentRadius.current
             const springForce = displacement * stiffness
             velocity.current = (velocity.current + springForce) * damping
             currentRadius.current += velocity.current
 
-            // Apply directly to DOM (bypasses React render)
             if (overlayRef.current) {
                 const opacity = currentRadius.current > 20 ? 1 : Math.max(currentRadius.current / 20, 0)
                 const clipValue = `circle(${currentRadius.current}% at 50% 50%)`
@@ -88,7 +107,6 @@ function SplashScreen({ state, onComplete, reduceMotion }) {
                 overlayRef.current.style.opacity = opacity
             }
 
-            // Check if animation should trigger complete
             if (currentRadius.current <= 5 && state !== 'dashboard') {
                 onComplete()
             }
@@ -100,23 +118,46 @@ function SplashScreen({ state, onComplete, reduceMotion }) {
         return () => cancelAnimationFrame(animationId)
     }, [state, onComplete])
 
-    // Handle scroll - just updates target, doesn't trigger re-render
+    // Handle scroll
     useEffect(() => {
-        if (!showScrollHint || state === 'dashboard') return
+        if (phase !== 'ready' || state === 'dashboard') return
 
         const handleWheel = (e) => {
-            const scrollDelta = e.deltaY * 0.3  // Sensitivity
+            const scrollDelta = e.deltaY * 0.35
             targetRadius.current = Math.max(Math.min(targetRadius.current - scrollDelta, 150), 0)
         }
 
         window.addEventListener('wheel', handleWheel, { passive: true })
         return () => window.removeEventListener('wheel', handleWheel)
-    }, [showScrollHint, state])
+    }, [phase, state])
+
+    // Touch support for mobile
+    useEffect(() => {
+        if (phase !== 'ready' || state === 'dashboard') return
+
+        let touchStartY = 0
+        const handleTouchStart = (e) => { touchStartY = e.touches[0].clientY }
+        const handleTouchMove = (e) => {
+            const delta = (touchStartY - e.touches[0].clientY) * 0.5
+            targetRadius.current = Math.max(Math.min(targetRadius.current - delta, 150), 0)
+            touchStartY = e.touches[0].clientY
+        }
+
+        window.addEventListener('touchstart', handleTouchStart, { passive: true })
+        window.addEventListener('touchmove', handleTouchMove, { passive: true })
+        return () => {
+            window.removeEventListener('touchstart', handleTouchStart)
+            window.removeEventListener('touchmove', handleTouchMove)
+        }
+    }, [phase, state])
 
     // Click handler
     const handleClick = useCallback(() => {
-        targetRadius.current = 0
-    }, [])
+        if (phase === 'ready') {
+            setPhase('exiting')
+            targetRadius.current = 0
+        }
+    }, [phase])
 
     // Dashboard state - immediate hide
     useEffect(() => {
@@ -125,10 +166,13 @@ function SplashScreen({ state, onComplete, reduceMotion }) {
         }
     }, [state])
 
+    const circumference = 2 * Math.PI * 58
+
     return (
         <div
             ref={overlayRef}
             id="splash-overlay"
+            className={phase === 'exiting' ? 'splash-exiting' : ''}
             style={{
                 WebkitClipPath: 'circle(150% at 50% 50%)',
                 clipPath: 'circle(150% at 50% 50%)',
@@ -136,34 +180,131 @@ function SplashScreen({ state, onComplete, reduceMotion }) {
             }}
             aria-hidden={state === 'dashboard'}
         >
-            <AutoVariableProximity containerRef={overlayRef} enabled={!reduceMotion}>
-                {/* Animated gradient orbs for depth */}
-                <div className="splash-orbs" aria-hidden="true">
-                    <div className="orb orb-1"></div>
-                    <div className="orb orb-2"></div>
-                    <div className="orb orb-3"></div>
-                </div>
-
-                <div className="splash-content">
+            {/* Ambient particles */}
+            <div className="splash-particles" aria-hidden="true">
+                {particles.map(p => (
                     <div
-                        className="splash-center"
-                        style={{ cursor: 'pointer' }}
-                        onClick={handleClick}
-                        title="Click to enter"
-                    >
-                        <div className={`typewriter-text ${isGlitchActive ? 'glitch-active' : ''}`} data-text={targetText}>
-                            {displayText}
-                        </div>
-                        <div className="loading-bar-container">
-                            <div className="loading-bar" style={{ width: `${progress}%` }}></div>
-                        </div>
+                        key={p.id}
+                        className="splash-particle"
+                        style={{
+                            left: `${p.x}%`,
+                            top: `${p.y}%`,
+                            width: `${p.size}px`,
+                            height: `${p.size}px`,
+                            opacity: p.opacity,
+                            animationDelay: `${p.delay}s`,
+                            animationDuration: `${p.duration}s`
+                        }}
+                    />
+                ))}
+            </div>
 
-                        {isGlitchActive && (
-                            <p className="splash-hint">Click or scroll to continue</p>
-                        )}
+            {/* Radial light beams */}
+            <div className="splash-beams" aria-hidden="true">
+                <div className="splash-beam splash-beam-1" />
+                <div className="splash-beam splash-beam-2" />
+                <div className="splash-beam splash-beam-3" />
+            </div>
+
+            {/* Gradient orbs for atmospheric depth */}
+            <div className="splash-orbs" aria-hidden="true">
+                <div className="orb orb-1" />
+                <div className="orb orb-2" />
+                <div className="orb orb-3" />
+            </div>
+
+            <div className="splash-content">
+                <div
+                    className="splash-center"
+                    onClick={handleClick}
+                    role="button"
+                    tabIndex={0}
+                    aria-label="Click to enter site"
+                    onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleClick() }}
+                >
+                    {/* Central ring with progress */}
+                    <div className={`splash-ring ${phase === 'ready' ? 'ring-complete' : ''}`} ref={ringRef}>
+                        <svg className="splash-ring-svg" viewBox="0 0 128 128">
+                            {/* Background ring track */}
+                            <circle
+                                cx="64"
+                                cy="64"
+                                r="58"
+                                fill="none"
+                                stroke="rgba(255,255,255,0.06)"
+                                strokeWidth="1.5"
+                            />
+                            {/* Progress ring */}
+                            <circle
+                                ref={progressRingRef}
+                                cx="64"
+                                cy="64"
+                                r="58"
+                                fill="none"
+                                stroke="url(#ringGradient)"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeDasharray={circumference}
+                                strokeDashoffset={circumference}
+                                className="progress-ring-circle"
+                                transform="rotate(-90 64 64)"
+                            />
+                            {/* Decorative inner ring */}
+                            <circle
+                                cx="64"
+                                cy="64"
+                                r="48"
+                                fill="none"
+                                stroke="rgba(255,255,255,0.03)"
+                                strokeWidth="0.5"
+                            />
+                            <defs>
+                                <linearGradient id="ringGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stopColor="#00d4ff" />
+                                    <stop offset="50%" stopColor="#a855f7" />
+                                    <stop offset="100%" stopColor="#f472b6" />
+                                </linearGradient>
+                            </defs>
+                        </svg>
+
+                        {/* Initials inside ring */}
+                        <div className="splash-ring-initials">
+                            <span className={progress > 0 ? 'visible' : ''}>A</span>
+                            <span className={progress > 50 ? 'visible' : ''}>P</span>
+                        </div>
                     </div>
+
+                    {/* Main name text with embossed effect */}
+                    <div className="splash-name-container">
+                        <h1 className={`splash-name ${phase === 'ready' ? 'name-complete' : ''}`} data-text={targetText}>
+                            {displayText}
+                            {phase === 'typing' && <span className="splash-cursor">|</span>}
+                        </h1>
+
+                        {/* Metallic underline */}
+                        <div className="splash-underline">
+                            <div className="splash-underline-fill" style={{ width: `${progress}%` }} />
+                        </div>
+                    </div>
+
+                    {/* Subtitle */}
+                    <p className={`splash-subtitle ${phase === 'ready' ? 'subtitle-visible' : ''}`}>
+                        Flutter Developer &middot; CS Student &middot; Builder
+                    </p>
+
+                    {/* Enter prompt */}
+                    {phase === 'ready' && (
+                        <div className="splash-enter-prompt">
+                            <div className="splash-enter-icon">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="M12 5v14M19 12l-7 7-7-7" />
+                                </svg>
+                            </div>
+                            <span>scroll or click to enter</span>
+                        </div>
+                    )}
                 </div>
-            </AutoVariableProximity>
+            </div>
         </div>
     )
 }

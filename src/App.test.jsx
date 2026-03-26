@@ -57,6 +57,6 @@ describe('App Component', () => {
   it('renders without crashing', () => {
     render(<App />)
     // Splash screen usually appears first
-    expect(screen.getByTitle(/Click to enter/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/Click to enter site/i)).toBeInTheDocument()
   })
 })
