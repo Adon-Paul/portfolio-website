@@ -111,6 +111,12 @@ export default function DarkVeil({
     const ref = useRef(null);
     const [hasError, setHasError] = useState(false);
 
+    // Store props in refs so the render loop always reads current values
+    // without needing to teardown/rebuild WebGL
+    const propsRef = useRef({ hueShift, animateHue, hueSpeed, hueMin, hueMax, noiseIntensity, scanlineIntensity, speed, scanlineFrequency, warpAmount });
+    propsRef.current = { hueShift, animateHue, hueSpeed, hueMin, hueMax, noiseIntensity, scanlineIntensity, speed, scanlineFrequency, warpAmount };
+
+    // WebGL initialization — only runs once (or on resolutionScale change)
     useEffect(() => {
         const canvas = ref.current;
         if (!canvas || hasError) return;
@@ -122,11 +128,11 @@ export default function DarkVeil({
             renderer = new Renderer({
                 dpr: Math.min(window.devicePixelRatio, 2),
                 canvas,
-                alpha: false // Ensure opaque for background
+                alpha: false
             });
 
             gl = renderer.gl;
-            const geometry = new Triangle(gl); // Generates full-screen triangle
+            const geometry = new Triangle(gl);
 
             program = new Program(gl, {
                 vertex,
@@ -160,34 +166,34 @@ export default function DarkVeil({
         resize();
 
         const start = performance.now();
-        frame = 0;
 
         const loop = () => {
+            const p = propsRef.current;
             const elapsedSeconds = (performance.now() - start) / 1000;
-            program.uniforms.uTime.value = elapsedSeconds * speed;
+            program.uniforms.uTime.value = elapsedSeconds * p.speed;
 
-            if (animateHue) {
-                const hasRange = Number.isFinite(hueMin) && Number.isFinite(hueMax) && hueMax !== hueMin;
+            if (p.animateHue) {
+                const hasRange = Number.isFinite(p.hueMin) && Number.isFinite(p.hueMax) && p.hueMax !== p.hueMin;
                 if (hasRange) {
-                    const min = hueMin;
-                    const max = hueMax;
+                    const min = p.hueMin;
+                    const max = p.hueMax;
                     const span = (min <= max) ? (max - min) : ((360 - min) + max);
                     const path = span * 2;
-                    const dist = ((elapsedSeconds * hueSpeed) % path + path) % path;
+                    const dist = ((elapsedSeconds * p.hueSpeed) % path + path) % path;
                     const pos = dist <= span ? dist : (path - dist);
                     const shifted = (min + pos) % 360;
                     program.uniforms.uHueShift.value = shifted < 0 ? shifted + 360 : shifted;
                 } else {
-                    const shifted = (hueShift + elapsedSeconds * hueSpeed) % 360;
+                    const shifted = (p.hueShift + elapsedSeconds * p.hueSpeed) % 360;
                     program.uniforms.uHueShift.value = shifted < 0 ? shifted + 360 : shifted;
                 }
             } else {
-                program.uniforms.uHueShift.value = hueShift;
+                program.uniforms.uHueShift.value = p.hueShift;
             }
-            program.uniforms.uNoise.value = noiseIntensity;
-            program.uniforms.uScan.value = scanlineIntensity;
-            program.uniforms.uScanFreq.value = scanlineFrequency;
-            program.uniforms.uWarp.value = warpAmount;
+            program.uniforms.uNoise.value = p.noiseIntensity;
+            program.uniforms.uScan.value = p.scanlineIntensity;
+            program.uniforms.uScanFreq.value = p.scanlineFrequency;
+            program.uniforms.uWarp.value = p.warpAmount;
             renderer.render({ scene: mesh });
             frame = requestAnimationFrame(loop);
         };
@@ -198,7 +204,7 @@ export default function DarkVeil({
             cancelAnimationFrame(frame);
             window.removeEventListener('resize', resize);
         };
-    }, [hueShift, animateHue, hueSpeed, hueMin, hueMax, noiseIntensity, scanlineIntensity, speed, scanlineFrequency, warpAmount, resolutionScale, hasError]);
+    }, [resolutionScale, hasError]); // Only rebuild WebGL on these changes
 
     // If WebGL failed, render a fallback gradient background
     if (hasError) {

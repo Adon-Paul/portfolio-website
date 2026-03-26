@@ -130,6 +130,16 @@ html[data-theme="dark"] .content-card::before {
   mix-blend-mode: screen;
 }
 
+/* Fallback for browsers without backdrop-filter */
+@supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+  html[data-theme="dark"] .content-card {
+    background: rgba(16, 16, 28, 0.92);
+  }
+  html[data-theme="light"] .content-card {
+    background: rgba(255, 255, 255, 0.94);
+  }
+}
+
 .profile-photo.fade {
   opacity: 0;
   filter: blur(1px) saturate(105%);

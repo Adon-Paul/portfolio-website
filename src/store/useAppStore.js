@@ -39,6 +39,8 @@ const useAppStore = create((set) => ({
   }),
 
   setReduceMotion: (reduceMotion) => set({ reduceMotion }),
+
+  toggleReduceMotion: () => set((state) => ({ reduceMotion: !state.reduceMotion })),
   
   setCursorGlow: (cursorGlow) => {
     set({ cursorGlow })

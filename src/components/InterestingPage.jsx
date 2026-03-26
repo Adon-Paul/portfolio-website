@@ -1,34 +1,30 @@
-import { useRef, useState } from 'react'
+import { useRef } from 'react'
 import ShootingStars from './ShootingStars'
 import AutoVariableProximity from './AutoVariableProximity'
+import useAppStore from '../store/useAppStore'
 
-export default function InterestingPage({
-    theme,
-    reduceMotion,
-    onToggleTheme,
-    onToggleMotion,
-    cursorGlow,
-    onToggleCursorGlow,
-    showShootingStars,
-    onToggleShootingStars,
-    fontSize,
-    onChangeFontSize,
-    highContrast,
-    onToggleHighContrast,
-    showBackground,
-    onToggleBackground
-}) {
-    const [year] = useState(new Date().getFullYear())
+const FONT_SIZE_OPTIONS = ['small', 'medium', 'large']
+const FONT_SIZE_LABELS = { small: 'Small', medium: 'Medium', large: 'Large' }
+
+export default function InterestingPage() {
     const containerRef = useRef(null)
+    const year = new Date().getFullYear()
 
-    const fontSizeOptions = ['small', 'medium', 'large']
+    const {
+        theme, toggleTheme,
+        reduceMotion, toggleReduceMotion,
+        cursorGlow, setCursorGlow,
+        showShootingStars, setShowShootingStars,
+        fontSize, setFontSize,
+        highContrast, setHighContrast,
+        showBackground, setShowBackground,
+    } = useAppStore()
+
     const nextFontSize = () => {
-        const currentIndex = fontSizeOptions.indexOf(fontSize)
-        const nextIndex = (currentIndex + 1) % fontSizeOptions.length
-        onChangeFontSize(fontSizeOptions[nextIndex])
+        const currentIndex = FONT_SIZE_OPTIONS.indexOf(fontSize)
+        const nextIndex = (currentIndex + 1) % FONT_SIZE_OPTIONS.length
+        setFontSize(FONT_SIZE_OPTIONS[nextIndex])
     }
-
-    const fontSizeLabels = { small: 'Small', medium: 'Medium', large: 'Large' }
 
     return (
         <>
@@ -66,7 +62,6 @@ export default function InterestingPage({
                                 <p className="lead">Customize your experience</p>
 
                                 <div className="settings-grid">
-                                    {/* Theme */}
                                     <div className="setting-item">
                                         <div className="setting-info">
                                             <span className="setting-label">Theme</span>
@@ -74,14 +69,13 @@ export default function InterestingPage({
                                         </div>
                                         <button
                                             className="setting-toggle"
-                                            onClick={onToggleTheme}
+                                            onClick={toggleTheme}
                                             aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
                                         >
                                             <span className="toggle-text">{theme === 'dark' ? 'Dark' : 'Light'}</span>
                                         </button>
                                     </div>
 
-                                    {/* Reduce Motion */}
                                     <div className="setting-item">
                                         <div className="setting-info">
                                             <span className="setting-label">Reduce Motion</span>
@@ -89,14 +83,13 @@ export default function InterestingPage({
                                         </div>
                                         <button
                                             className="setting-toggle"
-                                            onClick={onToggleMotion}
+                                            onClick={toggleReduceMotion}
                                             aria-label={`${reduceMotion ? 'Enable' : 'Disable'} animations`}
                                         >
                                             <span className="toggle-text">{reduceMotion ? 'Off' : 'On'}</span>
                                         </button>
                                     </div>
 
-                                    {/* Cursor Glow */}
                                     <div className="setting-item">
                                         <div className="setting-info">
                                             <span className="setting-label">Cursor Glow</span>
@@ -104,14 +97,13 @@ export default function InterestingPage({
                                         </div>
                                         <button
                                             className="setting-toggle"
-                                            onClick={onToggleCursorGlow}
+                                            onClick={() => setCursorGlow(!cursorGlow)}
                                             aria-label={`${cursorGlow ? 'Disable' : 'Enable'} cursor glow`}
                                         >
                                             <span className="toggle-text">{cursorGlow ? 'On' : 'Off'}</span>
                                         </button>
                                     </div>
 
-                                    {/* Shooting Stars */}
                                     <div className="setting-item">
                                         <div className="setting-info">
                                             <span className="setting-label">Shooting Stars</span>
@@ -119,14 +111,13 @@ export default function InterestingPage({
                                         </div>
                                         <button
                                             className="setting-toggle"
-                                            onClick={onToggleShootingStars}
+                                            onClick={() => setShowShootingStars(!showShootingStars)}
                                             aria-label={`${showShootingStars ? 'Disable' : 'Enable'} shooting stars`}
                                         >
                                             <span className="toggle-text">{showShootingStars ? 'On' : 'Off'}</span>
                                         </button>
                                     </div>
 
-                                    {/* Background Effects */}
                                     <div className="setting-item">
                                         <div className="setting-info">
                                             <span className="setting-label">Background Effects</span>
@@ -134,14 +125,13 @@ export default function InterestingPage({
                                         </div>
                                         <button
                                             className="setting-toggle"
-                                            onClick={onToggleBackground}
+                                            onClick={() => setShowBackground(!showBackground)}
                                             aria-label={`${showBackground ? 'Disable' : 'Enable'} background effects`}
                                         >
                                             <span className="toggle-text">{showBackground ? 'On' : 'Off'}</span>
                                         </button>
                                     </div>
 
-                                    {/* Font Size */}
                                     <div className="setting-item">
                                         <div className="setting-info">
                                             <span className="setting-label">Font Size</span>
@@ -152,11 +142,10 @@ export default function InterestingPage({
                                             onClick={nextFontSize}
                                             aria-label={`Change font size, current: ${fontSize}`}
                                         >
-                                            <span className="toggle-text">{fontSizeLabels[fontSize]}</span>
+                                            <span className="toggle-text">{FONT_SIZE_LABELS[fontSize]}</span>
                                         </button>
                                     </div>
 
-                                    {/* High Contrast */}
                                     <div className="setting-item">
                                         <div className="setting-info">
                                             <span className="setting-label">High Contrast</span>
@@ -164,7 +153,7 @@ export default function InterestingPage({
                                         </div>
                                         <button
                                             className="setting-toggle"
-                                            onClick={onToggleHighContrast}
+                                            onClick={() => setHighContrast(!highContrast)}
                                             aria-label={`${highContrast ? 'Disable' : 'Enable'} high contrast`}
                                         >
                                             <span className="toggle-text">{highContrast ? 'On' : 'Off'}</span>

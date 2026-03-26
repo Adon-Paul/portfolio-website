@@ -38,14 +38,24 @@
 /* Light theme header */
 html[data-theme="light"] .app-header {
   background: linear-gradient(
-    135deg, 
-    rgba(255, 255, 255, 0.85) 0%, 
+    135deg,
+    rgba(255, 255, 255, 0.85) 0%,
     rgba(248, 250, 252, 0.75) 100%
   );
   border-color: rgba(0, 0, 0, 0.06);
-  box-shadow: 
+  box-shadow:
     0 8px 32px rgba(0, 0, 0, 0.08),
     0 0 0 1px rgba(255, 255, 255, 0.5) inset;
+}
+
+/* Fallback for browsers without backdrop-filter */
+@supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+  .app-header {
+    background: rgba(10, 10, 15, 0.94);
+  }
+  html[data-theme="light"] .app-header {
+    background: rgba(255, 255, 255, 0.96);
+  }
 }
 
 .app-header.visible {

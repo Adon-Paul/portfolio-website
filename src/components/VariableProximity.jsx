@@ -89,6 +89,9 @@ const VariableProximity = forwardRef((props, ref) => {
   const letterRefs = useRef([]);
   const interpolatedSettingsRef = useRef([]);
   const lastPositionRef = useRef({ x: null, y: null });
+  const cachedRectsRef = useRef([]);
+  const containerRectRef = useRef(null);
+  const rectsDirtyRef = useRef(true);
 
   const parsedSettings = useMemo(() => {
     const parseSettings = (settingsStr) =>
@@ -128,14 +131,44 @@ const VariableProximity = forwardRef((props, ref) => {
     }
   };
 
+  // Invalidate cached rects on resize/scroll
+  useEffect(() => {
+    if (!enabled) return;
+    const invalidate = () => { rectsDirtyRef.current = true; };
+    window.addEventListener('resize', invalidate);
+    window.addEventListener('scroll', invalidate, { passive: true });
+    return () => {
+      window.removeEventListener('resize', invalidate);
+      window.removeEventListener('scroll', invalidate);
+    };
+  }, [enabled]);
+
   useEffect(() => {
     if (!enabled) return;
 
+    const recalcRects = () => {
+      if (!containerRef?.current) return;
+      containerRectRef.current = containerRef.current.getBoundingClientRect();
+      cachedRectsRef.current = letterRefs.current.map(el => {
+        if (!el) return null;
+        const r = el.getBoundingClientRect();
+        return {
+          centerX: r.left + r.width / 2 - containerRectRef.current.left,
+          centerY: r.top + r.height / 2 - containerRectRef.current.top,
+        };
+      });
+      rectsDirtyRef.current = false;
+    };
+
     const update = (globalX, globalY) => {
       if (!containerRef?.current) return;
-      const containerRect = containerRef.current.getBoundingClientRect();
-      const x = globalX - containerRect.left;
-      const y = globalY - containerRect.top;
+
+      if (rectsDirtyRef.current) recalcRects();
+
+      const cRect = containerRectRef.current;
+      if (!cRect) return;
+      const x = globalX - cRect.left;
+      const y = globalY - cRect.top;
 
       if (lastPositionRef.current.x === x && lastPositionRef.current.y === y) {
         return;
@@ -144,12 +177,10 @@ const VariableProximity = forwardRef((props, ref) => {
 
       letterRefs.current.forEach((letterRef, index) => {
         if (!letterRef) return;
+        const cached = cachedRectsRef.current[index];
+        if (!cached) return;
 
-        const rect = letterRef.getBoundingClientRect();
-        const letterCenterX = rect.left + rect.width / 2 - containerRect.left;
-        const letterCenterY = rect.top + rect.height / 2 - containerRect.top;
-
-        const distance = calculateDistance(x, y, letterCenterX, letterCenterY);
+        const distance = calculateDistance(x, y, cached.centerX, cached.centerY);
 
         if (distance >= radius) {
           letterRef.style.fontVariationSettings = fromFontVariationSettings;

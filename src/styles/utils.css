@@ -95,6 +95,18 @@
   border: 1px solid var(--glass-border);
 }
 
+/* Fallback for browsers without backdrop-filter (older Firefox) */
+@supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+  .glass,
+  .glass-heavy {
+    background: rgba(16, 16, 24, 0.88);
+  }
+  html[data-theme="light"] .glass,
+  html[data-theme="light"] .glass-heavy {
+    background: rgba(255, 255, 255, 0.92);
+  }
+}
+
 /* ========================================
    Button Animations
    ======================================== */

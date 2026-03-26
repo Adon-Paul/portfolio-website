@@ -1,10 +1,10 @@
-import { useRef, useState } from 'react'
+import { useRef } from 'react'
 import ShootingStars from './ShootingStars'
 import Lanyard from './Lanyard'
 import AutoVariableProximity from './AutoVariableProximity'
 
 export default function AboutPage({ theme, reduceMotion, showShootingStars = true }) {
-    const [year] = useState(new Date().getFullYear())
+    const year = new Date().getFullYear()
     const containerRef = useRef(null)
 
     return (

@@ -29,9 +29,9 @@ h1::before {
 
 @keyframes glitchText {
   0%, 90%, 100% { opacity: 0; transform: translate(0); }
-  91% { opacity: .7; transform: translate(-2px, 2px); clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%); }
-  93% { opacity: .8; transform: translate(2px, -2px); clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%); }
-  95% { opacity: .6; transform: translate(-1px, 1px); clip-path: polygon(0 20%, 100% 20%, 100% 80%, 0 80%); }
+  91% { opacity: .7; transform: translate(-2px, 2px); -webkit-clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%); clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%); }
+  93% { opacity: .8; transform: translate(2px, -2px); -webkit-clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%); clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%); }
+  95% { opacity: .6; transform: translate(-1px, 1px); -webkit-clip-path: polygon(0 20%, 100% 20%, 100% 80%, 0 80%); clip-path: polygon(0 20%, 100% 20%, 100% 80%, 0 80%); }
 }
 
 .subtitle {

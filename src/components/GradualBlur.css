@@ -20,7 +20,7 @@
   backdrop-filter: inherit;
 }
 
-@supports not (backdrop-filter: blur(1px)) {
+@supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
   .gradual-blur-inner > div {
     background: rgba(0, 0, 0, 0.3);
     opacity: 0.5;

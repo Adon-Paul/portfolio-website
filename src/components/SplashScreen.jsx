@@ -82,7 +82,9 @@ function SplashScreen({ state, onComplete, reduceMotion }) {
             // Apply directly to DOM (bypasses React render)
             if (overlayRef.current) {
                 const opacity = currentRadius.current > 20 ? 1 : Math.max(currentRadius.current / 20, 0)
-                overlayRef.current.style.clipPath = `circle(${currentRadius.current}% at 50% 50%)`
+                const clipValue = `circle(${currentRadius.current}% at 50% 50%)`
+                overlayRef.current.style.webkitClipPath = clipValue
+                overlayRef.current.style.clipPath = clipValue
                 overlayRef.current.style.opacity = opacity
             }
 
@@ -128,6 +130,7 @@ function SplashScreen({ state, onComplete, reduceMotion }) {
             ref={overlayRef}
             id="splash-overlay"
             style={{
+                WebkitClipPath: 'circle(150% at 50% 50%)',
                 clipPath: 'circle(150% at 50% 50%)',
                 pointerEvents: state === 'dashboard' ? 'none' : 'auto'
             }}

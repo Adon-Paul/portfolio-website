@@ -1,4 +1,4 @@
-import { useRef, useState, useMemo } from 'react'
+import { useRef, useMemo } from 'react'
 import ShootingStars from './ShootingStars'
 import Antigravity from './Antigravity'
 import AutoVariableProximity from './AutoVariableProximity'
@@ -11,7 +11,7 @@ const PROFILE_IMAGES = [
 ]
 
 function LandingPage({ theme, reduceMotion, onNavigate, showShootingStars = true }) {
-    const [year] = useState(new Date().getFullYear())
+    const year = new Date().getFullYear()
     const containerRef = useRef(null)
 
     // Randomly select a profile image once on mount

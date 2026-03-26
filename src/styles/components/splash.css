@@ -15,7 +15,15 @@
   -webkit-backdrop-filter: blur(60px) saturate(1.8);
   will-change: clip-path, opacity;
   transform: translateZ(0);
-  transition: clip-path 0.08s linear, opacity 0.3s ease-out;
+  -webkit-transition: -webkit-clip-path 0.08s linear, clip-path 0.08s linear, opacity 0.3s ease-out;
+  transition: -webkit-clip-path 0.08s linear, clip-path 0.08s linear, opacity 0.3s ease-out;
+}
+
+/* Fallback for browsers without backdrop-filter */
+@supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+  #splash-overlay {
+    background: rgba(8, 8, 14, 0.96);
+  }
 }
 
 .splash-orbs {
@@ -162,8 +170,10 @@
 }
 
 #splash-overlay.to-dashboard {
+  -webkit-clip-path: inset(0 0 calc(100% - 80px) 0);
   clip-path: inset(0 0 calc(100% - 80px) 0);
   backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
@@ -188,6 +198,7 @@
 
 @media (max-width: 600px) {
   #splash-overlay.to-dashboard {
+    -webkit-clip-path: inset(0 0 calc(100% - 100px) 0);
     clip-path: inset(0 0 calc(100% - 100px) 0);
     height: 100px;
   }

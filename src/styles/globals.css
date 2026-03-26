@@ -56,6 +56,7 @@ html {
 
 html, body {
   height: 100%;
+  height: 100dvh; /* Dynamic viewport height — accounts for mobile browser chrome */
   overflow-x: hidden;
 }
 
@@ -162,12 +163,15 @@ a:focus-visible,
 @media (min-width: 1024px) {
   html, body {
     height: 100%;
+    height: 100dvh;
     overflow: hidden;
   }
 
   main {
     height: 100vh;
+    height: 100dvh;
     min-height: 100vh;
+    min-height: 100dvh;
     padding-left: 0;
   }
 }
