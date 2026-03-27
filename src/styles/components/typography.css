@@ -114,7 +114,7 @@ html[data-theme="light"] .hero-tagline {
   color: #475569;
 }
 
-/* CTA Primary Button */
+/* CTA Primary Button — Skeuomorphic Physical Button */
 .cta-primary {
   display: inline-flex;
   align-items: center;
@@ -128,11 +128,20 @@ html[data-theme="light"] .hero-tagline {
   font-weight: 600;
   letter-spacing: 0.01em;
   color: #fff;
-  background: linear-gradient(135deg, rgba(0, 212, 255, 0.85), rgba(168, 85, 247, 0.8));
-  box-shadow: 0 4px 20px rgba(0, 212, 255, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.1) inset;
-  transition: transform 0.28s cubic-bezier(.22, 1, .36, 1), box-shadow 0.28s cubic-bezier(.22, 1, .36, 1);
   position: relative;
   overflow: hidden;
+  /* Glossy button: gradient with radial highlight at top */
+  background:
+    radial-gradient(80% 30% at 50% 10%, rgba(255, 255, 255, 0.25) 0%, transparent 60%),
+    linear-gradient(180deg, rgba(0, 220, 255, 0.9) 0%, rgba(0, 180, 220, 0.85) 50%, rgba(0, 160, 200, 0.9) 100%);
+  /* Physical raised button */
+  box-shadow:
+    0 6px 16px rgba(0, 180, 220, 0.35),
+    0 2px 4px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+  transition: all 0.15s ease;
 }
 
 .cta-primary::before {
@@ -140,22 +149,33 @@ html[data-theme="light"] .hero-tagline {
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background: linear-gradient(135deg, transparent 30%, rgba(255, 255, 255, 0.15) 50%, transparent 70%);
+  background: linear-gradient(135deg, transparent 30%, rgba(255, 255, 255, 0.12) 50%, transparent 70%);
   opacity: 0;
   transition: opacity 0.3s ease;
 }
 
 .cta-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 32px rgba(0, 212, 255, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.15) inset;
+  box-shadow:
+    0 10px 24px rgba(0, 180, 220, 0.4),
+    0 4px 8px rgba(0, 0, 0, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.15);
 }
 
-.cta-primary:hover::before {
-  opacity: 1;
-}
+.cta-primary:hover::before { opacity: 1; }
 
+/* PRESSED: sinks into surface */
 .cta-primary:active {
-  transform: translateY(0);
+  transform: translateY(1px);
+  box-shadow:
+    0 1px 4px rgba(0, 180, 220, 0.25),
+    inset 0 2px 6px rgba(0, 0, 0, 0.25),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.cta-primary:active > span {
+  transform: scale(0.97);
 }
 
 .cta-primary svg {
@@ -166,43 +186,84 @@ html[data-theme="light"] .hero-tagline {
   transform: translateX(3px);
 }
 
-/* CTA Secondary Button */
+/* CTA Secondary — Raised metal button */
 .cta-secondary {
   display: inline-flex;
   align-items: center;
   gap: 8px;
   padding: 14px 28px;
   border-radius: 14px;
-  border: 1px solid rgba(255, 255, 255, 0.15);
   cursor: pointer;
   font-family: inherit;
   font-size: 0.95rem;
   font-weight: 500;
   letter-spacing: 0.01em;
-  color: var(--fg);
-  background: rgba(255, 255, 255, 0.04);
-  backdrop-filter: blur(8px);
-  transition: transform 0.28s cubic-bezier(.22, 1, .36, 1), box-shadow 0.28s ease, border-color 0.28s ease, background 0.28s ease;
+  color: rgba(200, 210, 230, 0.8);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 100%),
+    rgba(28, 31, 42, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow:
+    0 4px 10px rgba(0, 0, 0, 0.25),
+    0 1px 3px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.07),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+  transition: all 0.15s ease;
 }
 
 .cta-secondary:hover {
-  transform: translateY(-2px);
-  border-color: rgba(0, 212, 255, 0.4);
-  background: rgba(255, 255, 255, 0.08);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  transform: translateY(-1px);
+  color: #fff;
+  border-color: rgba(0, 212, 255, 0.15);
+  box-shadow:
+    0 6px 16px rgba(0, 0, 0, 0.3),
+    0 2px 5px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.09),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.2);
 }
 
+/* PRESSED */
 .cta-secondary:active {
-  transform: translateY(0);
+  transform: translateY(1px);
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.25),
+    inset 0 2px 4px rgba(0, 0, 0, 0.25),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.03);
 }
 
+/* Light mode CTAs */
 html[data-theme="light"] .cta-primary {
-  background: linear-gradient(135deg, rgba(14, 165, 233, 0.9), rgba(139, 92, 246, 0.85));
-  box-shadow: 0 4px 20px rgba(14, 165, 233, 0.25);
+  background:
+    radial-gradient(80% 30% at 50% 10%, rgba(255, 255, 255, 0.35) 0%, transparent 60%),
+    linear-gradient(180deg, rgba(14, 175, 240, 0.95) 0%, rgba(14, 145, 220, 0.9) 50%, rgba(14, 125, 200, 0.95) 100%);
+  box-shadow:
+    0 6px 16px rgba(14, 165, 233, 0.3),
+    0 2px 4px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.08);
 }
 
 html[data-theme="light"] .cta-primary:hover {
-  box-shadow: 0 8px 32px rgba(14, 165, 233, 0.35);
+  box-shadow:
+    0 10px 24px rgba(14, 165, 233, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+html[data-theme="light"] .cta-secondary {
+  color: rgba(40, 50, 70, 0.8);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.9) 0%, rgba(240, 242, 248, 0.85) 100%);
+  border-color: rgba(0, 0, 0, 0.06);
+  box-shadow:
+    0 4px 10px rgba(0, 0, 0, 0.05),
+    0 1px 3px rgba(0, 0, 0, 0.03),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.03);
+}
+
+html[data-theme="light"] .cta-secondary:hover {
+  color: #0f172a;
+  border-color: rgba(14, 165, 233, 0.2);
 }
 
 html[data-theme="light"] .cta-secondary {

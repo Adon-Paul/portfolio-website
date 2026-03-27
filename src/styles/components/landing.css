@@ -1,5 +1,7 @@
 /* ========================================
-   Landing Page — Immersive & Skeuomorphic
+   Landing Page — True Skeuomorphic
+   Consistent light source: top-left
+   Material: dark brushed metal / chrome
    ======================================== */
 main.landing-page {
   min-height: 100vh;
@@ -11,7 +13,7 @@ main.landing-page {
 }
 
 /* ========================================
-   Hero Grid Layout
+   Hero Grid
    ======================================== */
 .hero-grid {
   display: grid;
@@ -26,7 +28,7 @@ main.landing-page {
 }
 
 /* ========================================
-   Left Column — Photo Frame
+   Photo Frame — Metal Bezel
    ======================================== */
 .hero-left {
   display: flex;
@@ -37,82 +39,91 @@ main.landing-page {
   padding: clamp(16px, 3vw, 48px);
 }
 
-/* Skeuomorphic Photo Frame */
 .photo-frame {
   position: relative;
   width: 100%;
-  max-width: 420px;
-  border-radius: 24px;
+  max-width: 400px;
+  border-radius: 22px;
   transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
   will-change: transform;
   transform-style: preserve-3d;
-}
 
-/* Metallic border frame */
-.photo-frame-border {
-  position: absolute;
-  inset: -3px;
-  border-radius: 27px;
-  z-index: 0;
-  /* Brushed metal gradient */
-  background: linear-gradient(
-    145deg,
-    rgba(255, 255, 255, 0.18) 0%,
-    rgba(255, 255, 255, 0.06) 30%,
-    rgba(0, 212, 255, 0.12) 50%,
-    rgba(168, 85, 247, 0.08) 70%,
-    rgba(255, 255, 255, 0.1) 100%
-  );
-  /* Skeuomorphic shadow for depth */
+  /* The bezel itself — raised metal border */
+  padding: 6px;
+  background:
+    /* Brushed metal streaks */
+    repeating-linear-gradient(
+      to right,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0) 5%,
+      rgba(255, 255, 255, 0.015) 6%
+    ),
+    linear-gradient(
+      145deg,
+      rgba(60, 65, 80, 0.9) 0%,
+      rgba(35, 38, 50, 0.95) 40%,
+      rgba(25, 27, 38, 1) 100%
+    );
+
+  /* 6-layer physical depth */
   box-shadow:
-    0 20px 60px rgba(0, 0, 0, 0.5),
-    0 8px 24px rgba(0, 0, 0, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.15),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+    0 25px 50px rgba(0, 0, 0, 0.55),
+    0 10px 20px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(255, 255, 255, 0.05),
+    inset 1px 1px 2px rgba(255, 255, 255, 0.08),
+    inset -1px -1px 2px rgba(0, 0, 0, 0.3),
+    inset 0 0 20px rgba(0, 0, 0, 0.1);
+
+  border: 1px solid rgba(255, 255, 255, 0.04);
 }
 
-html[data-theme="light"] .photo-frame-border {
-  background: linear-gradient(
-    145deg,
-    rgba(255, 255, 255, 0.9) 0%,
-    rgba(248, 250, 252, 0.8) 30%,
-    rgba(14, 165, 233, 0.08) 50%,
-    rgba(139, 92, 246, 0.06) 70%,
-    rgba(255, 255, 255, 0.85) 100%
-  );
+html[data-theme="light"] .photo-frame {
+  background:
+    linear-gradient(
+      145deg,
+      rgba(240, 242, 248, 0.95) 0%,
+      rgba(220, 225, 235, 0.9) 40%,
+      rgba(210, 215, 228, 0.95) 100%
+    );
   box-shadow:
-    0 20px 60px rgba(0, 0, 0, 0.12),
-    0 8px 24px rgba(0, 0, 0, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.95),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.05);
+    0 25px 50px rgba(0, 0, 0, 0.1),
+    0 10px 20px rgba(0, 0, 0, 0.06),
+    0 0 0 1px rgba(255, 255, 255, 0.5),
+    inset 1px 1px 2px rgba(255, 255, 255, 0.7),
+    inset -1px -1px 2px rgba(0, 0, 0, 0.06);
+  border-color: rgba(255, 255, 255, 0.3);
 }
 
-/* Particles behind photo */
+/* Particles */
 .photo-particles {
   position: absolute;
   inset: -30%;
   z-index: 0;
   pointer-events: none;
   filter: blur(6px);
-  opacity: 0.6;
+  opacity: 0.5;
 }
 
-/* Photo inner container */
+/* Photo — recessed into the bezel */
 .photo-inner {
   position: relative;
   z-index: 1;
-  border-radius: 22px;
+  border-radius: 17px;
   overflow: hidden;
-  /* Inset shadow for recessed look */
+  /* Inset shadow = photo sits INSIDE the bezel */
   box-shadow:
-    inset 0 2px 4px rgba(0, 0, 0, 0.3),
-    inset 0 -1px 0 rgba(255, 255, 255, 0.05);
+    inset 0 3px 8px rgba(0, 0, 0, 0.5),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.2),
+    inset 2px 0 4px rgba(0, 0, 0, 0.15),
+    inset -2px 0 4px rgba(0, 0, 0, 0.15);
 }
 
 html[data-theme="light"] .photo-inner {
   box-shadow:
-    inset 0 2px 4px rgba(0, 0, 0, 0.08),
-    inset 0 -1px 0 rgba(255, 255, 255, 0.5);
+    inset 0 3px 8px rgba(0, 0, 0, 0.1),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.04),
+    inset 2px 0 4px rgba(0, 0, 0, 0.03),
+    inset -2px 0 4px rgba(0, 0, 0, 0.03);
 }
 
 .profile-photo {
@@ -134,77 +145,98 @@ html[data-theme="light"] .photo-inner {
 }
 
 .photo-frame:hover .profile-photo {
-  filter: brightness(1.1) saturate(1.15);
-  transform: scale(1.01);
+  filter: brightness(1.1) saturate(1.12);
 }
 
-/* Bottom vignette on photo */
+/* Bottom vignette */
 .photo-vignette {
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
-  height: 40%;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.5) 0%, transparent 100%);
+  height: 35%;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.45) 0%, transparent 100%);
   pointer-events: none;
 }
 
 html[data-theme="light"] .photo-vignette {
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.15) 0%, transparent 100%);
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.12) 0%, transparent 100%);
 }
 
-/* Status badge */
+/* Glossy glare overlay on photo */
+.photo-glare {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 40%;
+  background: linear-gradient(
+    170deg,
+    rgba(255, 255, 255, 0.06) 0%,
+    transparent 60%
+  );
+  pointer-events: none;
+}
+
+/* Status badge — inset pill */
 .status-badge {
   position: absolute;
-  bottom: 16px;
-  left: 16px;
+  bottom: 14px;
+  left: 14px;
   z-index: 3;
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 6px 12px;
-  border-radius: 20px;
-  /* Frosted glass pill */
-  background: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(16px) saturate(180%);
-  -webkit-backdrop-filter: blur(16px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  padding: 5px 11px;
+  border-radius: 16px;
+  /* Recessed into the bezel */
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow:
+    inset 0 1px 2px rgba(0, 0, 0, 0.3),
+    0 1px 0 rgba(255, 255, 255, 0.03);
 }
 
 html[data-theme="light"] .status-badge {
-  background: rgba(255, 255, 255, 0.7);
-  border: 1px solid rgba(0, 0, 0, 0.06);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  background: rgba(255, 255, 255, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow:
+    inset 0 1px 2px rgba(0, 0, 0, 0.04),
+    0 1px 0 rgba(255, 255, 255, 0.5);
 }
 
 .status-dot {
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
   background: #22c55e;
-  box-shadow: 0 0 8px rgba(34, 197, 94, 0.6);
+  box-shadow: 0 0 6px rgba(34, 197, 94, 0.6);
   animation: statusPulse 2.5s ease-in-out infinite;
 }
 
 @keyframes statusPulse {
-  0%, 100% { box-shadow: 0 0 8px rgba(34, 197, 94, 0.6); }
-  50% { box-shadow: 0 0 16px rgba(34, 197, 94, 0.8), 0 0 4px rgba(34, 197, 94, 1); }
+  0%, 100% { box-shadow: 0 0 6px rgba(34, 197, 94, 0.5); }
+  50% { box-shadow: 0 0 12px rgba(34, 197, 94, 0.8), 0 0 3px rgba(34, 197, 94, 1); }
 }
 
 .status-text {
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.9);
-  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.85);
+  letter-spacing: 0.03em;
+  /* Debossed into the badge */
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
 html[data-theme="light"] .status-text {
   color: #1a1a2e;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.4);
 }
 
 /* ========================================
-   Right Column — Hero Card
+   Hero Card — Raised Metal Panel
    ======================================== */
 .hero-right {
   display: flex;
@@ -215,121 +247,107 @@ html[data-theme="light"] .status-text {
   padding: clamp(16px, 2vw, 32px);
 }
 
-/* Skeuomorphic Card */
 .hero-card {
   position: relative;
-  width: min(620px, 100%);
-  padding: clamp(32px, 3.5vw, 56px) clamp(28px, 3vw, 48px);
-  border-radius: 28px;
+  width: min(580px, 100%);
+  padding: clamp(32px, 3.5vw, 52px) clamp(28px, 3vw, 44px);
+  border-radius: 24px;
   overflow: hidden;
-  /* Dark mode: frosted dark glass with depth */
-  background: linear-gradient(
-    160deg,
-    rgba(255, 255, 255, 0.09) 0%,
-    rgba(255, 255, 255, 0.03) 50%,
-    rgba(0, 0, 0, 0.05) 100%
-  );
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(24px) saturate(150%);
-  -webkit-backdrop-filter: blur(24px) saturate(150%);
-  /* Skeuomorphic layered shadows */
+
+  /* Dark brushed metal panel */
+  background:
+    repeating-linear-gradient(
+      to right,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0) 5%,
+      rgba(255, 255, 255, 0.012) 6%
+    ),
+    linear-gradient(
+      155deg,
+      rgba(38, 42, 56, 0.95) 0%,
+      rgba(22, 24, 35, 0.98) 45%,
+      rgba(16, 17, 26, 1) 100%
+    );
+
+  border: 1px solid rgba(255, 255, 255, 0.04);
+
+  /* Full physical depth stack */
   box-shadow:
-    0 30px 80px rgba(0, 0, 0, 0.5),
-    0 12px 30px rgba(0, 0, 0, 0.35),
-    0 4px 10px rgba(0, 0, 0, 0.25),
-    inset 0 1px 0 rgba(255, 255, 255, 0.12),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.15),
-    0 0 0 1px rgba(255, 255, 255, 0.04);
+    0 30px 70px rgba(0, 0, 0, 0.55),
+    0 12px 28px rgba(0, 0, 0, 0.4),
+    0 4px 10px rgba(0, 0, 0, 0.3),
+    0 0 0 1px rgba(255, 255, 255, 0.04),
+    inset 2px 2px 4px rgba(255, 255, 255, 0.05),
+    inset -2px -2px 4px rgba(0, 0, 0, 0.3);
+
   transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.4s ease;
 }
 
 .hero-card:hover {
   transform: translateY(-2px);
   box-shadow:
-    0 35px 90px rgba(0, 0, 0, 0.55),
-    0 14px 35px rgba(0, 0, 0, 0.4),
-    0 4px 10px rgba(0, 0, 0, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.15),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.15),
-    0 0 40px rgba(0, 212, 255, 0.04);
+    0 35px 80px rgba(0, 0, 0, 0.6),
+    0 14px 32px rgba(0, 0, 0, 0.45),
+    0 4px 10px rgba(0, 0, 0, 0.35),
+    0 0 0 1px rgba(255, 255, 255, 0.06),
+    inset 2px 2px 4px rgba(255, 255, 255, 0.06),
+    inset -2px -2px 4px rgba(0, 0, 0, 0.3);
 }
 
-/* Light mode card */
+/* Light mode */
 html[data-theme="light"] .hero-card {
-  background: linear-gradient(
-    160deg,
-    rgba(255, 255, 255, 0.85) 0%,
-    rgba(255, 255, 255, 0.6) 50%,
-    rgba(248, 250, 252, 0.75) 100%
-  );
-  border: 1px solid rgba(255, 255, 255, 0.6);
+  background:
+    linear-gradient(
+      155deg,
+      rgba(245, 247, 252, 0.95) 0%,
+      rgba(235, 238, 248, 0.92) 45%,
+      rgba(228, 232, 244, 0.95) 100%
+    );
+  border-color: rgba(255, 255, 255, 0.4);
   box-shadow:
-    0 30px 80px rgba(0, 0, 0, 0.1),
-    0 12px 30px rgba(0, 0, 0, 0.06),
-    0 4px 10px rgba(0, 0, 0, 0.04),
-    inset 0 1px 0 rgba(255, 255, 255, 0.9),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.02),
-    0 0 0 1px rgba(0, 0, 0, 0.03);
+    0 30px 70px rgba(0, 0, 0, 0.08),
+    0 12px 28px rgba(0, 0, 0, 0.05),
+    0 0 0 1px rgba(255, 255, 255, 0.5),
+    inset 1px 1px 3px rgba(255, 255, 255, 0.7),
+    inset -1px -1px 3px rgba(0, 0, 0, 0.04);
 }
 
 html[data-theme="light"] .hero-card:hover {
   box-shadow:
-    0 35px 90px rgba(0, 0, 0, 0.12),
-    0 14px 35px rgba(0, 0, 0, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.95),
-    0 0 40px rgba(14, 165, 233, 0.06);
+    0 35px 80px rgba(0, 0, 0, 0.1),
+    0 14px 32px rgba(0, 0, 0, 0.06),
+    0 0 0 1px rgba(255, 255, 255, 0.6),
+    inset 1px 1px 3px rgba(255, 255, 255, 0.8),
+    inset -1px -1px 3px rgba(0, 0, 0, 0.04);
 }
 
-/* Card shine sweep */
-.hero-card-shine {
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background: linear-gradient(
-    110deg,
-    transparent 20%,
-    rgba(255, 255, 255, 0.04) 40%,
-    rgba(255, 255, 255, 0.08) 50%,
-    rgba(255, 255, 255, 0.04) 60%,
-    transparent 80%
-  );
-  opacity: 0;
-  transition: opacity 0.4s ease;
-  pointer-events: none;
-}
-
-.hero-card:hover .hero-card-shine {
-  opacity: 1;
-}
-
-html[data-theme="light"] .hero-card-shine {
-  background: linear-gradient(
-    110deg,
-    transparent 20%,
-    rgba(255, 255, 255, 0.3) 40%,
-    rgba(255, 255, 255, 0.5) 50%,
-    rgba(255, 255, 255, 0.3) 60%,
-    transparent 80%
-  );
-}
-
-/* Bevel highlight on top edge */
-.hero-card-bevel {
+/* Glossy glare on card top */
+.hero-card-gloss {
   position: absolute;
   top: 0;
-  left: 5%;
-  right: 5%;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2) 20%, rgba(255, 255, 255, 0.35) 50%, rgba(255, 255, 255, 0.2) 80%, transparent);
-  border-radius: 1px;
+  left: 10px;
+  right: 10px;
+  height: 40%;
+  border-radius: 22px 22px 50% 50%;
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.035) 0%,
+    rgba(255, 255, 255, 0.008) 35%,
+    transparent 100%
+  );
   pointer-events: none;
 }
 
-html[data-theme="light"] .hero-card-bevel {
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.7) 20%, rgba(255, 255, 255, 0.95) 50%, rgba(255, 255, 255, 0.7) 80%, transparent);
+html[data-theme="light"] .hero-card-gloss {
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.5) 0%,
+    rgba(255, 255, 255, 0.15) 30%,
+    transparent 100%
+  );
 }
 
-/* Card content stacking */
+/* Card content */
 .hero-card-content {
   position: relative;
   z-index: 1;
@@ -339,101 +357,92 @@ html[data-theme="light"] .hero-card-bevel {
 }
 
 /* ========================================
-   Hero Typography
+   Typography — Embossed & Debossed
    ======================================== */
+
+/* Greeting — small debossed text */
 .hero-greeting {
   font-size: var(--text-lg);
-  color: var(--fg-muted);
   font-weight: 500;
   margin-bottom: 4px;
-  letter-spacing: 0.01em;
+  letter-spacing: 0.02em;
+  /* Debossed: dark above, light below */
+  color: rgba(160, 170, 190, 0.5);
+  text-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.06),
+    0 -1px 0 rgba(0, 0, 0, 0.4);
 }
 
+html[data-theme="light"] .hero-greeting {
+  color: rgba(80, 90, 110, 0.6);
+  text-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.5),
+    0 -1px 0 rgba(0, 0, 0, 0.06);
+}
+
+/* Name — EMBOSSED (raised from surface) */
 .hero-name {
   font-family: 'Quantico', sans-serif;
-  font-size: clamp(2rem, 1.6rem + 3vw, 3.6rem);
+  font-size: clamp(2rem, 1.6rem + 3vw, 3.4rem);
   font-weight: 700;
   line-height: 1.05;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.03em;
   text-transform: uppercase;
   margin: 0 0 16px;
   position: relative;
-  /* Embossed text with metallic feel */
-  color: #fff;
+  /* Embossed: light top-left edge, dark bottom-right edge */
+  color: rgba(210, 218, 235, 0.7);
   text-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.12),
-    0 -1px 0 rgba(0, 0, 0, 0.35),
-    0 0 20px rgba(0, 212, 255, 0.15);
+    -1px -1px 0 rgba(255, 255, 255, 0.12),
+    1px 1px 2px rgba(0, 0, 0, 0.65),
+    0 0 25px rgba(0, 180, 255, 0.06);
 }
 
 html[data-theme="light"] .hero-name {
-  color: #0b0b12;
+  color: rgba(30, 35, 50, 0.75);
   text-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.5),
-    0 -1px 0 rgba(0, 0, 0, 0.08),
-    0 0 20px rgba(14, 165, 233, 0.08);
+    -1px -1px 0 rgba(255, 255, 255, 0.6),
+    1px 1px 1px rgba(0, 0, 0, 0.12);
 }
 
-/* Glitch effect on name */
-.hero-name::before {
-  content: attr(data-text);
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(165deg, #00e7ff 0%, #a855f7 50%, #ff00ff 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  opacity: 0;
-  animation: glitchText 4s infinite;
-  pointer-events: none;
-}
-
-@keyframes glitchText {
-  0%, 92%, 100% { opacity: 0; transform: translate(0); }
-  93% { opacity: 0.5; transform: translate(-2px, 1px); clip-path: polygon(0 0, 100% 0, 100% 40%, 0 40%); }
-  95% { opacity: 0.6; transform: translate(2px, -1px); clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%); }
-  97% { opacity: 0.4; transform: translate(-1px, 1px); clip-path: polygon(0 25%, 100% 25%, 100% 75%, 0 75%); }
-}
-
-/* Role badges */
+/* Role — engraved line with text */
 .hero-role {
   display: flex;
   align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
+  gap: 14px;
   margin-bottom: 16px;
 }
 
-.role-badge {
+.role-line {
+  flex: 1;
+  height: 1px;
+  /* Engraved line: dark top, light bottom */
+  background: rgba(0, 0, 0, 0.4);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+html[data-theme="light"] .role-line {
+  background: rgba(0, 0, 0, 0.08);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.role-text {
   font-size: var(--text-sm);
   font-weight: 600;
-  letter-spacing: 0.02em;
-  padding: 5px 14px;
-  border-radius: 8px;
-  /* Skeuomorphic raised pill */
-  background: linear-gradient(180deg, rgba(0, 212, 255, 0.15) 0%, rgba(0, 212, 255, 0.08) 100%);
-  border: 1px solid rgba(0, 212, 255, 0.2);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
   color: var(--accent);
-  box-shadow:
-    0 2px 6px rgba(0, 0, 0, 0.15),
-    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  /* Subtle debossed feel */
+  text-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.04),
+    0 -1px 0 rgba(0, 0, 0, 0.3);
 }
 
-html[data-theme="light"] .role-badge {
-  background: linear-gradient(180deg, rgba(14, 165, 233, 0.1) 0%, rgba(14, 165, 233, 0.05) 100%);
-  border: 1px solid rgba(14, 165, 233, 0.15);
-  box-shadow:
-    0 2px 6px rgba(0, 0, 0, 0.04),
-    inset 0 1px 0 rgba(255, 255, 255, 0.5);
-}
-
-.role-divider {
-  color: var(--fg-subtle);
-  font-size: var(--text-sm);
-  font-weight: 300;
+html[data-theme="light"] .role-text {
+  text-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.4),
+    0 -1px 0 rgba(0, 0, 0, 0.05);
 }
 
 /* Bio */
@@ -441,150 +450,102 @@ html[data-theme="light"] .role-badge {
   font-size: var(--text-base);
   color: var(--fg-muted);
   line-height: 1.65;
-  margin-bottom: 12px;
-  max-width: 480px;
-}
-
-/* ========================================
-   Skill Pills
-   ======================================== */
-.hero-skills {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
   margin-bottom: 20px;
-}
-
-.skill-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 4px 12px;
-  border-radius: 20px;
-  font-size: 0.78rem;
-  font-weight: 500;
-  letter-spacing: 0.01em;
-  color: var(--fg-muted);
-  /* Inset/recessed style */
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  box-shadow:
-    inset 0 1px 2px rgba(0, 0, 0, 0.2),
-    0 1px 0 rgba(255, 255, 255, 0.03);
-  transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
-}
-
-.skill-pill:hover {
-  border-color: rgba(0, 212, 255, 0.2);
-  background: rgba(0, 212, 255, 0.05);
-  transform: translateY(-1px);
-}
-
-html[data-theme="light"] .skill-pill {
-  background: rgba(0, 0, 0, 0.02);
-  border: 1px solid rgba(0, 0, 0, 0.06);
-  box-shadow:
-    inset 0 1px 2px rgba(0, 0, 0, 0.04),
-    0 1px 0 rgba(255, 255, 255, 0.6);
-}
-
-html[data-theme="light"] .skill-pill:hover {
-  border-color: rgba(14, 165, 233, 0.2);
-  background: rgba(14, 165, 233, 0.04);
-}
-
-.skill-icon {
-  font-size: 0.85rem;
-  line-height: 1;
+  max-width: 460px;
 }
 
 /* ========================================
-   Social Links — Embossed Metallic Pills
+   Social Links — Raised Physical Buttons
    ======================================== */
 .hero-socials {
   display: flex;
-  gap: 12px;
+  gap: 10px;
   margin-bottom: 20px;
   flex-wrap: wrap;
 }
 
-.social-link {
+.social-btn {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 10px 20px;
-  border-radius: 14px;
+  gap: 7px;
+  padding: 9px 18px;
+  border-radius: 12px;
   font-size: var(--text-sm);
   font-weight: 500;
-  color: var(--fg);
   text-decoration: none;
-  /* Raised metallic button */
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.04) 100%);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+
+  /* Raised button: lighter top, darker bottom */
+  color: rgba(200, 210, 230, 0.8);
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.07) 0%,
+      rgba(255, 255, 255, 0.02) 100%
+    ),
+    rgba(30, 33, 45, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+
+  /* Physical button shadow stack */
   box-shadow:
-    0 4px 12px rgba(0, 0, 0, 0.2),
-    0 1px 3px rgba(0, 0, 0, 0.15),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+    0 4px 10px rgba(0, 0, 0, 0.3),
+    0 1px 3px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+
+  transition: all 0.15s ease;
 }
 
-.social-link:hover {
-  transform: translateY(-2px);
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0.06) 100%);
-}
-
-/* Pressed state */
-.social-link:active {
-  transform: translateY(0);
+.social-btn:hover {
+  color: #fff;
+  transform: translateY(-1px);
   box-shadow:
-    0 1px 4px rgba(0, 0, 0, 0.25),
-    inset 0 2px 4px rgba(0, 0, 0, 0.15);
+    0 6px 16px rgba(0, 0, 0, 0.35),
+    0 2px 5px rgba(0, 0, 0, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.2),
+    0 0 15px rgba(0, 212, 255, 0.08);
+  border-color: rgba(0, 212, 255, 0.15);
 }
 
-/* LinkedIn glow */
-.social-linkedin:hover {
-  border-color: rgba(0, 212, 255, 0.4);
+/* PRESSED: button sinks into its hole */
+.social-btn:active {
+  transform: translateY(1px);
   box-shadow:
-    0 8px 24px rgba(0, 0, 0, 0.25),
-    0 0 20px rgba(0, 212, 255, 0.15),
-    inset 0 1px 0 rgba(0, 212, 255, 0.1);
+    0 1px 2px rgba(0, 0, 0, 0.3),
+    inset 0 2px 4px rgba(0, 0, 0, 0.3),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.03);
 }
 
-/* GitHub glow */
-.social-github:hover {
-  border-color: rgba(168, 85, 247, 0.4);
+html[data-theme="light"] .social-btn {
+  color: rgba(40, 50, 70, 0.8);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.9) 0%, rgba(240, 242, 248, 0.85) 100%);
+  border-color: rgba(0, 0, 0, 0.06);
   box-shadow:
-    0 8px 24px rgba(0, 0, 0, 0.25),
-    0 0 20px rgba(168, 85, 247, 0.15),
-    inset 0 1px 0 rgba(168, 85, 247, 0.1);
+    0 4px 10px rgba(0, 0, 0, 0.06),
+    0 1px 3px rgba(0, 0, 0, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.03);
 }
 
-html[data-theme="light"] .social-link {
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.9) 100%);
-  border: 1px solid rgba(0, 0, 0, 0.08);
+html[data-theme="light"] .social-btn:hover {
   color: #0f172a;
   box-shadow:
-    0 4px 12px rgba(0, 0, 0, 0.06),
-    0 1px 3px rgba(0, 0, 0, 0.04),
-    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    0 6px 16px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 0 15px rgba(14, 165, 233, 0.06);
 }
 
-html[data-theme="light"] .social-link:hover {
-  background: linear-gradient(180deg, #fff 0%, rgba(248, 250, 252, 0.95) 100%);
-}
-
-html[data-theme="light"] .social-linkedin:hover {
-  border-color: rgba(14, 165, 233, 0.35);
-  box-shadow: 0 8px 24px rgba(14, 165, 233, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.9);
-}
-
-html[data-theme="light"] .social-github:hover {
-  border-color: rgba(139, 92, 246, 0.35);
-  box-shadow: 0 8px 24px rgba(139, 92, 246, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+html[data-theme="light"] .social-btn:active {
+  transform: translateY(1px);
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.06),
+    inset 0 2px 4px rgba(0, 0, 0, 0.06);
 }
 
 /* ========================================
-   CTA Buttons — Physical Press Feel
+   CTA Buttons
    ======================================== */
 .hero-ctas {
   display: flex;
@@ -592,8 +553,10 @@ html[data-theme="light"] .social-github:hover {
   flex-wrap: wrap;
 }
 
-/* Stagger animations inherited from typography.css */
-
+/* ========================================
+   Reduced Motion & Stagger
+   (Stagger animations inherited from typography.css)
+   ======================================== */
 @media (prefers-reduced-motion: reduce) {
   .photo-frame {
     transform: none !important;
@@ -604,7 +567,7 @@ html[data-theme="light"] .social-github:hover {
 }
 
 /* ========================================
-   Shooting Stars (preserved from original)
+   Shooting Stars
    ======================================== */
 .shooting-star {
   position: fixed;
@@ -626,9 +589,7 @@ html[data-theme="light"] .social-github:hover {
   100% { transform: translate(var(--travel-x), var(--travel-y)); opacity: 0; }
 }
 
-html[data-theme="light"] .shooting-star {
-  display: none;
-}
+html[data-theme="light"] .shooting-star { display: none; }
 
 @media (prefers-reduced-motion: reduce) {
   .shooting-star { display: none; }
@@ -644,31 +605,25 @@ html[data-theme="light"] .shooting-star {
   right: 0;
   text-align: center;
   color: var(--fg-subtle);
-  font-size: 0.78rem;
+  font-size: 0.75rem;
   letter-spacing: 0.01em;
-  opacity: 0.6;
+  opacity: 0.5;
   z-index: 2;
+  /* Debossed footer */
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.03);
 }
 
 /* ========================================
-   Desktop — Large screens
+   Desktop
    ======================================== */
 @media (min-width: 1024px) {
-  .hero-grid {
-    height: 100%;
-  }
-
-  .hero-left {
-    align-self: center;
-  }
-
-  .hero-right {
-    align-self: center;
-  }
+  .hero-grid { height: 100%; }
+  .hero-left { align-self: center; }
+  .hero-right { align-self: center; }
 }
 
 /* ========================================
-   Tablet & Small Desktop
+   Tablet & Mobile
    ======================================== */
 @media (max-width: 900px) {
   .hero-grid {
@@ -695,16 +650,12 @@ html[data-theme="light"] .shooting-star {
 
   .photo-frame {
     max-width: 100%;
-    border-radius: 0 0 24px 24px;
-  }
-
-  .photo-frame-border {
-    inset: 0 0 -3px 0;
-    border-radius: 0 0 27px 27px;
+    border-radius: 0 0 20px 20px;
+    padding: 0 0 6px 0;
   }
 
   .photo-inner {
-    border-radius: 0 0 22px 22px;
+    border-radius: 0 0 16px 16px;
   }
 
   .profile-photo {
@@ -717,7 +668,7 @@ html[data-theme="light"] .shooting-star {
   .hero-right {
     order: 2;
     padding: 0 16px 100px;
-    margin-top: -20px;
+    margin-top: -16px;
     z-index: 3;
   }
 
@@ -735,6 +686,7 @@ html[data-theme="light"] .shooting-star {
 
   .hero-bio {
     font-size: var(--text-sm);
+    text-align: center;
   }
 
   .hero-ctas {
@@ -747,26 +699,16 @@ html[data-theme="light"] .shooting-star {
     justify-content: center;
   }
 
-  .hero-socials {
-    justify-content: center;
-  }
-
-  .hero-skills {
-    justify-content: center;
-  }
+  .hero-socials { justify-content: center; }
 
   .hero-card-content {
     align-items: center;
     text-align: center;
   }
 
-  .hero-role {
-    justify-content: center;
-  }
+  .hero-role { justify-content: center; }
 
-  .hero-bio {
-    text-align: center;
-  }
+  .role-line { max-width: 60px; }
 
   .page-footer {
     position: relative;
@@ -790,56 +732,33 @@ html[data-theme="light"] .shooting-star {
     margin-bottom: 12px;
   }
 
-  .hero-greeting {
-    font-size: var(--text-base);
-  }
+  .hero-greeting { font-size: var(--text-base); }
 
-  .hero-skills {
-    gap: 6px;
-  }
-
-  .skill-pill {
-    font-size: 0.72rem;
-    padding: 3px 10px;
-  }
-
-  .social-link {
-    padding: 8px 16px;
+  .social-btn {
+    padding: 8px 14px;
     font-size: 0.82rem;
   }
 
   .status-badge {
-    bottom: 12px;
-    left: 12px;
-    padding: 4px 10px;
+    bottom: 10px;
+    left: 10px;
+    padding: 4px 9px;
   }
 
-  .status-text {
-    font-size: 0.65rem;
-  }
+  .status-text { font-size: 0.62rem; }
 
-  .photo-particles {
-    display: none;
-  }
+  .photo-particles { display: none; }
 }
 
 /* ========================================
    Backdrop-filter Fallback
    ======================================== */
 @supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
-  .hero-card {
-    background: rgba(16, 16, 28, 0.94);
-  }
-  html[data-theme="light"] .hero-card {
-    background: rgba(255, 255, 255, 0.96);
-  }
-  .status-badge {
-    background: rgba(0, 0, 0, 0.7);
-  }
+  .status-badge { background: rgba(0, 0, 0, 0.7); }
 }
 
 /* ========================================
-   Light Mode Decorative Accents
+   Light Mode Decorative Orbs
    ======================================== */
 html[data-theme="light"] main.landing-page::before,
 html[data-theme="light"] main.landing-page::after {
@@ -848,21 +767,17 @@ html[data-theme="light"] main.landing-page::after {
   z-index: -1;
   border-radius: 50%;
   filter: blur(50px);
-  opacity: 0.35;
+  opacity: 0.3;
 }
 
 html[data-theme="light"] main.landing-page::before {
-  width: 500px;
-  height: 500px;
-  top: -100px;
-  right: -100px;
-  background: radial-gradient(closest-side, rgba(14, 165, 233, 0.2), transparent 70%);
+  width: 500px; height: 500px;
+  top: -100px; right: -100px;
+  background: radial-gradient(closest-side, rgba(14, 165, 233, 0.15), transparent 70%);
 }
 
 html[data-theme="light"] main.landing-page::after {
-  width: 400px;
-  height: 400px;
-  bottom: -80px;
-  left: -80px;
-  background: radial-gradient(closest-side, rgba(139, 92, 246, 0.15), transparent 70%);
+  width: 400px; height: 400px;
+  bottom: -80px; left: -80px;
+  background: radial-gradient(closest-side, rgba(139, 92, 246, 0.1), transparent 70%);
 }

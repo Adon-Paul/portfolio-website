@@ -4,34 +4,19 @@ function SplashScreen({ state, onComplete, reduceMotion }) {
     const [displayText, setDisplayText] = useState('')
     const [progress, setProgress] = useState(0)
     const [phase, setPhase] = useState('typing') // typing | ready | exiting
-    const [particles, setParticles] = useState([])
 
     // Direct DOM manipulation for ultra-smooth animation
     const overlayRef = useRef(null)
     const currentRadius = useRef(150)
     const targetRadius = useRef(150)
     const velocity = useRef(0)
-    const ringRef = useRef(null)
     const progressRingRef = useRef(null)
+    const autoTimerRef = useRef(null)
 
     const targetText = "Adon Paul Tomy"
     const speed = 85
 
-    // Generate scattered particles on mount
-    useEffect(() => {
-        const pts = Array.from({ length: 40 }, (_, i) => ({
-            id: i,
-            x: Math.random() * 100,
-            y: Math.random() * 100,
-            size: Math.random() * 3 + 1,
-            delay: Math.random() * 4,
-            duration: Math.random() * 6 + 8,
-            opacity: Math.random() * 0.4 + 0.1
-        }))
-        setParticles(pts)
-    }, [])
-
-    // Typewriter effect with progress ring
+    // Typewriter effect
     useEffect(() => {
         if (reduceMotion) {
             setDisplayText(targetText)
@@ -73,6 +58,20 @@ function SplashScreen({ state, onComplete, reduceMotion }) {
         rafId = requestAnimationFrame(animate)
         return () => cancelAnimationFrame(rafId)
     }, [reduceMotion])
+
+    // Auto-dismiss after 5 seconds once ready
+    useEffect(() => {
+        if (phase !== 'ready' || state === 'dashboard') return
+
+        autoTimerRef.current = setTimeout(() => {
+            setPhase('exiting')
+            targetRadius.current = 0
+        }, 5000)
+
+        return () => {
+            if (autoTimerRef.current) clearTimeout(autoTimerRef.current)
+        }
+    }, [phase, state])
 
     // Lock Body Scroll
     useEffect(() => {
@@ -125,6 +124,8 @@ function SplashScreen({ state, onComplete, reduceMotion }) {
         const handleWheel = (e) => {
             const scrollDelta = e.deltaY * 0.35
             targetRadius.current = Math.max(Math.min(targetRadius.current - scrollDelta, 150), 0)
+            // Cancel auto-timer on manual interaction
+            if (autoTimerRef.current) clearTimeout(autoTimerRef.current)
         }
 
         window.addEventListener('wheel', handleWheel, { passive: true })
@@ -141,6 +142,7 @@ function SplashScreen({ state, onComplete, reduceMotion }) {
             const delta = (touchStartY - e.touches[0].clientY) * 0.5
             targetRadius.current = Math.max(Math.min(targetRadius.current - delta, 150), 0)
             touchStartY = e.touches[0].clientY
+            if (autoTimerRef.current) clearTimeout(autoTimerRef.current)
         }
 
         window.addEventListener('touchstart', handleTouchStart, { passive: true })
@@ -154,6 +156,7 @@ function SplashScreen({ state, onComplete, reduceMotion }) {
     // Click handler
     const handleClick = useCallback(() => {
         if (phase === 'ready') {
+            if (autoTimerRef.current) clearTimeout(autoTimerRef.current)
             setPhase('exiting')
             targetRadius.current = 0
         }
@@ -180,37 +183,13 @@ function SplashScreen({ state, onComplete, reduceMotion }) {
             }}
             aria-hidden={state === 'dashboard'}
         >
-            {/* Ambient particles */}
-            <div className="splash-particles" aria-hidden="true">
-                {particles.map(p => (
-                    <div
-                        key={p.id}
-                        className="splash-particle"
-                        style={{
-                            left: `${p.x}%`,
-                            top: `${p.y}%`,
-                            width: `${p.size}px`,
-                            height: `${p.size}px`,
-                            opacity: p.opacity,
-                            animationDelay: `${p.delay}s`,
-                            animationDuration: `${p.duration}s`
-                        }}
-                    />
-                ))}
-            </div>
+            {/* Subtle noise texture overlay */}
+            <div className="splash-noise" aria-hidden="true" />
 
-            {/* Radial light beams */}
-            <div className="splash-beams" aria-hidden="true">
-                <div className="splash-beam splash-beam-1" />
-                <div className="splash-beam splash-beam-2" />
-                <div className="splash-beam splash-beam-3" />
-            </div>
-
-            {/* Gradient orbs for atmospheric depth */}
+            {/* Ambient orbs */}
             <div className="splash-orbs" aria-hidden="true">
                 <div className="orb orb-1" />
                 <div className="orb orb-2" />
-                <div className="orb orb-3" />
             </div>
 
             <div className="splash-content">
@@ -222,85 +201,84 @@ function SplashScreen({ state, onComplete, reduceMotion }) {
                     aria-label="Click to enter site"
                     onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleClick() }}
                 >
-                    {/* Central ring with progress */}
-                    <div className={`splash-ring ${phase === 'ready' ? 'ring-complete' : ''}`} ref={ringRef}>
-                        <svg className="splash-ring-svg" viewBox="0 0 128 128">
-                            {/* Background ring track */}
-                            <circle
-                                cx="64"
-                                cy="64"
-                                r="58"
-                                fill="none"
-                                stroke="rgba(255,255,255,0.06)"
-                                strokeWidth="1.5"
-                            />
-                            {/* Progress ring */}
-                            <circle
-                                ref={progressRingRef}
-                                cx="64"
-                                cy="64"
-                                r="58"
-                                fill="none"
-                                stroke="url(#ringGradient)"
-                                strokeWidth="2"
-                                strokeLinecap="round"
-                                strokeDasharray={circumference}
-                                strokeDashoffset={circumference}
-                                className="progress-ring-circle"
-                                transform="rotate(-90 64 64)"
-                            />
-                            {/* Decorative inner ring */}
-                            <circle
-                                cx="64"
-                                cy="64"
-                                r="48"
-                                fill="none"
-                                stroke="rgba(255,255,255,0.03)"
-                                strokeWidth="0.5"
-                            />
-                            <defs>
-                                <linearGradient id="ringGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                                    <stop offset="0%" stopColor="#00d4ff" />
-                                    <stop offset="50%" stopColor="#a855f7" />
-                                    <stop offset="100%" stopColor="#f472b6" />
-                                </linearGradient>
-                            </defs>
-                        </svg>
+                    {/* Skeuomorphic embossed panel */}
+                    <div className="splash-panel">
+                        {/* Glossy highlight on panel top */}
+                        <div className="splash-panel-gloss" aria-hidden="true" />
 
-                        {/* Initials inside ring */}
-                        <div className="splash-ring-initials">
-                            <span className={progress > 0 ? 'visible' : ''}>A</span>
-                            <span className={progress > 50 ? 'visible' : ''}>P</span>
+                        {/* Central gauge ring */}
+                        <div className={`splash-ring ${phase === 'ready' ? 'ring-complete' : ''}`}>
+                            <svg className="splash-ring-svg" viewBox="0 0 128 128">
+                                {/* Debossed track */}
+                                <circle
+                                    cx="64" cy="64" r="58"
+                                    fill="none"
+                                    stroke="rgba(0,0,0,0.4)"
+                                    strokeWidth="3"
+                                />
+                                <circle
+                                    cx="64" cy="64" r="58"
+                                    fill="none"
+                                    stroke="rgba(255,255,255,0.05)"
+                                    strokeWidth="2"
+                                />
+                                {/* Progress fill */}
+                                <circle
+                                    ref={progressRingRef}
+                                    cx="64" cy="64" r="58"
+                                    fill="none"
+                                    stroke="url(#ringGrad)"
+                                    strokeWidth="3"
+                                    strokeLinecap="round"
+                                    strokeDasharray={circumference}
+                                    strokeDashoffset={circumference}
+                                    className="progress-ring-circle"
+                                    transform="rotate(-90 64 64)"
+                                />
+                                <defs>
+                                    <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" stopColor="#00d4ff" />
+                                        <stop offset="100%" stopColor="#a855f7" />
+                                    </linearGradient>
+                                </defs>
+                            </svg>
+
+                            {/* Initials — embossed into the surface */}
+                            <div className="splash-ring-initials">
+                                <span className={progress > 0 ? 'visible' : ''}>A</span>
+                                <span className={progress > 50 ? 'visible' : ''}>P</span>
+                            </div>
                         </div>
-                    </div>
 
-                    {/* Main name text with embossed effect */}
-                    <div className="splash-name-container">
-                        <h1 className={`splash-name ${phase === 'ready' ? 'name-complete' : ''}`} data-text={targetText}>
-                            {displayText}
-                            {phase === 'typing' && <span className="splash-cursor">|</span>}
-                        </h1>
-
-                        {/* Metallic underline */}
-                        <div className="splash-underline">
-                            <div className="splash-underline-fill" style={{ width: `${progress}%` }} />
+                        {/* Name — debossed / engraved into metal */}
+                        <div className="splash-name-container">
+                            <h1 className={`splash-name ${phase === 'ready' ? 'name-complete' : ''}`} data-text={targetText}>
+                                {displayText}
+                                {phase === 'typing' && <span className="splash-cursor" />}
+                            </h1>
                         </div>
-                    </div>
 
-                    {/* Subtitle */}
-                    <p className={`splash-subtitle ${phase === 'ready' ? 'subtitle-visible' : ''}`}>
-                        Flutter Developer &middot; CS Student &middot; Builder
-                    </p>
+                        {/* Inset progress track */}
+                        <div className="splash-track">
+                            <div className="splash-track-fill" style={{ width: `${progress}%` }} />
+                            <div className="splash-track-shine" aria-hidden="true" />
+                        </div>
+
+                        {/* Subtitle — letterpress style */}
+                        <p className={`splash-subtitle ${phase === 'ready' ? 'subtitle-visible' : ''}`}>
+                            Developer &middot; Student &middot; Builder
+                        </p>
+                    </div>
 
                     {/* Enter prompt */}
                     {phase === 'ready' && (
                         <div className="splash-enter-prompt">
                             <div className="splash-enter-icon">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                                     <path d="M12 5v14M19 12l-7 7-7-7" />
                                 </svg>
                             </div>
-                            <span>scroll or click to enter</span>
+                            <span>click or scroll to enter</span>
                         </div>
                     )}
                 </div>
