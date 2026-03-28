@@ -5,6 +5,7 @@ function SplashScreen({ state, onComplete, reduceMotion, theme, toggleTheme }) {
     const [progress, setProgress] = useState(0)
     const [phase, setPhase] = useState('typing') // typing | ready | exiting
     const [isEntering, setIsEntering] = useState(false)
+    const [selectedTheme, setSelectedTheme] = useState(null)
 
     // Direct DOM manipulation for ultra-smooth animation
     const overlayRef = useRef(null)
@@ -153,20 +154,22 @@ function SplashScreen({ state, onComplete, reduceMotion, theme, toggleTheme }) {
     }, [state])
     // Theme toggle handler triggers the exit sequence
 
-    const handleThemeSelection = () => {
-        toggleTheme()
-        
-        if (phase === 'ready') {
-            setIsEntering(true)
-            
-            // Wait 3 seconds strictly after user interacts with the slider, then enter
-            // (Reset the timer if clicked multiple times)
-            if (proceedTimerRef.current) clearTimeout(proceedTimerRef.current)
-            proceedTimerRef.current = setTimeout(() => {
-                setPhase('exiting')
-                targetRadius.current = 0
-            }, 3000)
+    const handleThemeSelection = (choice) => {
+        if (phase !== 'ready') return
+
+        setSelectedTheme(choice)
+
+        if (choice !== theme) {
+            toggleTheme()
         }
+
+        setIsEntering(true)
+
+        if (proceedTimerRef.current) clearTimeout(proceedTimerRef.current)
+        proceedTimerRef.current = setTimeout(() => {
+            setPhase('exiting')
+            targetRadius.current = 0
+        }, 800)
     }
 
     const circumference = 2 * Math.PI * 58
@@ -273,27 +276,45 @@ function SplashScreen({ state, onComplete, reduceMotion, theme, toggleTheme }) {
                     <p className="theme-dock-prompt">
                         {isEntering ? "Crafting your experience..." : "Select Your Desired Experience"}
                     </p>
-                    <div className="theme-slider-track">
-                        {/* Underglow based on theme */}
-                        <div className={`theme-slider-glow ${theme}`} />
-                        
-                        <div className="theme-slider-labels">
-                            <span className={`label-dark ${theme === 'dark' ? 'active' : ''}`} onClick={() => { if(theme !== 'dark') handleThemeSelection() }}>NEON DARK</span>
-                            <span className={`label-light ${theme === 'light' ? 'active' : ''}`} onClick={() => { if(theme !== 'light') handleThemeSelection() }}>SOLARIZED LIGHT</span>
-                        </div>
+                    
+                    <div className="theme-slider-container">
+                        <span 
+                            className={`theme-label label-dark ${selectedTheme === 'dark' ? 'active' : ''}`} 
+                            onClick={(e) => { e.stopPropagation(); handleThemeSelection('dark'); }}
+                        >
+                            NEON DARK
+                        </span>
                         
                         <div 
-                            className={`theme-slider-knob ${theme}`}
-                            onClick={handleThemeSelection}
-                            role="button"
-                            aria-label="Toggle Theme"
-                            tabIndex={0}
+                            className={`theme-slider-track ${selectedTheme ?? 'unset'}`}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                if (selectedTheme === 'dark') handleThemeSelection('light');
+                                else handleThemeSelection('dark');
+                            }}
                         >
-                            <div className="knob-texture">
-                                <div className="knob-ridges"></div>
-                                <div className="knob-indicator"></div>
+                            {/* Underglow based on theme */}
+                            <div className={`theme-slider-glow ${selectedTheme ?? 'unset'}`} />
+                            
+                            <div 
+                                className={`theme-slider-knob ${selectedTheme ?? 'unset'}`}
+                                role="button"
+                                aria-label="Choose theme"
+                                tabIndex={0}
+                            >
+                                <div className="knob-texture">
+                                    <div className="knob-ridges"></div>
+                                    <div className="knob-indicator"></div>
+                                </div>
                             </div>
                         </div>
+
+                        <span 
+                            className={`theme-label label-light ${selectedTheme === 'light' ? 'active' : ''}`} 
+                            onClick={(e) => { e.stopPropagation(); handleThemeSelection('light'); }}
+                        >
+                            SOLARIZED LIGHT
+                        </span>
                     </div>
                 </div>
             </div>
