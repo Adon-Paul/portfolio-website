@@ -49,8 +49,21 @@ export default function Lanyard({
     return [0, 0, cameraDistance];
   }, [cameraDistance, position]);
 
+  const [hasInteracted, setHasInteracted] = useState(false);
+
   return (
     <div className="lanyard-wrapper" aria-hidden="true">
+      <div className={`lanyard-tooltip ${hasInteracted ? 'hidden' : ''}`}>
+        <div className="lanyard-tooltip-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M5 9c0-1.5 1-3 2.5-3A2.5 2.5 0 0 1 10 8.5v3c0-1.5 1-3 2.5-3A2.5 2.5 0 0 1 15 11v1" />
+            <path d="M10 8.5v-3C10 4 11 2.5 12.5 2.5S15 4 15 5.5v3.5" />
+            <path d="M15 9c0-1.5 1-3 2.5-3A2.5 2.5 0 0 1 20 8.5v7.5A6.5 6.5 0 0 1 13.5 22.5h-2A6.5 6.5 0 0 1 5 16v-7.5" />
+            <path d="M19 12h-4" />
+          </svg>
+        </div>
+        <span>Grab & Pull</span>
+      </div>
       <Canvas
         camera={{ position: cameraPosition, fov }}
         dpr={[1, isMobile ? 1.5 : 2]}
@@ -64,6 +77,7 @@ export default function Lanyard({
             isMobile={isMobile}
             cardUrl={cardUrl}
             lanyardTextureUrl={lanyardTextureUrl}
+            onDragStart={() => setHasInteracted(true)}
           />
         </Physics>
 
@@ -108,6 +122,7 @@ function Band({
   isMobile = false,
   cardUrl,
   lanyardTextureUrl,
+  onDragStart
 }) {
   const band = useRef();
   const fixed = useRef();
@@ -172,11 +187,26 @@ function Band({
       dir.copy(vec).sub(state.camera.position).normalize();
       vec.add(dir.multiplyScalar(state.camera.position.length()));
       [card, j1, j2, j3, fixed].forEach((ref) => ref.current?.wakeUp());
+      
+      // Update target position
       card.current?.setNextKinematicTranslation({
         x: vec.x - dragged.x,
         y: vec.y - dragged.y,
         z: vec.z - dragged.z,
       });
+
+      // Apply physical rotation matching movement velocity for organic swing
+      const dragVelocityX = state.pointer.x - (card.current?.lastPointerX || state.pointer.x);
+      card.current.lastPointerX = state.pointer.x;
+      card.current?.setNextKinematicRotation(
+        new THREE.Quaternion().setFromEuler(
+          new THREE.Euler(
+            (vec.y - dragged.y) * -0.05, 
+            dragVelocityX * 5, 
+            dragVelocityX * -2
+          )
+        )
+      );
     }
 
     if (fixed.current && j1.current && j2.current && j3.current && card.current) {
@@ -198,7 +228,27 @@ function Band({
 
       ang.copy(card.current.angvel());
       rot.copy(card.current.rotation());
-      card.current.setAngvel({ x: ang.x, y: ang.y - rot.y * 0.25, z: ang.z });
+      
+      // Auto-spin physics when not being dragged
+      if (!dragged) {
+        // Keep waking it up so it never goes to sleep and stops spinning
+        card.current.wakeUp();
+        // Give it a subtle continuous push on the Y axis to keep it spinning smoothly
+        const currentSpinY = ang.y;
+        const targetSpinY = 2.0; // Desired spin speed (increased for faster continuous rotation)
+        
+        // Gentle acceleration towards target spin speed
+        const spinForce = (targetSpinY - currentSpinY) * delta * 8; 
+        
+        card.current.setAngvel({ 
+          x: ang.x * 0.98, // damp x swinging faster
+          y: ang.y + spinForce, // continuous spin
+          z: ang.z * 0.98  // damp z swinging faster
+        });
+      } else {
+        // Adjust angular velocity to naturally dampen and spin while dragged
+        card.current.setAngvel({ x: ang.x, y: ang.y - rot.y * 0.25, z: ang.z });
+      }
     }
   });
 
@@ -235,11 +285,21 @@ function Band({
             position={[0, -1.2, -0.05]}
             onPointerOver={() => setHovered(true)}
             onPointerOut={() => setHovered(false)}
-            onPointerUp={(e) => (e.target.releasePointerCapture(e.pointerId), setDragged(false))}
-            onPointerDown={(e) => (
-              e.target.setPointerCapture(e.pointerId),
-              setDragged(new THREE.Vector3().copy(e.point).sub(vec.copy(card.current.translation())))
-            )}
+            onPointerUp={(e) => {
+              e.target.releasePointerCapture(e.pointerId);
+              setDragged(false);
+              
+              // Apply flick spin on release
+              if (card.current) {
+                const spinForce = (Math.random() - 0.5) * 4;
+                card.current.applyTorqueImpulse({ x: 0, y: spinForce, z: (Math.random() - 0.5) * 2 }, true);
+              }
+            }}
+            onPointerDown={(e) => {
+              e.target.setPointerCapture(e.pointerId);
+              setDragged(new THREE.Vector3().copy(e.point).sub(vec.copy(card.current.translation())));
+              if (onDragStart) onDragStart();
+            }}
           >
             <mesh geometry={nodes.card?.geometry}>
               <meshPhysicalMaterial

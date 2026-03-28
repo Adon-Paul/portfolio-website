@@ -1,9 +1,10 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 
-function SplashScreen({ state, onComplete, reduceMotion }) {
+function SplashScreen({ state, onComplete, reduceMotion, theme, toggleTheme }) {
     const [displayText, setDisplayText] = useState('')
     const [progress, setProgress] = useState(0)
     const [phase, setPhase] = useState('typing') // typing | ready | exiting
+    const [isEntering, setIsEntering] = useState(false)
 
     // Direct DOM manipulation for ultra-smooth animation
     const overlayRef = useRef(null)
@@ -11,7 +12,6 @@ function SplashScreen({ state, onComplete, reduceMotion }) {
     const targetRadius = useRef(150)
     const velocity = useRef(0)
     const progressRingRef = useRef(null)
-    const autoTimerRef = useRef(null)
 
     const targetText = "Adon Paul Tomy"
     const speed = 85
@@ -42,8 +42,7 @@ function SplashScreen({ state, onComplete, reduceMotion }) {
                 // Update progress ring via DOM
                 if (progressRingRef.current) {
                     const circumference = 2 * Math.PI * 58
-                    const offset = circumference - (pct / 100) * circumference
-                    progressRingRef.current.style.strokeDashoffset = offset
+                    progressRingRef.current.style.strokeDashoffset = circumference - (pct / 100) * circumference
                 }
                 lastTime = timestamp
             }
@@ -59,19 +58,8 @@ function SplashScreen({ state, onComplete, reduceMotion }) {
         return () => cancelAnimationFrame(rafId)
     }, [reduceMotion])
 
-    // Auto-dismiss after 5 seconds once ready
-    useEffect(() => {
-        if (phase !== 'ready' || state === 'dashboard') return
-
-        autoTimerRef.current = setTimeout(() => {
-            setPhase('exiting')
-            targetRadius.current = 0
-        }, 5000)
-
-        return () => {
-            if (autoTimerRef.current) clearTimeout(autoTimerRef.current)
-        }
-    }, [phase, state])
+    // Removed auto-dismiss timer - User must explicitly choose a theme now.
+    const proceedTimerRef = useRef(null)
 
     // Lock Body Scroll
     useEffect(() => {
@@ -123,9 +111,8 @@ function SplashScreen({ state, onComplete, reduceMotion }) {
 
         const handleWheel = (e) => {
             const scrollDelta = e.deltaY * 0.35
+            // Allow manual pulling down of the circle for fun, but don't enter automatically
             targetRadius.current = Math.max(Math.min(targetRadius.current - scrollDelta, 150), 0)
-            // Cancel auto-timer on manual interaction
-            if (autoTimerRef.current) clearTimeout(autoTimerRef.current)
         }
 
         window.addEventListener('wheel', handleWheel, { passive: true })
@@ -142,7 +129,6 @@ function SplashScreen({ state, onComplete, reduceMotion }) {
             const delta = (touchStartY - e.touches[0].clientY) * 0.5
             targetRadius.current = Math.max(Math.min(targetRadius.current - delta, 150), 0)
             touchStartY = e.touches[0].clientY
-            if (autoTimerRef.current) clearTimeout(autoTimerRef.current)
         }
 
         window.addEventListener('touchstart', handleTouchStart, { passive: true })
@@ -153,21 +139,35 @@ function SplashScreen({ state, onComplete, reduceMotion }) {
         }
     }, [phase, state])
 
-    // Click handler
+    // Click handler - Removed immediate skip so user is forced to pick a theme
     const handleClick = useCallback(() => {
-        if (phase === 'ready') {
-            if (autoTimerRef.current) clearTimeout(autoTimerRef.current)
-            setPhase('exiting')
-            targetRadius.current = 0
-        }
-    }, [phase])
+        // Disabled immediate skip.
+    }, [])
 
     // Dashboard state - immediate hide
     useEffect(() => {
         if (state === 'dashboard') {
             targetRadius.current = 0
+            if (proceedTimerRef.current) clearTimeout(proceedTimerRef.current)
         }
     }, [state])
+    // Theme toggle handler triggers the exit sequence
+
+    const handleThemeSelection = () => {
+        toggleTheme()
+        
+        if (phase === 'ready') {
+            setIsEntering(true)
+            
+            // Wait 3 seconds strictly after user interacts with the slider, then enter
+            // (Reset the timer if clicked multiple times)
+            if (proceedTimerRef.current) clearTimeout(proceedTimerRef.current)
+            proceedTimerRef.current = setTimeout(() => {
+                setPhase('exiting')
+                targetRadius.current = 0
+            }, 3000)
+        }
+    }
 
     const circumference = 2 * Math.PI * 58
 
@@ -209,18 +209,12 @@ function SplashScreen({ state, onComplete, reduceMotion }) {
                         {/* Central gauge ring */}
                         <div className={`splash-ring ${phase === 'ready' ? 'ring-complete' : ''}`}>
                             <svg className="splash-ring-svg" viewBox="0 0 128 128">
-                                {/* Debossed track */}
+                                {/* Ambient track */}
                                 <circle
                                     cx="64" cy="64" r="58"
                                     fill="none"
-                                    stroke="rgba(0,0,0,0.4)"
-                                    strokeWidth="3"
-                                />
-                                <circle
-                                    cx="64" cy="64" r="58"
-                                    fill="none"
-                                    stroke="rgba(255,255,255,0.05)"
-                                    strokeWidth="2"
+                                    stroke="rgba(255,255,255,0.08)"
+                                    strokeWidth="1.5"
                                 />
                                 {/* Progress fill */}
                                 <circle
@@ -228,7 +222,7 @@ function SplashScreen({ state, onComplete, reduceMotion }) {
                                     cx="64" cy="64" r="58"
                                     fill="none"
                                     stroke="url(#ringGrad)"
-                                    strokeWidth="3"
+                                    strokeWidth="3.5"
                                     strokeLinecap="round"
                                     strokeDasharray={circumference}
                                     strokeDashoffset={circumference}
@@ -238,7 +232,8 @@ function SplashScreen({ state, onComplete, reduceMotion }) {
                                 <defs>
                                     <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
                                         <stop offset="0%" stopColor="#00d4ff" />
-                                        <stop offset="100%" stopColor="#a855f7" />
+                                        <stop offset="50%" stopColor="#a855f7" />
+                                        <stop offset="100%" stopColor="#ff00a0" />
                                     </linearGradient>
                                 </defs>
                             </svg>
@@ -270,17 +265,36 @@ function SplashScreen({ state, onComplete, reduceMotion }) {
                         </p>
                     </div>
 
-                    {/* Enter prompt */}
-                    {phase === 'ready' && (
-                        <div className="splash-enter-prompt">
-                            <div className="splash-enter-icon">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                                    <path d="M12 5v14M19 12l-7 7-7-7" />
-                                </svg>
-                            </div>
-                            <span>click or scroll to enter</span>
+                    {/* Removed manual enter prompt as user must select theme */}
+                </div>
+
+                {/* Innovative Skeuomorphic Theme Slider - Centered underneath */}
+                <div className={`splash-theme-dock ${phase === 'ready' ? 'visible' : ''}`} onClick={(e) => e.stopPropagation()}>
+                    <p className="theme-dock-prompt">
+                        {isEntering ? "Crafting your experience..." : "Select Your Desired Experience"}
+                    </p>
+                    <div className="theme-slider-track">
+                        {/* Underglow based on theme */}
+                        <div className={`theme-slider-glow ${theme}`} />
+                        
+                        <div className="theme-slider-labels">
+                            <span className={`label-dark ${theme === 'dark' ? 'active' : ''}`} onClick={() => { if(theme !== 'dark') handleThemeSelection() }}>NEON DARK</span>
+                            <span className={`label-light ${theme === 'light' ? 'active' : ''}`} onClick={() => { if(theme !== 'light') handleThemeSelection() }}>SOLARIZED LIGHT</span>
                         </div>
-                    )}
+                        
+                        <div 
+                            className={`theme-slider-knob ${theme}`}
+                            onClick={handleThemeSelection}
+                            role="button"
+                            aria-label="Toggle Theme"
+                            tabIndex={0}
+                        >
+                            <div className="knob-texture">
+                                <div className="knob-ridges"></div>
+                                <div className="knob-indicator"></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

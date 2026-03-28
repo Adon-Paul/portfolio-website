@@ -20,6 +20,7 @@ uniform float uNoise;
 uniform float uScan;
 uniform float uScanFreq;
 uniform float uWarp;
+uniform float uLightMode;
 #define iTime uTime
 #define iResolution uResolution
 
@@ -76,13 +77,51 @@ vec4 cppn_fn(vec2 coordinate,float in0,float in1,float in2){
 void mainImage(out vec4 fragColor,in vec2 fragCoord){
     vec2 uv=fragCoord/uResolution.xy*2.-1.;
     uv.y*=-1.;
-    uv+=uWarp*vec2(sin(uv.y*6.283+uTime*0.5),cos(uv.x*6.283+uTime*0.5))*0.05;
-    fragColor=cppn_fn(uv,0.1*sin(0.3*uTime),0.1*sin(0.69*uTime),0.1*sin(0.44*uTime));
+    
+    // Add extra warping and activity if light mode is active
+    float warpMultiplier = uLightMode > 0.5 ? 2.5 : 1.0;
+    float timeSpeed = uLightMode > 0.5 ? uTime * 1.5 : uTime * 0.5;
+    
+    uv+=uWarp * warpMultiplier * vec2(sin(uv.y*6.283+timeSpeed),cos(uv.x*6.283+timeSpeed))*0.05;
+    
+    // Increase frequency of the neural network inputs for a more complex/active pattern in light mode
+    float freqMult = uLightMode > 0.5 ? 2.2 : 1.0;
+    
+    fragColor=cppn_fn(uv,0.1*sin(0.3*uTime*freqMult),0.1*sin(0.69*uTime*freqMult),0.1*sin(0.44*uTime*freqMult));
 }
 
 void main(){
     vec4 col;mainImage(col,gl_FragCoord.xy);
     col.rgb=hueShiftRGB(col.rgb,uHueShift);
+    
+    if (uLightMode > 0.5) {
+        // Solarized Light theme mapping - High Activity Design
+        vec3 baseIvory = vec3(0.992, 0.965, 0.890); // #fdf6e3 Background
+        vec3 softGold  = vec3(0.902, 0.761, 0.529); // #e6c287 Mid-tones
+        vec3 richWood  = vec3(0.651, 0.439, 0.247); // Stronger wood tone for cores/peaks
+        vec3 deepWood  = vec3(0.502, 0.302, 0.149); // Darkest peaks
+        
+        // Calculate original brightness and exaggerate it for more extreme peaks/valleys
+        float intensity = dot(col.rgb, vec3(0.299, 0.587, 0.114));
+        
+        // Add some high-frequency noise from the base color mapping to make the fluid look more turbulent/textured
+        intensity += (col.r - col.b) * 0.25; 
+        
+        // Sharpen the contrast curve aggressively so tendrils become tight and bold instead of soft blobs
+        intensity = pow(abs(intensity), 0.6);
+        
+        // Map different brightness zones to our solarized/wood colors with sharper cutoffs
+        float wave1 = smoothstep(0.0, 0.4, intensity);
+        float wave2 = smoothstep(0.3, 0.7, intensity);
+        float wave3 = smoothstep(0.6, 1.0, intensity);
+        
+        // Layer the colors: Ivory -> Gold -> Rich Wood -> Deep Wood
+        vec3 mappedColor = mix(baseIvory, softGold, wave1);
+        mappedColor = mix(mappedColor, richWood, wave2);
+        mappedColor = mix(mappedColor, deepWood, wave3);
+        
+        col.rgb = mappedColor;
+    }
     
     // Scanlines
     float scanline_val=sin(gl_FragCoord.y*uScanFreq)*0.5+0.5;
@@ -96,6 +135,7 @@ void main(){
 `;
 
 export default function DarkVeil({
+    theme = 'dark',
     hueShift = 0,
     animateHue = false,
     hueSpeed = 12,
@@ -113,8 +153,8 @@ export default function DarkVeil({
 
     // Store props in refs so the render loop always reads current values
     // without needing to teardown/rebuild WebGL
-    const propsRef = useRef({ hueShift, animateHue, hueSpeed, hueMin, hueMax, noiseIntensity, scanlineIntensity, speed, scanlineFrequency, warpAmount });
-    propsRef.current = { hueShift, animateHue, hueSpeed, hueMin, hueMax, noiseIntensity, scanlineIntensity, speed, scanlineFrequency, warpAmount };
+    const propsRef = useRef({ theme, hueShift, animateHue, hueSpeed, hueMin, hueMax, noiseIntensity, scanlineIntensity, speed, scanlineFrequency, warpAmount });
+    propsRef.current = { theme, hueShift, animateHue, hueSpeed, hueMin, hueMax, noiseIntensity, scanlineIntensity, speed, scanlineFrequency, warpAmount };
 
     // WebGL initialization — only runs once (or on resolutionScale change)
     useEffect(() => {
@@ -144,7 +184,8 @@ export default function DarkVeil({
                     uNoise: { value: noiseIntensity },
                     uScan: { value: scanlineIntensity },
                     uScanFreq: { value: scanlineFrequency },
-                    uWarp: { value: warpAmount }
+                    uWarp: { value: warpAmount },
+                    uLightMode: { value: theme === 'light' ? 1.0 : 0.0 }
                 }
             });
 
@@ -194,6 +235,7 @@ export default function DarkVeil({
             program.uniforms.uScan.value = p.scanlineIntensity;
             program.uniforms.uScanFreq.value = p.scanlineFrequency;
             program.uniforms.uWarp.value = p.warpAmount;
+            program.uniforms.uLightMode.value = p.theme === 'light' ? 1.0 : 0.0;
             renderer.render({ scene: mesh });
             frame = requestAnimationFrame(loop);
         };
@@ -212,7 +254,9 @@ export default function DarkVeil({
             <div style={{
                 width: '100%',
                 height: '100%',
-                background: 'linear-gradient(135deg, #0b0b12 0%, #1a1a2e 50%, #16213e 100%)',
+                background: theme === 'dark' 
+                    ? 'linear-gradient(135deg, #0b0b12 0%, #1a1a2e 50%, #16213e 100%)'
+                    : 'linear-gradient(135deg, #fdf6e3 0%, #eee8d5 50%, #eaddc5 100%)',
                 position: 'absolute',
                 top: 0,
                 left: 0

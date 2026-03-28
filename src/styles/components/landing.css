@@ -16,37 +16,55 @@ main.landing-page {
    Hero Grid
    ======================================== */
 .hero-grid {
-  display: grid;
-  grid-template-columns: minmax(280px, 38vw) 1fr;
-  align-items: center;
-  gap: clamp(24px, 4vw, 64px);
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: stretch; /* Back to stretch */
+  gap: clamp(8px, 1.5vw, 24px);
   width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
   min-height: 100vh;
   min-height: 100dvh;
+  transform: translateY(0); /* Removed the aggressive negative translation to prevent colliding with header */
   position: relative;
   z-index: 2;
+  perspective: 1600px;
+  transform-style: preserve-3d;
+  --scene-x: 0;
+  --scene-y: 0;
 }
 
 /* ========================================
    Photo Frame — Metal Bezel
    ======================================== */
 .hero-left {
+  flex: 0 1 440px;
+  width: 100%;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  justify-content: flex-end;
+  align-items: center; /* keep center so it defines the height based on its own aspect ratio */
   position: relative;
   z-index: 2;
-  padding: clamp(16px, 3vw, 48px);
+  padding: clamp(8px, 1vw, 24px);
+  padding-right: 0;
+  transform-style: preserve-3d;
 }
 
 .photo-frame {
   position: relative;
   width: 100%;
-  max-width: 400px;
+  /* Force a strict 3/4 aspect ratio on the entire parent frame so it's a guaranteed height */
+  aspect-ratio: 3 / 4;
+  height: auto; /* ensure height calculates from width */
+  display: flex;
+  flex-direction: column;
   border-radius: 22px;
-  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
   will-change: transform;
   transform-style: preserve-3d;
+  transform-origin: center right;
+  --light-x: 50%;
+  --light-y: 50%;
 
   /* The bezel itself — raised metal border */
   padding: 6px;
@@ -75,6 +93,23 @@ main.landing-page {
     inset 0 0 20px rgba(0, 0, 0, 0.1);
 
   border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+/* Dynamic 3D lighting highlight */
+.photo-frame::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    800px circle at var(--light-x) var(--light-y),
+    rgba(255, 255, 255, 0.15),
+    transparent 50%
+  );
+  pointer-events: none;
+  z-index: 10;
+  mix-blend-mode: overlay;
+  transition: opacity 0.3s ease;
 }
 
 html[data-theme="light"] .photo-frame {
@@ -107,9 +142,16 @@ html[data-theme="light"] .photo-frame {
 /* Photo — recessed into the bezel */
 .photo-inner {
   position: relative;
+  display: flex;
+  flex: 1; /* Stretch to fill the 3/4 bounded frame */
   z-index: 1;
   border-radius: 17px;
   overflow: hidden;
+  /* Extrude out slightly from the frame and move inversely to mouse for deep parallax */
+  transform: translateZ(30px) translate(calc(var(--scene-x) * -10px), calc(var(--scene-y) * -10px));
+  will-change: transform;
+  transition: transform 0.1s ease-out;
+
   /* Inset shadow = photo sits INSIDE the bezel */
   box-shadow:
     inset 0 3px 8px rgba(0, 0, 0, 0.5),
@@ -128,8 +170,8 @@ html[data-theme="light"] .photo-inner {
 
 .profile-photo {
   width: 100%;
-  height: auto;
-  aspect-ratio: 3 / 4;
+  height: 100%;
+  /* Let it fill the inner container fully */
   display: block;
   object-fit: cover;
   object-position: center top;
@@ -189,6 +231,10 @@ html[data-theme="light"] .photo-vignette {
   gap: 6px;
   padding: 5px 11px;
   border-radius: 16px;
+  /* Extrude heavily */
+  transform: translateZ(40px) translate(calc(var(--scene-x) * -15px), calc(var(--scene-y) * -15px));
+  will-change: transform;
+  transition: transform 0.1s ease-out;
   /* Recessed into the bezel */
   background: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(12px);
@@ -239,20 +285,37 @@ html[data-theme="light"] .status-text {
    Hero Card — Raised Metal Panel
    ======================================== */
 .hero-right {
+  flex: 0 1 460px;
+  width: 100%;
   display: flex;
-  align-items: center;
+  flex-direction: column;
   justify-content: center;
+  align-items: flex-start;
+  gap: 24px;
   position: relative;
   z-index: 2;
-  padding: clamp(16px, 2vw, 32px);
+  padding: clamp(8px, 1vw, 24px);
+  padding-left: 0;
+  transform-style: preserve-3d;
 }
 
 .hero-card {
   position: relative;
-  width: min(580px, 100%);
+  width: min(100%, 440px);
+  height: auto;
+  min-height: clamp(420px, 64vh, 560px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Center content vertically */
   padding: clamp(32px, 3.5vw, 52px) clamp(28px, 3vw, 44px);
   border-radius: 24px;
-  overflow: hidden;
+  will-change: transform;
+  transform-style: preserve-3d;
+  transform-origin: center left;
+  /* Add explicit stacking context to fix Safari/Chrome button hitboxes */
+  z-index: 10;
+  --light-x: 50%;
+  --light-y: 50%;
 
   /* Dark brushed metal panel */
   background:
@@ -283,8 +346,26 @@ html[data-theme="light"] .status-text {
   transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.4s ease;
 }
 
+/* Dynamic 3D lighting highlight for right card */
+.hero-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    800px circle at var(--light-x) var(--light-y),
+    rgba(255, 255, 255, 0.1),
+    transparent 40%
+  );
+  pointer-events: none;
+  z-index: 5;
+  mix-blend-mode: overlay;
+  transition: opacity 0.3s ease;
+  transform: translateZ(1px);
+}
+
 .hero-card:hover {
-  transform: translateY(-2px);
+  /* transform: translateY(-2px); hover effect managed by JS mostly now, keep simple box shadow */
   box-shadow:
     0 35px 80px rgba(0, 0, 0, 0.6),
     0 14px 32px rgba(0, 0, 0, 0.45),
@@ -350,10 +431,17 @@ html[data-theme="light"] .hero-card-gloss {
 /* Card content */
 .hero-card-content {
   position: relative;
-  z-index: 1;
+  z-index: 20; /* Keep higher than card after-layer */
   display: flex;
   flex-direction: column;
   gap: 0;
+  transform-style: preserve-3d;
+  transform: translateZ(30px) translate(calc(var(--scene-x) * 10px), calc(var(--scene-y) * 10px));
+}
+
+/* Let the text contents be normal, but buttons MUST be clickable */
+.hero-greeting, .hero-name, .hero-role, .hero-bio {
+  pointer-events: auto;
 }
 
 /* ========================================
@@ -450,8 +538,23 @@ html[data-theme="light"] .role-text {
   font-size: var(--text-base);
   color: var(--fg-muted);
   line-height: 1.65;
-  margin-bottom: 20px;
+  margin-bottom: 0; /* Remove margin since action buttons moved out */
   max-width: 460px;
+}
+
+/* ========================================
+   Action Area (Links & CTAs detached from card)
+   ======================================== */
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  width: min(440px, 100%);
+  justify-content: flex-end; /* Align right side */
+  align-items: center;
+  position: relative;
+  z-index: 50;
+  /* Lift up slightly to overlay grid base if needed */
 }
 
 /* ========================================
@@ -459,89 +562,170 @@ html[data-theme="light"] .role-text {
    ======================================== */
 .hero-socials {
   display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
+  gap: 12px;
   flex-wrap: wrap;
+  position: relative;
+  z-index: 50;
 }
 
 .social-btn {
   display: inline-flex;
   align-items: center;
-  gap: 7px;
-  padding: 9px 18px;
+  gap: 8px;
+  padding: 12px 20px; /* Make them bigger */
   border-radius: 12px;
-  font-size: var(--text-sm);
+  font-size: var(--text-base); /* Larger font */
   font-weight: 500;
   text-decoration: none;
   cursor: pointer;
 
-  /* Raised button: lighter top, darker bottom */
-  color: rgba(200, 210, 230, 0.8);
+  /* Accentuated raised button: lighter top, darker bottom */
+  color: #fff; /* Brighter color */
   background:
     linear-gradient(
       180deg,
-      rgba(255, 255, 255, 0.07) 0%,
+      rgba(255, 255, 255, 0.12) 0%,
       rgba(255, 255, 255, 0.02) 100%
     ),
-    rgba(30, 33, 45, 0.8);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+    rgba(40, 45, 60, 0.85); /* Slightly lighter background than before to stand out */
+  border: 1px solid rgba(255, 255, 255, 0.1); /* Stronger border */
 
-  /* Physical button shadow stack */
+  /* Extruded Physical shadow stack for more pop */
   box-shadow:
-    0 4px 10px rgba(0, 0, 0, 0.3),
-    0 1px 3px rgba(0, 0, 0, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.08),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+    0 8px 20px rgba(0, 0, 0, 0.4),
+    0 2px 6px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.3);
 
-  transition: all 0.15s ease;
+  transition: all 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+  position: relative;
+  z-index: 50;
 }
 
 .social-btn:hover {
   color: #fff;
-  transform: translateY(-1px);
+  transform: translateY(-2px);
   box-shadow:
-    0 6px 16px rgba(0, 0, 0, 0.35),
-    0 2px 5px rgba(0, 0, 0, 0.25),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.2),
-    0 0 15px rgba(0, 212, 255, 0.08);
-  border-color: rgba(0, 212, 255, 0.15);
+    0 12px 28px rgba(0, 0, 0, 0.5),
+    0 4px 10px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.3),
+    0 0 20px rgba(0, 212, 255, 0.12); /* Brighter glow */
+  border-color: rgba(0, 212, 255, 0.25);
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.15) 0%,
+      rgba(255, 255, 255, 0.04) 100%
+    ),
+    rgba(45, 52, 70, 0.9);
 }
 
 /* PRESSED: button sinks into its hole */
 .social-btn:active {
   transform: translateY(1px);
   box-shadow:
-    0 1px 2px rgba(0, 0, 0, 0.3),
-    inset 0 2px 4px rgba(0, 0, 0, 0.3),
-    inset 0 -1px 0 rgba(255, 255, 255, 0.03);
+    0 2px 4px rgba(0, 0, 0, 0.4),
+    inset 0 3px 6px rgba(0, 0, 0, 0.5),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.05);
 }
 
 html[data-theme="light"] .social-btn {
-  color: rgba(40, 50, 70, 0.8);
+  color: #0f172a;
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.9) 0%, rgba(240, 242, 248, 0.85) 100%);
-  border-color: rgba(0, 0, 0, 0.06);
+    linear-gradient(180deg, #ffffff 0%, #f1f5f9 100%);
+  border-color: rgba(0, 0, 0, 0.1);
   box-shadow:
-    0 4px 10px rgba(0, 0, 0, 0.06),
-    0 1px 3px rgba(0, 0, 0, 0.04),
-    inset 0 1px 0 rgba(255, 255, 255, 0.8),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.03);
+    0 8px 20px rgba(0, 0, 0, 0.08),
+    0 2px 6px rgba(0, 0, 0, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 1),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.05);
 }
 
 html[data-theme="light"] .social-btn:hover {
-  color: #0f172a;
+  color: #000;
   box-shadow:
-    0 6px 16px rgba(0, 0, 0, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.9),
-    0 0 15px rgba(14, 165, 233, 0.06);
+    0 12px 28px rgba(0, 0, 0, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 1),
+    0 0 20px rgba(14, 165, 233, 0.1);
+  border-color: rgba(14, 165, 233, 0.3);
 }
 
 html[data-theme="light"] .social-btn:active {
   transform: translateY(1px);
   box-shadow:
-    0 1px 2px rgba(0, 0, 0, 0.06),
-    inset 0 2px 4px rgba(0, 0, 0, 0.06);
+    0 2px 4px rgba(0, 0, 0, 0.1),
+    inset 0 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* ========================================
+   Golden Symbol Buttons
+   ======================================== */
+.social-btn.golden-btn {
+  padding: 12px !important; /* Square proportions */
+  border-radius: 50% !important; /* Circle shape since no text */
+  justify-content: center !important;
+  width: 48px !important;
+  height: 48px !important;
+  background:
+    linear-gradient(
+      135deg,
+      #dbb462 0%,
+      #fffbe0 25%,
+      #cda142 50%,
+      #fffae0 75%,
+      #c49136 100%
+    ) !important;
+  color: #1a1a1a !important;
+  border: 1px solid rgba(255, 255, 255, 0.6) !important;
+  box-shadow:
+    0 8px 20px rgba(0, 0, 0, 0.5),
+    0 2px 6px rgba(0, 0, 0, 0.4),
+    inset 0 2px 4px rgba(255, 255, 255, 0.8),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.5),
+    0 0 20px rgba(252, 246, 186, 0.4) !important;
+}
+
+.social-btn.golden-btn:hover {
+  filter: brightness(1.15) !important;
+  transform: translateY(-3px) scale(1.05) !important;
+  box-shadow:
+    0 12px 28px rgba(0, 0, 0, 0.6),
+    0 4px 10px rgba(0, 0, 0, 0.4),
+    inset 0 2px 4px rgba(255, 255, 255, 0.9),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.5),
+    0 0 25px rgba(252, 246, 186, 0.6) !important;
+}
+
+html[data-theme="light"] .social-btn.golden-btn {
+  background:
+    linear-gradient(
+      135deg,
+      #e8c557 0%,
+      #fff8e6 25%,
+      #d4b23d 50%,
+      #fffaf0 75%,
+      #bf9f2c 100%
+    ) !important;
+  color: #111 !important;
+  border: 1px solid rgba(255, 255, 255, 0.8) !important;
+  box-shadow:
+    0 8px 20px rgba(0, 0, 0, 0.15),
+    0 2px 6px rgba(0, 0, 0, 0.1),
+    inset 0 2px 4px rgba(255, 255, 255, 0.9),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.3),
+    0 0 20px rgba(212, 175, 55, 0.3) !important;
+}
+
+html[data-theme="light"] .social-btn.golden-btn:hover {
+  filter: brightness(1.1) !important;
+  transform: translateY(-3px) scale(1.05) !important;
+  box-shadow:
+    0 12px 28px rgba(0, 0, 0, 0.2),
+    0 4px 10px rgba(0, 0, 0, 0.1),
+    inset 0 2px 4px rgba(255, 255, 255, 1),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.4),
+    0 0 25px rgba(212, 175, 55, 0.5) !important;
 }
 
 /* ========================================
@@ -551,6 +735,22 @@ html[data-theme="light"] .social-btn:active {
   display: flex;
   gap: 12px;
   flex-wrap: wrap;
+  position: relative;
+  z-index: 50;
+  justify-content: flex-end;
+}
+
+.hero-ctas a, .hero-ctas button, .hero-ctas .cta-primary, .hero-ctas .cta-secondary {
+  position: relative;
+  z-index: 50;
+  padding: 12px 24px;
+  font-size: 1.05rem;
+  /* Give About Me a stronger pop since it's the primary */
+  box-shadow:
+    0 8px 20px rgba(0, 0, 0, 0.4),
+    0 2px 6px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.3);
 }
 
 /* ========================================
@@ -619,7 +819,7 @@ html[data-theme="light"] .shooting-star { display: none; }
 @media (min-width: 1024px) {
   .hero-grid { height: 100%; }
   .hero-left { align-self: center; }
-  .hero-right { align-self: center; }
+  .hero-right { align-self: center; height: 100%; max-height: max-content;}
 }
 
 /* ========================================
@@ -627,12 +827,13 @@ html[data-theme="light"] .shooting-star { display: none; }
    ======================================== */
 @media (max-width: 900px) {
   .hero-grid {
-    grid-template-columns: 1fr;
+    flex-direction: column;
     gap: 0;
     padding: 0;
     min-height: auto;
-    align-items: start;
+    align-items: stretch;
     height: auto;
+    transform: none; /* Reset transform on mobile so it doesn't clip top */
   }
 
   main.landing-page {
@@ -646,6 +847,7 @@ html[data-theme="light"] .shooting-star { display: none; }
     order: 1;
     padding: 0;
     justify-content: center;
+    flex: none;
   }
 
   .photo-frame {
@@ -667,17 +869,20 @@ html[data-theme="light"] .shooting-star { display: none; }
 
   .hero-right {
     order: 2;
+    flex: none;
     padding: 0 16px 100px;
     margin-top: -16px;
     z-index: 3;
+    justify-content: flex-start;
   }
 
   .hero-card {
     width: 100%;
-    max-width: 520px;
+    max-width: 440px;
     margin: 0 auto;
     border-radius: 20px;
     padding: 28px 24px;
+    min-height: auto;
   }
 
   .hero-name {
@@ -690,12 +895,15 @@ html[data-theme="light"] .shooting-star { display: none; }
   }
 
   .hero-ctas {
-    flex-direction: column;
+    flex-direction: row;
+    justify-content: center;
+    max-width: 520px;
+    margin: 0 auto;
   }
 
   .hero-ctas .cta-primary,
   .hero-ctas .cta-secondary {
-    width: 100%;
+    width: auto;
     justify-content: center;
   }
 
@@ -737,6 +945,12 @@ html[data-theme="light"] .shooting-star { display: none; }
   .social-btn {
     padding: 8px 14px;
     font-size: 0.82rem;
+  }
+
+  .social-btn.golden-btn {
+    padding: 6px !important;
+    width: 36px !important;
+    height: 36px !important;
   }
 
   .status-badge {

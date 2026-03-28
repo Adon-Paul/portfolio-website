@@ -18,6 +18,59 @@
   display: block;
 }
 
+.lanyard-tooltip {
+  position: absolute;
+  top: 55%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: var(--fg);
+  background: var(--glass-bg);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: 12px 20px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-md);
+  z-index: 10;
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  animation: float-tooltip 4s ease-in-out infinite;
+}
+
+.lanyard-tooltip.hidden {
+  opacity: 0;
+  transform: translate(-50%, -60%);
+}
+
+.lanyard-tooltip-icon {
+  animation: wiggle-hand 2s ease-in-out infinite;
+  color: var(--accent);
+}
+
+.lanyard-tooltip span {
+  font-family: "Space Grotesk", sans-serif;
+  font-weight: 500;
+  font-size: 0.9rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+@keyframes float-tooltip {
+  0%, 100% { transform: translate(-50%, -50%); }
+  50% { transform: translate(-50%, -55%); }
+}
+
+@keyframes wiggle-hand {
+  0%, 100% { transform: rotate(0deg) translateY(0); }
+  25% { transform: rotate(-10deg) translateY(-2px); }
+  75% { transform: rotate(10deg) translateY(2px); }
+}
+
 @media (max-width: 900px) {
   .lanyard-wrapper {
     min-height: 380px;

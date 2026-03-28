@@ -118,19 +118,21 @@ function App() {
 
     return (
         <>
-            {/* Background - DarkVeil only in dark mode when enabled */}
-            {theme === 'dark' && !reduceMotion && showBackground && (
-                <div style={{ position: 'fixed', inset: 0, zIndex: 0, backgroundColor: '#0b0b12' }}>
+            {/* Background - DarkVeil dynamically maps colors for dark/light mode */}
+            {!reduceMotion && showBackground && (
+                <div style={{ position: 'fixed', inset: 0, zIndex: 0, backgroundColor: theme === 'dark' ? '#0b0b12' : '#fdf6e3' }}>
                     <DarkVeil
-                        hueShift={35}
-                        animateHue
+                        theme={theme}
+                        hueShift={theme === 'dark' ? 35 : 0}
+                        animateHue={theme === 'dark'}
                         hueSpeed={3}
                         hueMin={320}
                         hueMax={40}
-                        noiseIntensity={0.02}
+                        noiseIntensity={theme === 'dark' ? 0.02 : 0.02}
                         scanlineIntensity={0}
                         scanlineFrequency={0}
-                        speed={0.2}
+                        speed={theme === 'dark' ? 0.2 : 0.25}
+                        warpAmount={theme === 'dark' ? 0 : 0.45}
                     />
                 </div>
             )}
@@ -140,6 +142,8 @@ function App() {
                 state={splashState}
                 onComplete={handleSplashComplete}
                 reduceMotion={reduceMotion}
+                theme={theme}
+                toggleTheme={toggleTheme}
             />
 
             {/* Persistent Header - appears on dashboard */}

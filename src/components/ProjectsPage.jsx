@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import ShootingStars from './ShootingStars'
 import CardSwap, { Card } from './CardSwap'
 import AutoVariableProximity from './AutoVariableProximity'
@@ -6,6 +6,63 @@ import AutoVariableProximity from './AutoVariableProximity'
 export default function ProjectsPage({ theme, reduceMotion, showShootingStars = true }) {
     const year = new Date().getFullYear()
     const containerRef = useRef(null)
+    const [expandedPreview, setExpandedPreview] = useState(false)
+
+    const projects = [
+        {
+            title: 'style-transfer-ai',
+            video: `${import.meta.env.BASE_URL}videos/style-transfer-ai.mp4`,
+            videoLabel: 'style-transfer-ai demo video',
+        },
+        {
+            title: 'Melody Music Player',
+            video: `${import.meta.env.BASE_URL}videos/melody music player.mp4`,
+            videoLabel: 'Melody Music Player demo video',
+        },
+        {
+            title: 'E-Commerce Platform',
+            description: 'Full-stack Flutter marketplace with Razorpay payments, Google OAuth, and real-time Supabase sync.',
+            tags: ['Flutter', 'Supabase', 'Razorpay'],
+        },
+    ]
+
+    const openExpandedPreview = () => setExpandedPreview(true)
+    const closeExpandedPreview = () => setExpandedPreview(false)
+
+    const handleStageKeyDown = (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault()
+            openExpandedPreview()
+        }
+    }
+
+    const renderProjectBody = (project) => {
+        if (project.video) {
+            return (
+                <div className="projects-card__media" aria-label={project.videoLabel}>
+                    <video
+                        src={project.video}
+                        autoPlay
+                        muted
+                        loop
+                        playsInline
+                        preload="metadata"
+                    />
+                </div>
+            )
+        }
+
+        return (
+            <div className="projects-card__description">
+                <p>{project.description}</p>
+                <div className="projects-card__tags">
+                    {project.tags.map((tag) => (
+                        <span key={tag} className="tag">{tag}</span>
+                    ))}
+                </div>
+            </div>
+        )
+    }
 
     return (
         <>
@@ -49,61 +106,59 @@ export default function ProjectsPage({ theme, reduceMotion, showShootingStars = 
                                 <aside className="projects-cards" aria-label="Featured projects preview">
                                     <div className="projects-cards__header">
                                         <h2>Featured</h2>
-                                        <p className="lead">Preview stack</p>
                                     </div>
 
-                                    <div className="projects-cards__stage">
-                                        <div className="projects-cards__swap">
-                                            <CardSwap
-                                                width={700}
-                                                height={480}
-                                                cardDistance={52}
-                                                verticalDistance={96}
-                                                delay={3000}
-                                                skewAmount={12}
-                                                pauseOnHover
-                                                easing="elastic"
+                                    {!expandedPreview ? (
+                                        <>
+                                            <div
+                                                className="projects-cards__stage projects-cards__stage--interactive"
+                                                role="button"
+                                                tabIndex={0}
+                                                aria-label="Open separate project previews"
+                                                onClick={openExpandedPreview}
+                                                onKeyDown={handleStageKeyDown}
                                             >
-                                                <Card className="projects-card">
-                                                    <h3>style-transfer-ai</h3>
-                                                    <div className="projects-card__media" aria-label="style-transfer-ai demo video">
-                                                        <video
-                                                            src={`${import.meta.env.BASE_URL}videos/style-transfer-ai.mp4`}
-                                                            autoPlay
-                                                            muted
-                                                            loop
-                                                            playsInline
-                                                            preload="metadata"
-                                                        />
-                                                    </div>
-                                                </Card>
-                                                <Card className="projects-card">
-                                                    <h3>Melody Music Player</h3>
-                                                    <div className="projects-card__media" aria-label="Melody Music Player demo video">
-                                                        <video
-                                                            src={`${import.meta.env.BASE_URL}videos/melody music player.mp4`}
-                                                            autoPlay
-                                                            muted
-                                                            loop
-                                                            playsInline
-                                                            preload="metadata"
-                                                        />
-                                                    </div>
-                                                </Card>
-                                                <Card className="projects-card">
-                                                    <h3>E-Commerce Platform</h3>
-                                                    <div className="projects-card__description">
-                                                        <p>Full-stack Flutter marketplace with Razorpay payments, Google OAuth, and real-time Supabase sync.</p>
-                                                        <div className="projects-card__tags">
-                                                            <span className="tag">Flutter</span>
-                                                            <span className="tag">Supabase</span>
-                                                            <span className="tag">Razorpay</span>
-                                                        </div>
-                                                    </div>
-                                                </Card>
-                                            </CardSwap>
-                                        </div>
-                                    </div>
+                                                <div className="projects-cards__swap">
+                                                    <CardSwap
+                                                        width={620}
+                                                        height={420}
+                                                        cardDistance={42}
+                                                        verticalDistance={78}
+                                                        delay={3000}
+                                                        skewAmount={12}
+                                                        pauseOnHover
+                                                        easing="elastic"
+                                                    >
+                                                        {projects.map((project) => (
+                                                            <Card key={project.title} className="projects-card">
+                                                                <h3>{project.title}</h3>
+                                                                {renderProjectBody(project)}
+                                                            </Card>
+                                                        ))}
+                                                    </CardSwap>
+                                                </div>
+                                            </div>
+                                            <p className="projects-cards__hint">Click preview to expand all projects</p>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <div className="projects-cards__expanded" aria-label="Expanded project previews">
+                                                {projects.map((project) => (
+                                                    <article key={project.title} className="projects-card projects-card--expanded">
+                                                        <h3>{project.title}</h3>
+                                                        {renderProjectBody(project)}
+                                                    </article>
+                                                ))}
+                                            </div>
+                                            <button
+                                                type="button"
+                                                className="projects-preview-toggle"
+                                                onClick={closeExpandedPreview}
+                                            >
+                                                Back to rolling preview
+                                            </button>
+                                        </>
+                                    )}
                                 </aside>
                             </div>
                         </div>

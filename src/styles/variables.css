@@ -117,37 +117,42 @@
    Light Theme Variables
    ======================================== */
 html[data-theme="light"] {
-  --bg: #f8fafc;
-  --bg-elevated: #ffffff;
-  --bg-card: #ffffff;
-  --fg: #0f172a;
-  --fg-muted: #475569;
-  --fg-subtle: #64748b;
-  
-  --accent: #0ea5e9;
-  --accent-hover: #0284c7;
-  --accent-muted: rgba(14, 165, 233, 0.12);
-  --accent-glow: rgba(14, 165, 233, 0.3);
-  --accent-secondary: #8b5cf6;
-  --accent-rgb: 14, 165, 233;
-  
-  --gradient-card: linear-gradient(145deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 250, 252, 0.8) 100%);
-  --gradient-shine: linear-gradient(110deg, transparent 25%, rgba(255, 255, 255, 0.6) 50%, transparent 75%);
-  
-  --glass-bg: rgba(255, 255, 255, 0.7);
-  --glass-bg-hover: rgba(255, 255, 255, 0.85);
-  --glass-border: rgba(0, 0, 0, 0.06);
-  --glass-border-hover: rgba(14, 165, 233, 0.25);
-  
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
-  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.12);
-  --shadow-xl: 0 24px 64px rgba(0, 0, 0, 0.15);
-  --shadow-glow: 0 0 40px rgba(14, 165, 233, 0.1);
-  
-  --scrollbar-track: rgba(0, 0, 0, 0.03);
-  --scrollbar-thumb: rgba(0, 0, 0, 0.15);
-  --scrollbar-thumb-hover: rgba(0, 0, 0, 0.25);
-  
+  /* Solarized Light Base */
+  --bg: #fdf6e3;
+  --bg-elevated: #eee8d5;
+  --bg-card: #fdf6e3;
+  --fg: #586e75;
+  --fg-muted: #93a1a1;
+  --fg-subtle: #839496;
+
+  /* Wood Accents (Light Brown) */
+  --accent: #c49a6c;
+  --accent-hover: #a67b5b;
+  --accent-muted: rgba(196, 154, 108, 0.15);
+  --accent-glow: rgba(196, 154, 108, 0.3);
+  --accent-secondary: #e6c287;
+  --accent-rgb: 196, 154, 108;
+
+  /* Gradients adapted for warm solarized tones - Made card gradient slightly more contrasting */
+  --gradient-card: linear-gradient(145deg, rgba(255, 255, 255, 0.6) 0%, rgba(238, 232, 213, 0.4) 100%);
+  --gradient-shine: linear-gradient(110deg, transparent 25%, rgba(255, 255, 255, 0.7) 50%, transparent 75%);
+
+  /* Glass adapted for warm solarized base - More opaque with stronger border */
+  --glass-bg: rgba(250, 245, 230, 0.95); /* Slightly darker/more solid inner color to pop off background */
+  --glass-bg-hover: rgba(255, 255, 255, 1);
+  --glass-border: rgba(170, 125, 85, 0.4); /* Stronger, darker wood border for intense emphasis */
+  --glass-border-hover: rgba(170, 125, 85, 0.7);
+
+  /* Deep, heavy shadows for solarized light to heavily accentuate boxes */
+  --shadow-sm: 0 4px 12px rgba(60, 75, 80, 0.2);
+  --shadow-md: 0 12px 28px rgba(60, 75, 80, 0.25), 0 4px 10px rgba(60, 75, 80, 0.15);
+  --shadow-lg: 0 20px 48px rgba(60, 75, 80, 0.3), 0 8px 20px rgba(60, 75, 80, 0.2);
+  --shadow-xl: 0 32px 72px rgba(60, 75, 80, 0.35), 0 12px 28px rgba(60, 75, 80, 0.25);
+  --shadow-glow: 0 0 40px rgba(170, 125, 85, 0.3);
+
+  --scrollbar-track: rgba(88, 110, 117, 0.04);
+  --scrollbar-thumb: rgba(196, 154, 108, 0.3);
+  --scrollbar-thumb-hover: rgba(196, 154, 108, 0.5);
+
   --muted: var(--fg-muted);
 }

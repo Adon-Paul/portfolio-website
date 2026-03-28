@@ -98,11 +98,11 @@
   gap: 20px;
   cursor: pointer;
   outline: none;
+  animation: floatPanel 6s ease-in-out infinite;
 }
 
 /* ========================================
-   Skeuomorphic Panel — the main container
-   Looks like a raised metal plate
+   Redesigned Glass/Holo Panel
    ======================================== */
 .splash-panel {
   display: flex;
@@ -110,80 +110,67 @@
   align-items: center;
   gap: 24px;
   padding: clamp(36px, 5vw, 56px) clamp(40px, 6vw, 72px);
-  border-radius: 24px;
+  border-radius: 30px;
   position: relative;
   overflow: hidden;
 
-  /* Dark brushed metal surface */
+  /* Modern Glass surface */
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
   background:
-    /* Brushed metal streaks */
-    repeating-linear-gradient(
-      to right,
-      rgba(255, 255, 255, 0) 0%,
-      rgba(255, 255, 255, 0) 6%,
-      rgba(255, 255, 255, 0.02) 7.5%
+    radial-gradient(
+      120% 120% at 50% 0%,
+      rgba(255, 255, 255, 0.08) 0%,
+      rgba(0, 0, 0, 0.3) 100%
     ),
-    repeating-linear-gradient(
-      to right,
-      transparent 0%,
-      transparent 4%,
-      rgba(0, 0, 0, 0.03) 4.5%
-    ),
-    /* Base gradient: lighter top-left (light source), darker bottom-right */
     linear-gradient(
       145deg,
-      rgba(40, 42, 56, 0.95) 0%,
-      rgba(22, 24, 36, 0.98) 50%,
-      rgba(14, 15, 24, 1) 100%
+      rgba(20, 22, 32, 0.4) 0%,
+      rgba(10, 12, 18, 0.6) 100%
     );
 
-  /* 6-layer shadow stack for true physical depth */
   box-shadow:
-    /* Cast shadow on background */
-    0 30px 60px rgba(0, 0, 0, 0.6),
-    0 12px 24px rgba(0, 0, 0, 0.45),
-    /* Outer ring bevel */
-    0 0 0 1px rgba(255, 255, 255, 0.06),
-    /* Top-left highlight edge (light source) */
-    inset 2px 2px 4px rgba(255, 255, 255, 0.06),
-    /* Bottom-right shadow edge */
-    inset -2px -2px 4px rgba(0, 0, 0, 0.35),
-    /* Inner ambient */
-    inset 0 0 40px rgba(0, 0, 0, 0.15);
+    0 30px 60px rgba(0, 0, 0, 0.8),
+    0 0 0 1px rgba(255, 255, 255, 0.1) inset,
+    0 0 20px rgba(255, 255, 255, 0.05) inset,
+    0 -10px 40px rgba(255, 255, 255, 0.03) inset;
 
-  border: 1px solid rgba(255, 255, 255, 0.04);
-  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
+}
+
+@keyframes floatPanel {
+  0%, 100% { transform: translateY(0px) scale(1); }
+  50% { transform: translateY(-10px) scale(1.01); }
 }
 
 .splash-center:hover .splash-panel {
-  transform: scale(1.005);
+  transform: scale(1.02);
   box-shadow:
-    0 35px 70px rgba(0, 0, 0, 0.65),
-    0 14px 28px rgba(0, 0, 0, 0.5),
-    0 0 0 1px rgba(255, 255, 255, 0.08),
-    inset 2px 2px 4px rgba(255, 255, 255, 0.07),
-    inset -2px -2px 4px rgba(0, 0, 0, 0.35),
-    inset 0 0 40px rgba(0, 0, 0, 0.12);
+    0 40px 80px rgba(0, 0, 0, 0.9),
+    0 0 0 1px rgba(255, 255, 255, 0.15) inset,
+    0 0 30px rgba(255, 255, 255, 0.1) inset,
+    0 -10px 40px rgba(255, 255, 255, 0.08) inset;
 }
 
 .splash-center:active .splash-panel {
-  transform: scale(0.998);
+  transform: scale(0.98);
 }
 
-/* Glossy highlight — Aqua-style glare on top half */
+/* Glowing edge highlight on top half */
 .splash-panel-gloss {
   position: absolute;
   top: 0;
-  left: 8px;
-  right: 8px;
-  height: 45%;
-  border-radius: 22px 22px 50% 50%;
+  left: 0;
+  right: 0;
+  height: 2px;
   background: linear-gradient(
-    to bottom,
-    rgba(255, 255, 255, 0.04) 0%,
-    rgba(255, 255, 255, 0.01) 40%,
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.5) 50%,
     transparent 100%
   );
+  opacity: 0.7;
   pointer-events: none;
 }
 
@@ -211,8 +198,8 @@
 
 .ring-complete .splash-ring-svg {
   filter:
-    drop-shadow(0 2px 6px rgba(0, 0, 0, 0.4))
-    drop-shadow(0 0 16px rgba(0, 212, 255, 0.25));
+    drop-shadow(0 0 10px rgba(0, 212, 255, 0.4))
+    drop-shadow(0 0 20px rgba(0, 212, 255, 0.2));
 }
 
 .progress-ring-circle {
@@ -223,9 +210,10 @@
 .ring-complete::after {
   content: '';
   position: absolute;
-  inset: -6px;
+  inset: -12px;
   border-radius: 50%;
-  border: 1px solid rgba(0, 212, 255, 0.15);
+  border: 1px solid rgba(0, 212, 255, 0.3);
+  box-shadow: 0 0 20px rgba(0, 212, 255, 0.1) inset, 0 0 20px rgba(0, 212, 255, 0.1);
   animation: ringPulse 3s ease-in-out infinite;
 }
 
@@ -264,40 +252,33 @@
 }
 
 /* ========================================
-   Name — Engraved / Embossed Metal Text
+   Name — Glowing Holographic Text
    ======================================== */
 .splash-name-container {
   text-align: center;
 }
 
 .splash-name {
-  font-family: 'Quantico', sans-serif;
-  font-size: clamp(1.5rem, 3.2vw, 2.6rem);
+  font-family: 'Space Grotesk', 'Quantico', sans-serif;
+  font-size: clamp(1.8rem, 3.8vw, 3rem);
   font-weight: 700;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   margin: 0;
   position: relative;
   line-height: 1.2;
-  /* Embossed text: matches the dark surface, two opposed shadows create the raised illusion */
-  color: rgba(200, 210, 230, 0.6);
-  text-shadow:
-    /* Light edge: top-left (toward light source) */
-    -1px -1px 0 rgba(255, 255, 255, 0.1),
-    /* Dark edge: bottom-right (away from light) */
-    1px 1px 2px rgba(0, 0, 0, 0.7),
-    /* Subtle ambient glow */
-    0 0 20px rgba(0, 180, 255, 0.08);
+  color: rgba(255, 255, 255, 0.9);
+  text-shadow: 0 0 10px rgba(0, 212, 255, 0.2);
+  transition: all 0.5s ease;
 }
 
-/* On completion: text gets a metallic sheen */
+/* On completion: text gets a bright neon sheen */
 .splash-name.name-complete {
-  color: rgba(220, 225, 240, 0.75);
+  color: #fff;
   text-shadow:
-    -1px -1px 0 rgba(255, 255, 255, 0.15),
-    1px 1px 2px rgba(0, 0, 0, 0.6),
-    0 0 30px rgba(0, 200, 255, 0.15),
-    0 0 60px rgba(0, 200, 255, 0.05);
+    0 0 10px rgba(0, 212, 255, 0.5),
+    0 0 30px rgba(168, 85, 247, 0.4),
+    0 0 60px rgba(255, 0, 160, 0.2);
 }
 
 /* Blinking cursor — metallic pip */
@@ -319,37 +300,29 @@
 }
 
 /* ========================================
-   Progress Track — Inset into the panel
-   Like a physical gauge slot
+   Progress Track — Modern Minimalist Bar
    ======================================== */
 .splash-track {
   width: min(320px, 80%);
-  height: 4px;
+  height: 6px;
   border-radius: 3px;
   position: relative;
   overflow: hidden;
-  /* Debossed slot */
-  background: rgba(0, 0, 0, 0.5);
-  box-shadow:
-    inset 0 1px 3px rgba(0, 0, 0, 0.6),
-    inset 0 -1px 0 rgba(255, 255, 255, 0.03),
-    0 1px 0 rgba(255, 255, 255, 0.02);
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
 .splash-track-fill {
   height: 100%;
   border-radius: inherit;
   transition: width 0.12s ease;
-  /* Glossy fill bar */
   background: linear-gradient(
-    180deg,
-    rgba(0, 230, 255, 0.9) 0%,
-    rgba(0, 180, 220, 0.7) 50%,
-    rgba(0, 212, 255, 0.85) 100%
+    90deg,
+    #00d4ff 0%,
+    #a855f7 50%,
+    #ff00a0 100%
   );
-  box-shadow:
-    0 0 8px rgba(0, 212, 255, 0.4),
-    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  box-shadow: 0 0 15px rgba(168, 85, 247, 0.5);
   position: relative;
 }
 
@@ -372,21 +345,19 @@
 }
 
 /* ========================================
-   Subtitle — Letterpress / Debossed
+   Subtitle — Sleek Futuristic
    ======================================== */
 .splash-subtitle {
+  font-family: 'Space Grotesk', sans-serif;
   font-size: clamp(0.7rem, 1.1vw, 0.85rem);
-  letter-spacing: 0.2em;
+  letter-spacing: 0.3em;
   text-transform: uppercase;
-  font-weight: 600;
+  font-weight: 500;
   opacity: 0;
   transform: translateY(8px);
   transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-  /* Debossed letterpress: light below, dark above */
-  color: rgba(140, 150, 170, 0.4);
-  text-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.06),
-    0 -1px 0 rgba(0, 0, 0, 0.4);
+  color: rgba(255, 255, 255, 0.6);
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
 .splash-subtitle.subtitle-visible {
@@ -422,21 +393,264 @@
 }
 
 .splash-enter-prompt span {
-  font-size: 0.65rem;
-  color: rgba(255, 255, 255, 0.2);
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 0.9rem;
   font-weight: 500;
-  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.03);
+  letter-spacing: 0.05em;
+  text-transform: lowercase;
 }
 
 /* ========================================
-   Exiting State
+   Centered Skeuomorphic Theme Slider
    ======================================== */
-.splash-exiting .splash-panel {
-  transition: transform 0.4s ease, opacity 0.3s ease;
-  transform: scale(0.97);
-  opacity: 0.7;
+.splash-theme-dock {
+  position: absolute;
+  bottom: 12%;
+  left: 50%;
+  transform: translateX(-50%) translateY(30px);
+  opacity: 0;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.6s, transform 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.6s;
+  z-index: 10;
+}
+
+.splash-theme-dock.visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+  pointer-events: auto;
+}
+
+.theme-dock-prompt {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin: 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8), 0 0 10px rgba(255, 255, 255, 0.2);
+}
+
+.theme-slider-track {
+  width: 360px;
+  height: 72px;
+  border-radius: 36px;
+  background:
+    linear-gradient(180deg, #090a0f 0%, #1a1c24 100%);
+  box-shadow:
+    inset 0 4px 12px rgba(0, 0, 0, 0.95),
+    inset 0 1px 3px rgba(0, 0, 0, 0.8),
+    0 2px 2px rgba(255, 255, 255, 0.15),
+    0 20px 40px rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  position: relative;
+  padding: 6px;
+  display: flex;
+  align-items: center;
+}
+
+.theme-slider-glow {
+  position: absolute;
+  top: 50%;
+  height: 56px;
+  width: 170px;
+  border-radius: 28px;
+  transform: translateY(-50%);
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), background 0.4s ease, box-shadow 0.4s ease;
+  pointer-events: none;
+}
+
+.theme-slider-glow.dark {
+  transform: translate(6px, -50%);
+  background: rgba(0, 212, 255, 0.15);
+  box-shadow: 0 0 25px rgba(0, 212, 255, 0.3);
+}
+
+.theme-slider-glow.light {
+  transform: translate(172px, -50%);
+  background: rgba(220, 160, 80, 0.2);
+  box-shadow: 0 0 25px rgba(230, 180, 100, 0.35);
+}
+
+.theme-slider-labels {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 32px;
+  pointer-events: none;
+}
+
+.theme-slider-labels span {
+  font-family: "Quantico", sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.7);
+  z-index: 1;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.9);
+  pointer-events: auto;
+  cursor: pointer;
+  transition: color 0.3s ease, text-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.label-dark.active {
+  color: #00d4ff;
+  text-shadow: 0 0 10px rgba(0, 212, 255, 0.8), 0 0 20px rgba(0, 212, 255, 0.4);
+  transform: scale(1.05);
+}
+
+.label-light.active {
+  color: #ffcc66;
+  text-shadow: 0 0 10px rgba(255, 204, 102, 0.8), 0 0 20px rgba(255, 204, 102, 0.4);
+  transform: scale(1.05);
+}
+
+.theme-slider-knob {
+  width: 170px;
+  height: 58px;
+  border-radius: 29px;
+  /* Ultimate Metallic Chrome Look */
+  background:
+    linear-gradient(
+      to bottom,
+      #ffffff 0%,
+      #a0a0a0 25%,
+      #d0d0d0 45%,
+      #6a6a6a 50%,
+      #404040 55%,
+      #d0d0d0 80%,
+      #ffffff 100%
+    );
+  box-shadow:
+    0 8px 16px rgba(0, 0, 0, 0.7),
+    0 12px 30px rgba(0, 0, 0, 0.4),
+    inset 0 4px 6px rgba(255, 255, 255, 0.7),
+    inset 0 -2px 6px rgba(0, 0, 0, 0.8),
+    inset -2px 0 10px rgba(255,255,255,0.4),
+    inset 2px 0 10px rgba(255,255,255,0.4);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  position: absolute;
+  left: 6px;
+  cursor: grab;
+  z-index: 5;
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+  overflow: hidden;
+}
+
+/* Chrome shine sweep */
+.theme-slider-knob::before {
+  content: '';
+  position: absolute;
+  top: -100%;
+  left: -100%;
+  width: 300%;
+  height: 300%;
+  background: linear-gradient(
+    45deg,
+    transparent 45%,
+    rgba(255, 255, 255, 0.4) 50%,
+    transparent 55%
+  );
+  animation: chromeShine 4s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes chromeShine {
+  0% { transform: translateX(-100%); }
+  40%, 100% { transform: translateX(100%); }
+}
+
+.theme-slider-knob:active {
+  cursor: grabbing;
+  box-shadow:
+    0 4px 8px rgba(0,0,0,0.6),
+    inset 0 2px 4px rgba(255,255,255,0.4),
+    inset 0 -1px 3px rgba(0,0,0,0.6);
+}
+
+.theme-slider-knob.light {
+  transform: translateX(166px); /* 360 - 170 - 12(padding) - 6(left inset) = 172 */
+}
+
+/* Mechanical details on the knob */
+.knob-texture {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+}
+
+.knob-ridges {
+  width: 40px;
+  height: 28px;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      transparent 0px,
+      transparent 3px,
+      rgba(0, 0, 0, 0.5) 4px,
+      rgba(255, 255, 255, 0.4) 5px
+    );
+  border-radius: 4px;
+}
+
+.knob-indicator {
+  position: absolute;
+  top: 8px;
+  width: 48px;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.6), inset 0 1px 1px rgba(255,255,255,0.5);
+}
+
+.theme-slider-knob.dark .knob-indicator {
+  background: #00d4ff;
+  box-shadow: 0 0 10px #00d4ff, 0 1px 1px rgba(0,0,0,0.7), inset 0 1px 2px rgba(255,255,255,0.7);
+}
+
+.theme-slider-knob.light .knob-indicator {
+  background: #ffcc66;
+  box-shadow: 0 0 10px #ffcc66, 0 1px 1px rgba(0,0,0,0.7), inset 0 1px 2px rgba(255,255,255,0.7);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .splash-theme-dock {
+    bottom: 8%;
+  }
+  .theme-slider-track {
+    width: 280px;
+    height: 56px;
+  }
+  .theme-slider-glow {
+    width: 130px;
+    height: 40px;
+  }
+  .theme-slider-glow.light {
+    transform: translate(132px, -50%);
+  }
+  .theme-slider-knob {
+    width: 130px;
+  }
+  .theme-slider-knob.light {
+    transform: translateX(126px);
+  }
+  .theme-slider-labels {
+    padding: 0 16px;
+  }
+  .theme-slider-labels span {
+    font-size: 0.65rem;
+  }
 }
 
 /* ========================================
@@ -503,4 +717,114 @@
     clip-path: inset(0 0 calc(100% - 100px) 0);
     height: 100px;
   }
+}
+
+/* ========================================
+   Light Mode Enhancements
+   ======================================== */
+html[data-theme="light"] #splash-overlay {
+  background: #f5f5f7;
+}
+
+html[data-theme="light"] .splash-panel {
+  background:
+    radial-gradient(
+      120% 120% at 50% 0%,
+      rgba(255, 255, 255, 1) 0%,
+      rgba(230, 230, 240, 0.6) 100%
+    ),
+    linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.4) 0%,
+      rgba(200, 200, 210, 0.2) 100%
+    );
+  box-shadow:
+    0 30px 60px rgba(0, 0, 0, 0.1),
+    0 0 0 1px rgba(255, 255, 255, 0.8) inset,
+    0 0 20px rgba(255, 255, 255, 0.5) inset,
+    0 -10px 40px rgba(200, 200, 200, 0.1) inset;
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+html[data-theme="light"] .splash-center:hover .splash-panel {
+  box-shadow:
+    0 40px 80px rgba(0, 0, 0, 0.15),
+    0 0 0 1px rgba(255, 255, 255, 0.9) inset,
+    0 0 30px rgba(255, 255, 255, 0.6) inset,
+    0 -10px 40px rgba(200, 200, 200, 0.15) inset;
+}
+
+html[data-theme="light"] .splash-panel-gloss {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.9) 50%,
+    transparent 100%
+  );
+}
+
+html[data-theme="light"] .splash-ring-svg circle:nth-child(1) {
+  stroke: rgba(0, 0, 0, 0.05);
+}
+
+html[data-theme="light"] .splash-ring-svg circle:nth-child(2) {
+  stroke: rgba(255, 255, 255, 0.8);
+}
+
+html[data-theme="light"] .ring-complete::after {
+  border-color: rgba(168, 85, 247, 0.3);
+  box-shadow: 0 0 20px rgba(168, 85, 247, 0.1) inset, 0 0 20px rgba(168, 85, 247, 0.1);
+}
+
+html[data-theme="light"] .splash-ring-initials span {
+  color: rgba(0, 0, 0, 0.2);
+}
+
+html[data-theme="light"] .splash-ring-initials span.visible {
+  color: #333;
+  text-shadow:
+    1px 1px 0 rgba(255, 255, 255, 0.8),
+    -1px -1px 0 rgba(0, 0, 0, 0.05);
+}
+
+html[data-theme="light"] .splash-name {
+  color: #333;
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+html[data-theme="light"] .splash-name.name-complete {
+  color: #111;
+  text-shadow:
+    0 0 10px rgba(168, 85, 247, 0.2),
+    0 0 30px rgba(0, 212, 255, 0.1);
+}
+
+html[data-theme="light"] .splash-cursor {
+  background: #a855f7;
+  box-shadow: 0 0 6px rgba(168, 85, 247, 0.4);
+}
+
+html[data-theme="light"] .splash-track {
+  background: rgba(0, 0, 0, 0.05);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+html[data-theme="light"] .splash-track-fill {
+  background: linear-gradient(
+    90deg,
+    #00d4ff 0%,
+    #a855f7 50%,
+    #ff00a0 100%
+  );
+  box-shadow: 0 0 15px rgba(168, 85, 247, 0.3);
+}
+
+html[data-theme="light"] .splash-subtitle {
+  color: rgba(0, 0, 0, 0.5);
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+}
+
+html[data-theme="light"] .theme-dock-prompt {
+  color: rgba(0, 0, 0, 0.8);
+  text-shadow: 0 1px 4px rgba(255, 255, 255, 0.9);
 }

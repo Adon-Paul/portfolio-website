@@ -70,16 +70,38 @@ const CardSwap = ({
   const tlRef = useRef(null)
   const intervalRef = useRef()
   const container = useRef(null)
+  const isAnimatingRef = useRef(false)
 
   useEffect(() => {
+    if (!refs.length) return undefined
+
     const total = refs.length
-    refs.forEach((r, i) => placeNow(r.current, makeSlot(i, cardDistance, verticalDistance, total), skewAmount))
+    refs.forEach((r, i) => {
+      if (r.current) {
+        placeNow(r.current, makeSlot(i, cardDistance, verticalDistance, total), skewAmount)
+      }
+    })
+
+    const stopInterval = () => {
+      if (intervalRef.current) {
+        window.clearInterval(intervalRef.current)
+        intervalRef.current = undefined
+      }
+    }
+
+    const startInterval = () => {
+      stopInterval()
+      intervalRef.current = window.setInterval(swap, delay)
+    }
 
     const swap = () => {
-      if (order.current.length < 2) return
+      if (order.current.length < 2 || isAnimatingRef.current) return
 
       const [front, ...rest] = order.current
       const elFront = refs[front].current
+      if (!elFront) return
+
+      isAnimatingRef.current = true
       const tl = gsap.timeline()
       tlRef.current = tl
 
@@ -130,33 +152,43 @@ const CardSwap = ({
 
       tl.call(() => {
         order.current = [...rest, front]
+        isAnimatingRef.current = false
+      })
+
+      tl.eventCallback('onInterrupt', () => {
+        isAnimatingRef.current = false
       })
     }
 
-    swap()
-    intervalRef.current = window.setInterval(swap, delay)
+    startInterval()
 
     const node = container.current
 
     if (pauseOnHover && node) {
       const pause = () => {
         tlRef.current?.pause()
-        clearInterval(intervalRef.current)
+        stopInterval()
       }
       const resume = () => {
         tlRef.current?.play()
-        intervalRef.current = window.setInterval(swap, delay)
+        startInterval()
       }
       node.addEventListener('mouseenter', pause)
       node.addEventListener('mouseleave', resume)
       return () => {
         node.removeEventListener('mouseenter', pause)
         node.removeEventListener('mouseleave', resume)
-        clearInterval(intervalRef.current)
+        stopInterval()
+        tlRef.current?.kill()
+        isAnimatingRef.current = false
       }
     }
 
-    return () => clearInterval(intervalRef.current)
+    return () => {
+      stopInterval()
+      tlRef.current?.kill()
+      isAnimatingRef.current = false
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cardDistance, verticalDistance, delay, pauseOnHover, skewAmount, easing])
 
