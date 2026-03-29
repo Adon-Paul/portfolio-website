@@ -1,9 +1,10 @@
-import { useRef } from 'react'
+import { Suspense, lazy, useRef } from 'react'
 import ShootingStars from './ShootingStars'
-import Lanyard from './Lanyard'
 import AutoVariableProximity from './AutoVariableProximity'
-import LogoLoop from './LogoLoop'
 import '../styles/components/projects.css'
+
+const Lanyard = lazy(() => import('./Lanyard'))
+const LogoLoop = lazy(() => import('./LogoLoop'))
 
 const TECH_LOGOS = [
     { src: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flutter/flutter-original.svg', alt: 'Flutter' },
@@ -44,7 +45,9 @@ export default function AboutPage({ theme, reduceMotion, showShootingStars = tru
                             {!reduceMotion && (
                                 <aside className="about-lanyard-side" aria-hidden="true">
                                     <div className="about-lanyard-sticky">
-                                        <Lanyard cameraDistance={9} fov={30} />
+                                        <Suspense fallback={null}>
+                                            <Lanyard cameraDistance={9} fov={30} />
+                                        </Suspense>
                                     </div>
                                 </aside>
                             )}
@@ -173,30 +176,32 @@ export default function AboutPage({ theme, reduceMotion, showShootingStars = tru
                                             </div>
                                         </div>
                                         <div className="bento-logoloop-wrapper">
-                                            <LogoLoop
-                                                logos={TECH_LOGOS}
-                                                speed={60}
-                                                logoHeight={28}
-                                                gap={32}
-                                                pauseOnHover
-                                                scaleOnHover
-                                                fadeOut
-                                                reduceMotion={reduceMotion}
-                                                renderItem={(item) => (
-                                                    <>
-                                                        <img
-                                                            src={item.src}
-                                                            alt={item.alt}
-                                                            title={item.alt}
-                                                            loading="lazy"
-                                                            decoding="async"
-                                                            draggable={false}
-                                                        />
-                                                        <span className="logoloop__item-label">{item.alt}</span>
-                                                    </>
-                                                )}
-                                                ariaLabel="Tech stack logos"
-                                            />
+                                            <Suspense fallback={null}>
+                                                <LogoLoop
+                                                    logos={TECH_LOGOS}
+                                                    speed={60}
+                                                    logoHeight={28}
+                                                    gap={32}
+                                                    pauseOnHover
+                                                    scaleOnHover
+                                                    fadeOut
+                                                    reduceMotion={reduceMotion}
+                                                    renderItem={(item) => (
+                                                        <>
+                                                            <img
+                                                                src={item.src}
+                                                                alt={item.alt}
+                                                                title={item.alt}
+                                                                loading="lazy"
+                                                                decoding="async"
+                                                                draggable={false}
+                                                            />
+                                                            <span className="logoloop__item-label">{item.alt}</span>
+                                                        </>
+                                                    )}
+                                                    ariaLabel="Tech stack logos"
+                                                />
+                                            </Suspense>
                                         </div>
                                     </div>
 

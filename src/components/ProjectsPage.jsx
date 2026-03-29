@@ -1,8 +1,9 @@
-import { useRef, useState } from 'react'
+import { Suspense, lazy, useRef, useState } from 'react'
 import ShootingStars from './ShootingStars'
-import CardSwap, { Card } from './CardSwap'
 import AutoVariableProximity from './AutoVariableProximity'
 import '../styles/components/projects.css'
+
+const CardSwap = lazy(() => import('./CardSwap'))
 
 export default function ProjectsPage({ theme, reduceMotion, showShootingStars = true }) {
     const year = new Date().getFullYear()
@@ -120,23 +121,25 @@ export default function ProjectsPage({ theme, reduceMotion, showShootingStars = 
                                                 onKeyDown={handleStageKeyDown}
                                             >
                                                 <div className="projects-cards__swap">
-                                                    <CardSwap
-                                                        width={620}
-                                                        height={420}
-                                                        cardDistance={42}
-                                                        verticalDistance={78}
-                                                        delay={3000}
-                                                        skewAmount={12}
-                                                        pauseOnHover
-                                                        easing="elastic"
-                                                    >
-                                                        {projects.map((project) => (
-                                                            <Card key={project.title} className="projects-card">
-                                                                <h3>{project.title}</h3>
-                                                                {renderProjectBody(project)}
-                                                            </Card>
-                                                        ))}
-                                                    </CardSwap>
+                                                    <Suspense fallback={null}>
+                                                        <CardSwap
+                                                            width={620}
+                                                            height={420}
+                                                            cardDistance={42}
+                                                            verticalDistance={78}
+                                                            delay={3000}
+                                                            skewAmount={12}
+                                                            pauseOnHover
+                                                            easing="elastic"
+                                                        >
+                                                            {projects.map((project) => (
+                                                                <article key={project.title} className="card projects-card">
+                                                                    <h3>{project.title}</h3>
+                                                                    {renderProjectBody(project)}
+                                                                </article>
+                                                            ))}
+                                                        </CardSwap>
+                                                    </Suspense>
                                                 </div>
                                             </div>
                                             <p className="projects-cards__hint">Click preview to expand all projects</p>

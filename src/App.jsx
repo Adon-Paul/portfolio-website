@@ -65,7 +65,10 @@ function App() {
 
     const preloadSecondaryViews = useCallback(() => {
         import('./components/AboutPage')
+        import('./components/Lanyard')
+        import('./components/LogoLoop')
         import('./components/ProjectsPage')
+        import('./components/CardSwap')
         import('./components/InterestingPage')
     }, [])
 
@@ -91,11 +94,14 @@ function App() {
     const handlePrefetchPage = useCallback((pageId) => {
         if (pageId === 'about') {
             import('./components/AboutPage')
+            import('./components/Lanyard')
+            import('./components/LogoLoop')
             return
         }
 
         if (pageId === 'projects') {
             import('./components/ProjectsPage')
+            import('./components/CardSwap')
             return
         }
 
@@ -107,6 +113,15 @@ function App() {
     const handleNavigate = useCallback((page, direction = null) => {
         if (page === currentPage || isTransitioning) {
             return
+        }
+
+        if (page === 'about') {
+            import('./components/Lanyard')
+            import('./components/LogoLoop')
+        }
+
+        if (page === 'projects') {
+            import('./components/CardSwap')
         }
 
         if (!direction) {
