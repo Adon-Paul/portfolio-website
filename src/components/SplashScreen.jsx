@@ -1,11 +1,16 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
+import useAppStore from '../store/useAppStore'
+import BorderGlow from './BorderGlow'
+import DarkVeil from './DarkVeil'
 
 function SplashScreen({ state, onComplete, reduceMotion, theme, toggleTheme }) {
+    const setTheme = useAppStore((s) => s.setTheme)
     const [displayText, setDisplayText] = useState('')
     const [progress, setProgress] = useState(0)
     const [phase, setPhase] = useState('typing') // typing | ready | exiting
     const [isEntering, setIsEntering] = useState(false)
     const [selectedTheme, setSelectedTheme] = useState(null)
+    const [craftingDots, setCraftingDots] = useState('.')
 
     // Direct DOM manipulation for ultra-smooth animation
     const overlayRef = useRef(null)
@@ -13,6 +18,16 @@ function SplashScreen({ state, onComplete, reduceMotion, theme, toggleTheme }) {
     const targetRadius = useRef(150)
     const velocity = useRef(0)
     const progressRingRef = useRef(null)
+
+    // Knob drag refs
+    const knobRef = useRef(null)
+    const isDragging = useRef(false)
+    const dragStartX = useRef(0)
+    const dragStartLeft = useRef(4)
+    // Track: 400px, padding: 4px, knob: 110px → travel 4..286
+    const KNOB_MIN = 4
+    const KNOB_MAX = 286
+    const KNOB_CENTER = 145
 
     const targetText = "Adon Paul Tomy"
     const speed = 85
@@ -61,6 +76,18 @@ function SplashScreen({ state, onComplete, reduceMotion, theme, toggleTheme }) {
 
     // Removed auto-dismiss timer - User must explicitly choose a theme now.
     const proceedTimerRef = useRef(null)
+
+    // Animated crafting dots
+    useEffect(() => {
+        if (!isEntering) return
+        let step = 0
+        const frames = ['.', '..', '...', '..']
+        const id = setInterval(() => {
+            step = (step + 1) % frames.length
+            setCraftingDots(frames[step])
+        }, 400)
+        return () => clearInterval(id)
+    }, [isEntering])
 
     // Lock Body Scroll
     useEffect(() => {
@@ -112,13 +139,13 @@ function SplashScreen({ state, onComplete, reduceMotion, theme, toggleTheme }) {
 
         const handleWheel = (e) => {
             const scrollDelta = e.deltaY * 0.35
-            // Allow manual pulling down of the circle for fun, but don't enter automatically
-            targetRadius.current = Math.max(Math.min(targetRadius.current - scrollDelta, 150), 0)
+            const minRadius = selectedTheme ? 0 : 10
+            targetRadius.current = Math.max(Math.min(targetRadius.current - scrollDelta, 150), minRadius)
         }
 
         window.addEventListener('wheel', handleWheel, { passive: true })
         return () => window.removeEventListener('wheel', handleWheel)
-    }, [phase, state])
+    }, [phase, state, selectedTheme])
 
     // Touch support for mobile
     useEffect(() => {
@@ -128,7 +155,8 @@ function SplashScreen({ state, onComplete, reduceMotion, theme, toggleTheme }) {
         const handleTouchStart = (e) => { touchStartY = e.touches[0].clientY }
         const handleTouchMove = (e) => {
             const delta = (touchStartY - e.touches[0].clientY) * 0.5
-            targetRadius.current = Math.max(Math.min(targetRadius.current - delta, 150), 0)
+            const minRadius = selectedTheme ? 0 : 10
+            targetRadius.current = Math.max(Math.min(targetRadius.current - delta, 150), minRadius)
             touchStartY = e.touches[0].clientY
         }
 
@@ -138,7 +166,7 @@ function SplashScreen({ state, onComplete, reduceMotion, theme, toggleTheme }) {
             window.removeEventListener('touchstart', handleTouchStart)
             window.removeEventListener('touchmove', handleTouchMove)
         }
-    }, [phase, state])
+    }, [phase, state, selectedTheme])
 
     // Click handler - Removed immediate skip so user is forced to pick a theme
     const handleClick = useCallback(() => {
@@ -152,25 +180,56 @@ function SplashScreen({ state, onComplete, reduceMotion, theme, toggleTheme }) {
             if (proceedTimerRef.current) clearTimeout(proceedTimerRef.current)
         }
     }, [state])
-    // Theme toggle handler triggers the exit sequence
 
-    const handleThemeSelection = (choice) => {
+    // Theme selection — triggers DarkVeil preview + exit countdown
+    const handleThemeSelection = useCallback((choice) => {
         if (phase !== 'ready') return
 
-        setSelectedTheme(choice)
-
-        if (choice !== theme) {
-            toggleTheme()
+        // Clear any inline drag positioning so CSS class takes over
+        if (knobRef.current) {
+            knobRef.current.style.left = ''
+            knobRef.current.style.transition = ''
         }
 
+        setSelectedTheme(choice)
+        setTheme(choice)
         setIsEntering(true)
 
         if (proceedTimerRef.current) clearTimeout(proceedTimerRef.current)
         proceedTimerRef.current = setTimeout(() => {
             setPhase('exiting')
             targetRadius.current = 0
-        }, 800)
-    }
+        }, 5000)
+    }, [phase, setTheme])
+
+    const handleKnobPointerDown = useCallback((e) => {
+        e.stopPropagation()
+        if (phase !== 'ready') return
+        isDragging.current = true
+        dragStartX.current = e.clientX
+        const knob = knobRef.current
+        if (!knob) return
+        const currentLeft = parseFloat(knob.style.left) || KNOB_MIN
+        dragStartLeft.current = currentLeft
+        knob.setPointerCapture(e.pointerId)
+        knob.style.transition = 'none'
+    }, [phase])
+
+    const handleKnobPointerMove = useCallback((e) => {
+        if (!isDragging.current || !knobRef.current) return
+        const delta = e.clientX - dragStartX.current
+        const newLeft = Math.max(KNOB_MIN, Math.min(KNOB_MAX, dragStartLeft.current + delta))
+        knobRef.current.style.left = `${newLeft}px`
+    }, [])
+
+    const handleKnobPointerUp = useCallback((e) => {
+        if (!isDragging.current || !knobRef.current) return
+        isDragging.current = false
+        knobRef.current.style.transition = ''
+        const currentLeft = parseFloat(knobRef.current.style.left) || KNOB_MIN
+        knobRef.current.style.left = ''
+        handleThemeSelection(currentLeft < KNOB_CENTER ? 'dark' : 'light')
+    }, [handleThemeSelection])
 
     const circumference = 2 * Math.PI * 58
 
@@ -186,14 +245,29 @@ function SplashScreen({ state, onComplete, reduceMotion, theme, toggleTheme }) {
             }}
             aria-hidden={state === 'dashboard'}
         >
-            {/* Subtle noise texture overlay */}
-            <div className="splash-noise" aria-hidden="true" />
-
-            {/* Ambient orbs */}
-            <div className="splash-orbs" aria-hidden="true">
-                <div className="orb orb-1" />
-                <div className="orb orb-2" />
-            </div>
+            {/* DarkVeil preview — fades in when user picks a theme */}
+            {selectedTheme && !reduceMotion && (
+                <div style={{
+                    position: 'absolute', inset: 0, zIndex: 1,
+                    backgroundColor: selectedTheme === 'dark' ? '#0b0b12' : '#fdf6e3',
+                    transition: 'background-color 0.4s ease',
+                    animation: 'splashVeilFadeIn 0.5s ease forwards'
+                }}>
+                    <DarkVeil
+                        theme={selectedTheme}
+                        hueShift={selectedTheme === 'dark' ? 35 : 0}
+                        animateHue={selectedTheme === 'dark'}
+                        hueSpeed={3}
+                        hueMin={320}
+                        hueMax={40}
+                        noiseIntensity={0.02}
+                        scanlineIntensity={0}
+                        scanlineFrequency={0}
+                        speed={selectedTheme === 'dark' ? 0.2 : 0.25}
+                        warpAmount={selectedTheme === 'dark' ? 0 : 0.45}
+                    />
+                </div>
+            )}
 
             <div className="splash-content">
                 <div
@@ -204,7 +278,20 @@ function SplashScreen({ state, onComplete, reduceMotion, theme, toggleTheme }) {
                     aria-label="Click to enter site"
                     onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleClick() }}
                 >
-                    {/* Skeuomorphic embossed panel */}
+                    {/* Skeuomorphic embossed panel with border glow */}
+                    <BorderGlow
+                        animated={phase === 'ready'}
+                        edgeSensitivity={10}
+                        glowIntensity={3.0}
+                        glowRadius={80}
+                        glowColor="180 100 60"
+                        colors={['#00ffff', '#ff00ff', '#ff0066', '#7700ff']}
+                        backgroundColor="#0a0a0a"
+                        borderRadius={30}
+                        fillOpacity={0}
+                        coneSpread={18}
+                        className="splash-border-glow"
+                    >
                     <div className="splash-panel">
                         {/* Glossy highlight on panel top */}
                         <div className="splash-panel-gloss" aria-hidden="true" />
@@ -267,40 +354,51 @@ function SplashScreen({ state, onComplete, reduceMotion, theme, toggleTheme }) {
                             Developer &middot; Student &middot; Builder
                         </p>
                     </div>
+                    </BorderGlow>
 
                     {/* Removed manual enter prompt as user must select theme */}
                 </div>
 
                 {/* Innovative Skeuomorphic Theme Slider - Centered underneath */}
                 <div className={`splash-theme-dock ${phase === 'ready' ? 'visible' : ''}`} onClick={(e) => e.stopPropagation()}>
-                    <p className="theme-dock-prompt">
-                        {isEntering ? "Crafting your experience..." : "Select Your Desired Experience"}
+                    <p className={`theme-dock-prompt ${isEntering ? 'prompt-crafting' : ''}`}>
+                        {isEntering
+                            ? <><span className="prompt-crafting-text">Crafting your experience</span><span className="prompt-crafting-dots">{craftingDots}</span></>
+                            : "Select Your Desired Experience"
+                        }
                     </p>
                     
                     <div className="theme-slider-container">
-                        <span 
-                            className={`theme-label label-dark ${selectedTheme === 'dark' ? 'active' : ''}`} 
-                            onClick={(e) => { e.stopPropagation(); handleThemeSelection('dark'); }}
-                        >
-                            NEON DARK
-                        </span>
-                        
-                        <div 
+                        <div
                             className={`theme-slider-track ${selectedTheme ?? 'unset'}`}
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                if (selectedTheme === 'dark') handleThemeSelection('light');
-                                else handleThemeSelection('dark');
-                            }}
+                            onClick={(e) => { e.stopPropagation(); }}
                         >
+                            {/* Engraved labels inside the track */}
+                            <span
+                                className="theme-label-engraved label-dark"
+                                onClick={(e) => { e.stopPropagation(); handleThemeSelection('dark'); }}
+                            >
+                                NEON DARK
+                            </span>
+                            <span
+                                className="theme-label-engraved label-light"
+                                onClick={(e) => { e.stopPropagation(); handleThemeSelection('light'); }}
+                            >
+                                SOLARIZED LIGHT
+                            </span>
+
                             {/* Underglow based on theme */}
                             <div className={`theme-slider-glow ${selectedTheme ?? 'unset'}`} />
-                            
-                            <div 
+
+                            <div
+                                ref={knobRef}
                                 className={`theme-slider-knob ${selectedTheme ?? 'unset'}`}
                                 role="button"
                                 aria-label="Choose theme"
                                 tabIndex={0}
+                                onPointerDown={handleKnobPointerDown}
+                                onPointerMove={handleKnobPointerMove}
+                                onPointerUp={handleKnobPointerUp}
                             >
                                 <div className="knob-texture">
                                     <div className="knob-ridges"></div>
@@ -308,13 +406,6 @@ function SplashScreen({ state, onComplete, reduceMotion, theme, toggleTheme }) {
                                 </div>
                             </div>
                         </div>
-
-                        <span 
-                            className={`theme-label label-light ${selectedTheme === 'light' ? 'active' : ''}`} 
-                            onClick={(e) => { e.stopPropagation(); handleThemeSelection('light'); }}
-                        >
-                            SOLARIZED LIGHT
-                        </span>
                     </div>
                 </div>
             </div>

@@ -798,17 +798,22 @@ html[data-theme="light"] .shooting-star { display: none; }
 /* ========================================
    Footer
    ======================================== */
-.page-footer {
+.landing-page ~ .page-footer,
+.landing-page + .page-footer,
+.page-footer--fixed {
   position: fixed;
   bottom: 16px;
   left: 0;
   right: 0;
+  z-index: 2;
+}
+
+.page-footer {
   text-align: center;
   color: var(--fg-subtle);
   font-size: 0.75rem;
   letter-spacing: 0.01em;
   opacity: 0.5;
-  z-index: 2;
   /* Debossed footer */
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.03);
 }
