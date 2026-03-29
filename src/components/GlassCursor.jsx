@@ -7,6 +7,7 @@ import { useEffect, useRef, useState } from 'react'
 function GlassCursor({ size = 140 }) {
     const cursorRef = useRef(null)
     const [isVisible, setIsVisible] = useState(true) // Start visible
+    const visibleRef = useRef(true)
     const positionRef = useRef({ x: window.innerWidth / 2, y: window.innerHeight / 2 })
     const targetRef = useRef({ x: window.innerWidth / 2, y: window.innerHeight / 2 })
     const rafRef = useRef(null)
@@ -24,6 +25,14 @@ function GlassCursor({ size = 140 }) {
         cursor.style.left = '0px'
         cursor.style.top = '0px'
 
+        let isAnimating = false
+
+        const ensureAnimation = () => {
+            if (isAnimating) return
+            isAnimating = true
+            rafRef.current = requestAnimationFrame(animate)
+        }
+
         const animate = () => {
             // Smooth easing towards target
             positionRef.current.x += (targetRef.current.x - positionRef.current.x) * 0.12
@@ -35,21 +44,39 @@ function GlassCursor({ size = 140 }) {
 
             cursor.style.transform = `translate3d(${x}px, ${y}px, 0)`
 
+            const dx = Math.abs(targetRef.current.x - positionRef.current.x)
+            const dy = Math.abs(targetRef.current.y - positionRef.current.y)
+
+            if (dx < 0.1 && dy < 0.1) {
+                isAnimating = false
+                rafRef.current = null
+                return
+            }
+
             rafRef.current = requestAnimationFrame(animate)
         }
 
         const handleMouseMove = (e) => {
             targetRef.current.x = e.clientX
             targetRef.current.y = e.clientY
-            if (!isVisible) setIsVisible(true)
+            if (!visibleRef.current) {
+                visibleRef.current = true
+                setIsVisible(true)
+            }
+            ensureAnimation()
         }
 
         const handleMouseLeave = () => {
+            if (!visibleRef.current) return
+            visibleRef.current = false
             setIsVisible(false)
         }
 
         const handleMouseEnter = () => {
+            if (visibleRef.current) return
+            visibleRef.current = true
             setIsVisible(true)
+            ensureAnimation()
         }
 
         window.addEventListener('mousemove', handleMouseMove, { passive: true })
@@ -57,13 +84,14 @@ function GlassCursor({ size = 140 }) {
         window.addEventListener('mouseenter', handleMouseEnter)
 
         // Start animation loop
-        rafRef.current = requestAnimationFrame(animate)
+        ensureAnimation()
 
         return () => {
             window.removeEventListener('mousemove', handleMouseMove)
             window.removeEventListener('mouseleave', handleMouseLeave)
             window.removeEventListener('mouseenter', handleMouseEnter)
             if (rafRef.current) cancelAnimationFrame(rafRef.current)
+            isAnimating = false
         }
     }, [size]) // Remove isVisible from deps to prevent re-running
 

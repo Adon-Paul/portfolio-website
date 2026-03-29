@@ -1,9 +1,9 @@
-import { useState, useEffect, useRef, useCallback } from 'react'
+import { memo, useState, useEffect, useRef, useCallback } from 'react'
 import useAppStore from '../store/useAppStore'
 import BorderGlow from './BorderGlow'
 import DarkVeil from './DarkVeil'
 
-function SplashScreen({ state, onComplete, reduceMotion, theme, toggleTheme }) {
+function SplashScreen({ state, onComplete, reduceMotion }) {
     const setTheme = useAppStore((s) => s.setTheme)
     const [displayText, setDisplayText] = useState('')
     const [progress, setProgress] = useState(0)
@@ -17,6 +17,8 @@ function SplashScreen({ state, onComplete, reduceMotion, theme, toggleTheme }) {
     const currentRadius = useRef(150)
     const targetRadius = useRef(150)
     const velocity = useRef(0)
+    const springRafRef = useRef(null)
+    const springAnimateRef = useRef(null)
     const progressRingRef = useRef(null)
 
     // Knob drag refs
@@ -31,6 +33,12 @@ function SplashScreen({ state, onComplete, reduceMotion, theme, toggleTheme }) {
 
     const targetText = "Adon Paul Tomy"
     const speed = 85
+
+    const requestSpringFrame = useCallback(() => {
+        if (springRafRef.current != null) return
+        if (typeof springAnimateRef.current !== 'function') return
+        springRafRef.current = requestAnimationFrame(springAnimateRef.current)
+    }, [])
 
     // Typewriter effect
     useEffect(() => {
@@ -77,6 +85,12 @@ function SplashScreen({ state, onComplete, reduceMotion, theme, toggleTheme }) {
     // Removed auto-dismiss timer - User must explicitly choose a theme now.
     const proceedTimerRef = useRef(null)
 
+    useEffect(() => {
+        return () => {
+            if (proceedTimerRef.current) clearTimeout(proceedTimerRef.current)
+        }
+    }, [])
+
     // Animated crafting dots
     useEffect(() => {
         if (!isEntering) return
@@ -106,9 +120,9 @@ function SplashScreen({ state, onComplete, reduceMotion, theme, toggleTheme }) {
         const stiffness = 0.012
         const damping = 0.87
 
-        let animationId
-
         const animate = () => {
+            springRafRef.current = null
+
             const displacement = targetRadius.current - currentRadius.current
             const springForce = displacement * stiffness
             velocity.current = (velocity.current + springForce) * damping
@@ -126,12 +140,28 @@ function SplashScreen({ state, onComplete, reduceMotion, theme, toggleTheme }) {
                 onComplete()
             }
 
-            animationId = requestAnimationFrame(animate)
+            if (Math.abs(displacement) < 0.02 && Math.abs(velocity.current) < 0.02) {
+                currentRadius.current = targetRadius.current
+                velocity.current = 0
+                return
+            }
+
+            springRafRef.current = requestAnimationFrame(animate)
         }
 
-        animationId = requestAnimationFrame(animate)
-        return () => cancelAnimationFrame(animationId)
-    }, [state, onComplete])
+        springAnimateRef.current = animate
+        requestSpringFrame()
+
+        return () => {
+            if (springRafRef.current != null) {
+                cancelAnimationFrame(springRafRef.current)
+                springRafRef.current = null
+            }
+            if (springAnimateRef.current === animate) {
+                springAnimateRef.current = null
+            }
+        }
+    }, [state, onComplete, requestSpringFrame])
 
     // Handle scroll
     useEffect(() => {
@@ -141,6 +171,7 @@ function SplashScreen({ state, onComplete, reduceMotion, theme, toggleTheme }) {
             const scrollDelta = e.deltaY * 0.35
             const minRadius = selectedTheme ? 0 : 10
             targetRadius.current = Math.max(Math.min(targetRadius.current - scrollDelta, 150), minRadius)
+            requestSpringFrame()
         }
 
         window.addEventListener('wheel', handleWheel, { passive: true })
@@ -158,6 +189,7 @@ function SplashScreen({ state, onComplete, reduceMotion, theme, toggleTheme }) {
             const minRadius = selectedTheme ? 0 : 10
             targetRadius.current = Math.max(Math.min(targetRadius.current - delta, 150), minRadius)
             touchStartY = e.touches[0].clientY
+            requestSpringFrame()
         }
 
         window.addEventListener('touchstart', handleTouchStart, { passive: true })
@@ -166,7 +198,7 @@ function SplashScreen({ state, onComplete, reduceMotion, theme, toggleTheme }) {
             window.removeEventListener('touchstart', handleTouchStart)
             window.removeEventListener('touchmove', handleTouchMove)
         }
-    }, [phase, state, selectedTheme])
+    }, [phase, state, selectedTheme, requestSpringFrame])
 
     // Click handler - Removed immediate skip so user is forced to pick a theme
     const handleClick = useCallback(() => {
@@ -177,9 +209,10 @@ function SplashScreen({ state, onComplete, reduceMotion, theme, toggleTheme }) {
     useEffect(() => {
         if (state === 'dashboard') {
             targetRadius.current = 0
+            requestSpringFrame()
             if (proceedTimerRef.current) clearTimeout(proceedTimerRef.current)
         }
-    }, [state])
+    }, [state, requestSpringFrame])
 
     // Theme selection — triggers DarkVeil preview + exit countdown
     const handleThemeSelection = useCallback((choice) => {
@@ -199,8 +232,9 @@ function SplashScreen({ state, onComplete, reduceMotion, theme, toggleTheme }) {
         proceedTimerRef.current = setTimeout(() => {
             setPhase('exiting')
             targetRadius.current = 0
+            requestSpringFrame()
         }, 5000)
-    }, [phase, setTheme])
+    }, [phase, setTheme, requestSpringFrame])
 
     const handleKnobPointerDown = useCallback((e) => {
         e.stopPropagation()
@@ -413,4 +447,6 @@ function SplashScreen({ state, onComplete, reduceMotion, theme, toggleTheme }) {
     )
 }
 
-export default SplashScreen
+SplashScreen.displayName = 'SplashScreen'
+
+export default memo(SplashScreen)

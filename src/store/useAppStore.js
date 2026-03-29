@@ -84,42 +84,44 @@ const useAppStore = create((set) => ({
   // Initializer to read from localStorage/Media Query
   initializeSettings: () => {
     const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
-    set({ reduceMotion: motionQuery.matches })
+    const nextState = { reduceMotion: motionQuery.matches }
 
     const savedTheme = localStorage.getItem('theme')
     if (savedTheme) {
-      set({ theme: savedTheme })
+      nextState.theme = savedTheme
       document.documentElement.setAttribute('data-theme', savedTheme)
     }
 
     const savedCursorGlow = localStorage.getItem('cursorGlow')
     if (savedCursorGlow !== null) {
         const val = savedCursorGlow === 'true'
-        set({ cursorGlow: val })
+        nextState.cursorGlow = val
         document.documentElement.setAttribute('data-cursor-glow', val)
     }
 
     const savedShootingStars = localStorage.getItem('showShootingStars')
-    if (savedShootingStars !== null) set({ showShootingStars: savedShootingStars === 'true' })
+    if (savedShootingStars !== null) nextState.showShootingStars = savedShootingStars === 'true'
 
     const savedFontSize = localStorage.getItem('fontSize')
     if (savedFontSize) {
-        set({ fontSize: savedFontSize })
+        nextState.fontSize = savedFontSize
         document.documentElement.setAttribute('data-font-size', savedFontSize)
     }
 
     const savedHighContrast = localStorage.getItem('highContrast')
     if (savedHighContrast !== null) {
         const val = savedHighContrast === 'true'
-        set({ highContrast: val })
+        nextState.highContrast = val
         document.documentElement.setAttribute('data-high-contrast', val)
     }
 
     const savedShowBackground = localStorage.getItem('showBackground')
-    if (savedShowBackground !== null) set({ showBackground: savedShowBackground === 'true' })
+    if (savedShowBackground !== null) nextState.showBackground = savedShowBackground === 'true'
 
     const savedNavPosition = localStorage.getItem('navPosition')
-    if (savedNavPosition) set({ navPosition: savedNavPosition })
+    if (savedNavPosition) nextState.navPosition = savedNavPosition
+
+    set(nextState)
   }
 }))
 

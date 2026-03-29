@@ -135,6 +135,9 @@ function Band({
   const ang = useMemo(() => new THREE.Vector3(), []);
   const rot = useMemo(() => new THREE.Vector3(), []);
   const dir = useMemo(() => new THREE.Vector3(), []);
+  const dragEuler = useMemo(() => new THREE.Euler(), []);
+  const dragQuaternion = useMemo(() => new THREE.Quaternion(), []);
+  const wakeRefs = useMemo(() => [card, j1, j2, j3, fixed], []);
 
   const segmentProps = useMemo(
     () => ({
@@ -163,6 +166,7 @@ function Band({
 
   const [dragged, setDragged] = useState(false);
   const [hovered, setHovered] = useState(false);
+  const ropePointCount = isMobile ? 16 : 32;
 
   // Slightly longer strap
   useRopeJoint(fixed, j1, [[0, 0, 0], [0, 0, 0], 1.35]);
@@ -186,7 +190,9 @@ function Band({
       vec.set(state.pointer.x, state.pointer.y, 0.5).unproject(state.camera);
       dir.copy(vec).sub(state.camera.position).normalize();
       vec.add(dir.multiplyScalar(state.camera.position.length()));
-      [card, j1, j2, j3, fixed].forEach((ref) => ref.current?.wakeUp());
+      for (let i = 0; i < wakeRefs.length; i += 1) {
+        wakeRefs[i].current?.wakeUp();
+      }
       
       // Update target position
       card.current?.setNextKinematicTranslation({
@@ -198,23 +204,18 @@ function Band({
       // Apply physical rotation matching movement velocity for organic swing
       const dragVelocityX = state.pointer.x - (card.current?.lastPointerX || state.pointer.x);
       card.current.lastPointerX = state.pointer.x;
-      card.current?.setNextKinematicRotation(
-        new THREE.Quaternion().setFromEuler(
-          new THREE.Euler(
-            (vec.y - dragged.y) * -0.05, 
-            dragVelocityX * 5, 
-            dragVelocityX * -2
-          )
-        )
-      );
+      dragEuler.set((vec.y - dragged.y) * -0.05, dragVelocityX * 5, dragVelocityX * -2);
+      dragQuaternion.setFromEuler(dragEuler);
+      card.current?.setNextKinematicRotation(dragQuaternion);
     }
 
     if (fixed.current && j1.current && j2.current && j3.current && card.current) {
       [j1, j2].forEach((ref) => {
-        if (!ref.current.lerped) ref.current.lerped = new THREE.Vector3().copy(ref.current.translation());
-        const clampedDistance = Math.max(0.1, Math.min(1, ref.current.lerped.distanceTo(ref.current.translation())));
+        const translation = ref.current.translation();
+        if (!ref.current.lerped) ref.current.lerped = new THREE.Vector3().copy(translation);
+        const clampedDistance = Math.max(0.1, Math.min(1, ref.current.lerped.distanceTo(translation)));
         ref.current.lerped.lerp(
-          ref.current.translation(),
+          translation,
           delta * (minSpeed + clampedDistance * (maxSpeed - minSpeed))
         );
       });
@@ -224,7 +225,7 @@ function Band({
       curve.points[2].copy(j1.current.lerped);
       curve.points[3].copy(fixed.current.translation());
 
-      band.current?.geometry?.setPoints(curve.getPoints(isMobile ? 16 : 32));
+      band.current?.geometry?.setPoints(curve.getPoints(ropePointCount));
 
       ang.copy(card.current.angvel());
       rot.copy(card.current.rotation());

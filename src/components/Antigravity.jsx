@@ -57,14 +57,14 @@ const AntigravityInner = ({
     const mesh = meshRef.current;
     if (!mesh) return;
 
-    const { viewport: v } = state;
     const time = state.clock.getElapsedTime();
 
     // Static center position
     const centerX = 0;
     const centerY = 0;
 
-    particles.forEach((particle, i) => {
+    for (let i = 0; i < particles.length; i += 1) {
+      const particle = particles[i];
       const { phase, speed, sizeVariance, radiusOffset } = particle;
 
       // Slowly rotate particles around the center
@@ -103,7 +103,7 @@ const AntigravityInner = ({
       dummy.scale.set(finalScale, finalScale * 1.5, finalScale);
       dummy.updateMatrix();
       mesh.setMatrixAt(i, dummy.matrix);
-    });
+    }
 
     mesh.instanceMatrix.needsUpdate = true;
   });

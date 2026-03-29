@@ -10,7 +10,16 @@ export default defineConfig({
         open: true
     },
     build: {
-        outDir: 'dist'
+        outDir: 'dist',
+        rollupOptions: {
+            output: {
+                manualChunks: {
+                    'three-stack': ['three', '@react-three/fiber', '@react-three/drei', '@react-three/rapier', 'meshline'],
+                    'animation-stack': ['gsap', 'motion'],
+                    'ogl-stack': ['ogl']
+                }
+            }
+        }
     },
     test: {
         globals: true,

@@ -118,7 +118,33 @@ function GradualBlur(props) {
   const config = useMemo(() => {
     const presetConfig = props.preset && PRESETS[props.preset] ? PRESETS[props.preset] : {};
     return mergeConfigs(DEFAULT_CONFIG, presetConfig, props);
-  }, [props]);
+  }, [
+    props.preset,
+    props.position,
+    props.strength,
+    props.height,
+    props.width,
+    props.divCount,
+    props.exponential,
+    props.zIndex,
+    props.animated,
+    props.duration,
+    props.easing,
+    props.opacity,
+    props.curve,
+    props.responsive,
+    props.target,
+    props.className,
+    props.style,
+    props.mobileHeight,
+    props.tabletHeight,
+    props.desktopHeight,
+    props.mobileWidth,
+    props.tabletWidth,
+    props.desktopWidth,
+    props.hoverIntensity,
+    props.onAnimationComplete,
+  ]);
 
   const responsiveHeight = useResponsiveDimension(config.responsive, config, 'height');
   const responsiveWidth = useResponsiveDimension(config.responsive, config, 'width');

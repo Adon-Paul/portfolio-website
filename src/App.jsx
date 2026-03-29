@@ -8,6 +8,7 @@ import ProjectsPage from './components/ProjectsPage'
 import InterestingPage from './components/InterestingPage'
 import GradualBlur from './components/GradualBlur'
 import useAppStore from './store/useAppStore'
+import { useShallow } from 'zustand/react/shallow'
 import './App.css'
 
 // Page order for scroll navigation
@@ -29,7 +30,26 @@ function App() {
         showBackground,
         navPosition, toggleNavPosition,
         initializeSettings
-    } = useAppStore()
+    } = useAppStore(useShallow((state) => ({
+        splashState: state.splashState,
+        setSplashState: state.setSplashState,
+        currentPage: state.currentPage,
+        setCurrentPage: state.setCurrentPage,
+        pendingPage: state.pendingPage,
+        setPendingPage: state.setPendingPage,
+        isTransitioning: state.isTransitioning,
+        setIsTransitioning: state.setIsTransitioning,
+        transitionDirection: state.transitionDirection,
+        setTransitionDirection: state.setTransitionDirection,
+        theme: state.theme,
+        toggleTheme: state.toggleTheme,
+        reduceMotion: state.reduceMotion,
+        showShootingStars: state.showShootingStars,
+        showBackground: state.showBackground,
+        navPosition: state.navPosition,
+        toggleNavPosition: state.toggleNavPosition,
+        initializeSettings: state.initializeSettings,
+    })))
 
     const pageContainerRef = useRef(null)
 
@@ -37,9 +57,9 @@ function App() {
         initializeSettings()
     }, [initializeSettings])
 
-    const handleSplashComplete = () => {
+    const handleSplashComplete = useCallback(() => {
         setSplashState('dashboard')
-    }
+    }, [setSplashState])
 
     const handleNavigate = useCallback((page, direction = null) => {
         if (page === currentPage || isTransitioning) {
@@ -142,8 +162,6 @@ function App() {
                 state={splashState}
                 onComplete={handleSplashComplete}
                 reduceMotion={reduceMotion}
-                theme={theme}
-                toggleTheme={toggleTheme}
             />
 
             {/* Persistent Header - appears on dashboard */}

@@ -1,4 +1,4 @@
-import { forwardRef, useMemo, useRef, useEffect } from 'react';
+import { forwardRef, useMemo, useRef, useEffect, useState, useCallback } from 'react';
 import { motion } from 'motion/react';
 import './VariableProximity.css';
 
@@ -34,7 +34,7 @@ const GlobalMouseScheduler = (() => {
   const ensureListeners = () => {
     if (listening) return;
     listening = true;
-    window.addEventListener('mousemove', onMouseMove);
+    window.addEventListener('mousemove', onMouseMove, { passive: true });
     window.addEventListener('touchmove', onTouchMove, { passive: true });
   };
 
@@ -87,11 +87,24 @@ const VariableProximity = forwardRef((props, ref) => {
   }
 
   const letterRefs = useRef([]);
+  const rootRef = useRef(null);
   const interpolatedSettingsRef = useRef([]);
   const lastPositionRef = useRef({ x: null, y: null });
   const cachedRectsRef = useRef([]);
   const containerRectRef = useRef(null);
   const rectsDirtyRef = useRef(true);
+  const [isInView, setIsInView] = useState(true);
+
+  const setCombinedRef = useCallback((node) => {
+    rootRef.current = node;
+    if (typeof ref === 'function') {
+      ref(node);
+      return;
+    }
+    if (ref && typeof ref === 'object') {
+      ref.current = node;
+    }
+  }, [ref]);
 
   const parsedSettings = useMemo(() => {
     const parseSettings = (settingsStr) =>
@@ -131,9 +144,27 @@ const VariableProximity = forwardRef((props, ref) => {
     }
   };
 
-  // Invalidate cached rects on resize/scroll
   useEffect(() => {
     if (!enabled) return;
+    if (typeof IntersectionObserver === 'undefined') return;
+    if (!rootRef.current) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsInView(entry.isIntersecting);
+      },
+      {
+        threshold: 0,
+      }
+    );
+
+    observer.observe(rootRef.current);
+    return () => observer.disconnect();
+  }, [enabled]);
+
+  // Invalidate cached rects on resize/scroll
+  useEffect(() => {
+    if (!enabled || !isInView) return;
     const invalidate = () => { rectsDirtyRef.current = true; };
     window.addEventListener('resize', invalidate);
     window.addEventListener('scroll', invalidate, { passive: true });
@@ -141,10 +172,10 @@ const VariableProximity = forwardRef((props, ref) => {
       window.removeEventListener('resize', invalidate);
       window.removeEventListener('scroll', invalidate);
     };
-  }, [enabled]);
+  }, [enabled, isInView]);
 
   useEffect(() => {
-    if (!enabled) return;
+    if (!enabled || !isInView) return;
 
     const recalcRects = () => {
       if (!containerRef?.current) return;
@@ -203,6 +234,7 @@ const VariableProximity = forwardRef((props, ref) => {
     return GlobalMouseScheduler.subscribe(update);
   }, [
     enabled,
+    isInView,
     containerRef,
     radius,
     falloff,
@@ -222,7 +254,7 @@ const VariableProximity = forwardRef((props, ref) => {
 
   return (
     <span
-      ref={ref}
+      ref={setCombinedRef}
       className={`${className} variable-proximity`}
       onClick={onClick}
       style={{ display: 'inline', ...style }}

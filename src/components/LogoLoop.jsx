@@ -5,7 +5,7 @@ const ANIMATION_CONFIG = { SMOOTH_TAU: 0.25, MIN_COPIES: 2, COPY_HEADROOM: 2 }
 
 const toCssLength = value => (typeof value === 'number' ? `${value}px` : (value ?? undefined))
 
-const useResizeObserver = (callback, elements, dependencies) => {
+const useResizeObserver = (callback, elements = [], dependencies = []) => {
   useEffect(() => {
     if (!window.ResizeObserver) {
       const handleResize = () => callback()
@@ -21,10 +21,10 @@ const useResizeObserver = (callback, elements, dependencies) => {
     })
     callback()
     return () => { observers.forEach(observer => observer?.disconnect()) }
-  }, [callback, elements, dependencies]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [callback, ...elements, ...dependencies]) // eslint-disable-line react-hooks/exhaustive-deps
 }
 
-const useImageLoader = (seqRef, onLoad, dependencies) => {
+const useImageLoader = (seqRef, onLoad, dependencies = []) => {
   useEffect(() => {
     const images = seqRef.current?.querySelectorAll('img') ?? []
     if (images.length === 0) { onLoad(); return }
@@ -38,7 +38,7 @@ const useImageLoader = (seqRef, onLoad, dependencies) => {
       }
     })
     return () => { images.forEach(img => { img.removeEventListener('load', handleLoad); img.removeEventListener('error', handleLoad) }) }
-  }, [onLoad, seqRef, dependencies]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [onLoad, seqRef, ...dependencies]) // eslint-disable-line react-hooks/exhaustive-deps
 }
 
 const useAnimationLoop = (trackRef, targetVelocity, seqWidth, seqHeight, isHovered, hoverSpeed, isVertical, paused) => {

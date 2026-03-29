@@ -31,54 +31,39 @@ function LandingPage({ theme, reduceMotion, onNavigate, showShootingStars = true
     useEffect(() => {
         if (reduceMotion || !gridRef.current) return
 
-        let animationFrameId
+        let animationFrameId = null
+        let isAnimating = false
         let currentX = 0
         let currentY = 0
         let targetX = 0
         let targetY = 0
+        let isDesktop = window.innerWidth > 900
+        let leftRect = null
+        let rightRect = null
 
-        const handleMouseMove = (e) => {
-            // Normalized coords -1 to 1
-            targetX = (e.clientX / window.innerWidth) * 2 - 1
-            targetY = (e.clientY / window.innerHeight) * 2 - 1
-            
-            // Pass local coordinates for precise radial lighting
-            if (leftCardRef.current) {
-                const rect = leftCardRef.current.getBoundingClientRect()
-                leftCardRef.current.style.setProperty('--light-x', `${e.clientX - rect.left}px`)
-                leftCardRef.current.style.setProperty('--light-y', `${e.clientY - rect.top}px`)
-            }
-            if (rightCardRef.current) {
-                const rect = rightCardRef.current.getBoundingClientRect()
-                rightCardRef.current.style.setProperty('--light-x', `${e.clientX - rect.left}px`)
-                rightCardRef.current.style.setProperty('--light-y', `${e.clientY - rect.top}px`)
-            }
+        const refreshRects = () => {
+            leftRect = leftCardRef.current ? leftCardRef.current.getBoundingClientRect() : null
+            rightRect = rightCardRef.current ? rightCardRef.current.getBoundingClientRect() : null
         }
 
-        const animate = () => {
-            // Smooth interpolation (lerp)
-            currentX += (targetX - currentX) * 0.05
-            currentY += (targetY - currentY) * 0.05
-
-            const isDesktop = window.innerWidth > 900
-
+        const applyTransforms = () => {
             if (gridRef.current) {
                 // The whole scene slightly pans
-                gridRef.current.style.transform = isDesktop 
+                gridRef.current.style.transform = isDesktop
                     ? `perspective(1200px) rotateY(${currentX * 4}deg) rotateX(${-currentY * 2}deg)`
-                    : `none`
+                    : 'none'
             }
-            
+
             // Inner pop parallax (adds extra dimension)
             if (leftCardRef.current) {
                 leftCardRef.current.style.transform = isDesktop
                     ? `rotateY(5deg) rotateX(${currentY * 1.5}deg) translateZ(${Math.abs(currentX) * 10}px)`
-                    : `none`
+                    : 'none'
             }
             if (rightCardRef.current) {
                 rightCardRef.current.style.transform = isDesktop
                     ? `rotateY(-5deg) rotateX(${currentY * 1.5}deg) translateZ(${Math.abs(currentX) * 10}px)`
-                    : `none`
+                    : 'none'
             }
 
             // Expose scene movement to css variables for inner element parallax
@@ -86,16 +71,68 @@ function LandingPage({ theme, reduceMotion, onNavigate, showShootingStars = true
                 gridRef.current.style.setProperty('--scene-x', currentX)
                 gridRef.current.style.setProperty('--scene-y', currentY)
             }
+        }
+
+        const ensureAnimation = () => {
+            if (isAnimating) return
+            isAnimating = true
+            animationFrameId = requestAnimationFrame(animate)
+        }
+
+        const handleMouseMove = (e) => {
+            // Normalized coords -1 to 1
+            targetX = (e.clientX / window.innerWidth) * 2 - 1
+            targetY = (e.clientY / window.innerHeight) * 2 - 1
+            
+            // Pass local coordinates for precise radial lighting
+            if (leftCardRef.current && leftRect) {
+                leftCardRef.current.style.setProperty('--light-x', `${e.clientX - leftRect.left}px`)
+                leftCardRef.current.style.setProperty('--light-y', `${e.clientY - leftRect.top}px`)
+            }
+            if (rightCardRef.current && rightRect) {
+                rightCardRef.current.style.setProperty('--light-x', `${e.clientX - rightRect.left}px`)
+                rightCardRef.current.style.setProperty('--light-y', `${e.clientY - rightRect.top}px`)
+            }
+
+            ensureAnimation()
+        }
+
+        const animate = () => {
+            // Smooth interpolation (lerp)
+            currentX += (targetX - currentX) * 0.05
+            currentY += (targetY - currentY) * 0.05
+
+            applyTransforms()
+
+            const remainingX = Math.abs(targetX - currentX)
+            const remainingY = Math.abs(targetY - currentY)
+
+            if (remainingX < 0.0005 && remainingY < 0.0005) {
+                isAnimating = false
+                animationFrameId = null
+                return
+            }
 
             animationFrameId = requestAnimationFrame(animate)
         }
 
-        animate()
+        const handleResize = () => {
+            isDesktop = window.innerWidth > 900
+            refreshRects()
+            ensureAnimation()
+        }
+
+        refreshRects()
+        ensureAnimation()
 
         window.addEventListener('mousemove', handleMouseMove, { passive: true })
+        window.addEventListener('resize', handleResize)
+        window.addEventListener('scroll', refreshRects, { passive: true })
         return () => {
             window.removeEventListener('mousemove', handleMouseMove)
-            cancelAnimationFrame(animationFrameId)
+            window.removeEventListener('resize', handleResize)
+            window.removeEventListener('scroll', refreshRects)
+            if (animationFrameId) cancelAnimationFrame(animationFrameId)
         }
     }, [reduceMotion])
 

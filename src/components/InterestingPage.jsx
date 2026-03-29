@@ -2,6 +2,7 @@ import { useRef } from 'react'
 import ShootingStars from './ShootingStars'
 import AutoVariableProximity from './AutoVariableProximity'
 import useAppStore from '../store/useAppStore'
+import { useShallow } from 'zustand/react/shallow'
 
 const FONT_SIZE_OPTIONS = ['small', 'medium', 'large']
 const FONT_SIZE_LABELS = { small: 'S', medium: 'M', large: 'L' }
@@ -32,7 +33,22 @@ export default function InterestingPage() {
         fontSize, setFontSize,
         highContrast, setHighContrast,
         showBackground, setShowBackground,
-    } = useAppStore()
+    } = useAppStore(useShallow((state) => ({
+        theme: state.theme,
+        toggleTheme: state.toggleTheme,
+        reduceMotion: state.reduceMotion,
+        toggleReduceMotion: state.toggleReduceMotion,
+        cursorGlow: state.cursorGlow,
+        setCursorGlow: state.setCursorGlow,
+        showShootingStars: state.showShootingStars,
+        setShowShootingStars: state.setShowShootingStars,
+        fontSize: state.fontSize,
+        setFontSize: state.setFontSize,
+        highContrast: state.highContrast,
+        setHighContrast: state.setHighContrast,
+        showBackground: state.showBackground,
+        setShowBackground: state.setShowBackground,
+    })))
 
     return (
         <>
