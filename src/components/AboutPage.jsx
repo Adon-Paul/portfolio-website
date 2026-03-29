@@ -3,6 +3,7 @@ import ShootingStars from './ShootingStars'
 import Lanyard from './Lanyard'
 import AutoVariableProximity from './AutoVariableProximity'
 import LogoLoop from './LogoLoop'
+import '../styles/components/projects.css'
 
 const TECH_LOGOS = [
     { src: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flutter/flutter-original.svg', alt: 'Flutter' },

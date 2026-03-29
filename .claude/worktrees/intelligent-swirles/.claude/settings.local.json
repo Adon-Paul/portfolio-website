@@ -1,7 +1,16 @@
 {
   "permissions": {
     "allow": [
-      "Bash(wc -l src/components/*.jsx)"
+      "Bash(wc -l src/components/*.jsx)",
+      "mcp__Claude_Preview__preview_start",
+      "WebFetch(domain:reactbits.dev)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebFetch(domain:github.com)",
+      "Bash(curl -s \"https://api.github.com/repos/DavidHDev/react-bits/git/trees/main?recursive=1\")",
+      "Read(//c/Users/adonp/Projects/portfolio-website/**)",
+      "Bash(npm run:*)",
+      "WebSearch",
+      "Bash(gh api:*)"
     ]
   }
 }

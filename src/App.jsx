@@ -1,11 +1,7 @@
-import { useEffect, useCallback, useRef } from 'react'
+import { Suspense, lazy, useEffect, useCallback, useRef } from 'react'
 import SplashScreen from './components/SplashScreen'
 import LandingPage from './components/LandingPage'
 import Header from './components/Header'
-import DarkVeil from './components/DarkVeil'
-import AboutPage from './components/AboutPage'
-import ProjectsPage from './components/ProjectsPage'
-import InterestingPage from './components/InterestingPage'
 import GradualBlur from './components/GradualBlur'
 import useAppStore from './store/useAppStore'
 import { useShallow } from 'zustand/react/shallow'
@@ -16,6 +12,11 @@ const PAGE_ORDER = ['home', 'about', 'projects', 'interesting']
 
 // Must match CSS animation duration in App.css
 const TRANSITION_DURATION_MS = 500
+
+const DarkVeil = lazy(() => import('./components/DarkVeil'))
+const AboutPage = lazy(() => import('./components/AboutPage'))
+const ProjectsPage = lazy(() => import('./components/ProjectsPage'))
+const InterestingPage = lazy(() => import('./components/InterestingPage'))
 
 function App() {
     const {
@@ -57,9 +58,51 @@ function App() {
         initializeSettings()
     }, [initializeSettings])
 
+    const preloadHomeEnhancements = useCallback(() => {
+        import('./components/DarkVeil')
+        import('./components/Antigravity')
+    }, [])
+
+    const preloadSecondaryViews = useCallback(() => {
+        import('./components/AboutPage')
+        import('./components/ProjectsPage')
+        import('./components/InterestingPage')
+    }, [])
+
+    useEffect(() => {
+        if (splashState !== 'dashboard') {
+            return undefined
+        }
+
+        if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
+            const idleId = window.requestIdleCallback(preloadSecondaryViews, { timeout: 1200 })
+            return () => window.cancelIdleCallback(idleId)
+        }
+
+        const timeoutId = window.setTimeout(preloadSecondaryViews, 350)
+        return () => window.clearTimeout(timeoutId)
+    }, [preloadSecondaryViews, splashState])
+
     const handleSplashComplete = useCallback(() => {
+        preloadHomeEnhancements()
         setSplashState('dashboard')
-    }, [setSplashState])
+    }, [preloadHomeEnhancements, setSplashState])
+
+    const handlePrefetchPage = useCallback((pageId) => {
+        if (pageId === 'about') {
+            import('./components/AboutPage')
+            return
+        }
+
+        if (pageId === 'projects') {
+            import('./components/ProjectsPage')
+            return
+        }
+
+        if (pageId === 'interesting') {
+            import('./components/InterestingPage')
+        }
+    }, [])
 
     const handleNavigate = useCallback((page, direction = null) => {
         if (page === currentPage || isTransitioning) {
@@ -115,22 +158,30 @@ function App() {
                 )
             case 'about':
                 return (
-                    <AboutPage
-                        theme={theme}
-                        reduceMotion={reduceMotion}
-                        showShootingStars={showShootingStars}
-                    />
+                    <Suspense fallback={null}>
+                        <AboutPage
+                            theme={theme}
+                            reduceMotion={reduceMotion}
+                            showShootingStars={showShootingStars}
+                        />
+                    </Suspense>
                 )
             case 'projects':
                 return (
-                    <ProjectsPage
-                        theme={theme}
-                        reduceMotion={reduceMotion}
-                        showShootingStars={showShootingStars}
-                    />
+                    <Suspense fallback={null}>
+                        <ProjectsPage
+                            theme={theme}
+                            reduceMotion={reduceMotion}
+                            showShootingStars={showShootingStars}
+                        />
+                    </Suspense>
                 )
             case 'interesting':
-                return <InterestingPage />
+                return (
+                    <Suspense fallback={null}>
+                        <InterestingPage />
+                    </Suspense>
+                )
             default:
                 return null
         }
@@ -141,19 +192,21 @@ function App() {
             {/* Background - DarkVeil dynamically maps colors for dark/light mode */}
             {!reduceMotion && showBackground && (
                 <div style={{ position: 'fixed', inset: 0, zIndex: 0, backgroundColor: theme === 'dark' ? '#0b0b12' : '#fdf6e3' }}>
-                    <DarkVeil
-                        theme={theme}
-                        hueShift={theme === 'dark' ? 35 : 0}
-                        animateHue={theme === 'dark'}
-                        hueSpeed={3}
-                        hueMin={320}
-                        hueMax={40}
-                        noiseIntensity={theme === 'dark' ? 0.02 : 0.02}
-                        scanlineIntensity={0}
-                        scanlineFrequency={0}
-                        speed={theme === 'dark' ? 0.2 : 0.25}
-                        warpAmount={theme === 'dark' ? 0 : 0.45}
-                    />
+                    <Suspense fallback={null}>
+                        <DarkVeil
+                            theme={theme}
+                            hueShift={theme === 'dark' ? 35 : 0}
+                            animateHue={theme === 'dark'}
+                            hueSpeed={3}
+                            hueMin={320}
+                            hueMax={40}
+                            noiseIntensity={theme === 'dark' ? 0.02 : 0.02}
+                            scanlineIntensity={0}
+                            scanlineFrequency={0}
+                            speed={theme === 'dark' ? 0.2 : 0.25}
+                            warpAmount={theme === 'dark' ? 0 : 0.45}
+                        />
+                    </Suspense>
                 </div>
             )}
 
@@ -169,6 +222,7 @@ function App() {
                 visible={splashState === 'dashboard'}
                 activePage={currentPage}
                 onNavigate={handleNavigate}
+                onPrefetchPage={handlePrefetchPage}
                 theme={theme}
                 onToggleTheme={toggleTheme}
                 reduceMotion={reduceMotion}

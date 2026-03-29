@@ -2,6 +2,7 @@ import { useRef, useState } from 'react'
 import ShootingStars from './ShootingStars'
 import CardSwap, { Card } from './CardSwap'
 import AutoVariableProximity from './AutoVariableProximity'
+import '../styles/components/projects.css'
 
 export default function ProjectsPage({ theme, reduceMotion, showShootingStars = true }) {
     const year = new Date().getFullYear()

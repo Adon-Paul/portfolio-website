@@ -3,6 +3,7 @@ import ShootingStars from './ShootingStars'
 import AutoVariableProximity from './AutoVariableProximity'
 import useAppStore from '../store/useAppStore'
 import { useShallow } from 'zustand/react/shallow'
+import '../styles/components/projects.css'
 
 const FONT_SIZE_OPTIONS = ['small', 'medium', 'large']
 const FONT_SIZE_LABELS = { small: 'S', medium: 'M', large: 'L' }

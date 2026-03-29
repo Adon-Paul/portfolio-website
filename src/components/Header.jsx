@@ -2,7 +2,7 @@ import { useRef } from 'react'
 import ThemeToggle from './ThemeToggle'
 import AutoVariableProximity from './AutoVariableProximity'
 
-export default function Header({ visible, activePage, onNavigate, theme, onToggleTheme, reduceMotion, navPosition, onToggleNavPosition }) {
+export default function Header({ visible, activePage, onNavigate, onPrefetchPage, theme, onToggleTheme, reduceMotion, navPosition, onToggleNavPosition }) {
     const containerRef = useRef(null)
 
     return (
@@ -35,6 +35,8 @@ export default function Header({ visible, activePage, onNavigate, theme, onToggl
                         type="button"
                         className={`header-btn ${activePage === 'about' ? 'active' : ''}`}
                         onClick={() => onNavigate('about')}
+                        onMouseEnter={() => onPrefetchPage?.('about')}
+                        onFocus={() => onPrefetchPage?.('about')}
                         title="About"
                     >
                         <img 
@@ -49,6 +51,8 @@ export default function Header({ visible, activePage, onNavigate, theme, onToggl
                         type="button"
                         className={`header-btn ${activePage === 'projects' ? 'active' : ''}`}
                         onClick={() => onNavigate('projects')}
+                        onMouseEnter={() => onPrefetchPage?.('projects')}
+                        onFocus={() => onPrefetchPage?.('projects')}
                         title="Projects"
                     >
                         <img 
@@ -63,6 +67,8 @@ export default function Header({ visible, activePage, onNavigate, theme, onToggl
                         type="button"
                         className={`header-btn ${activePage === 'interesting' ? 'active' : ''}`}
                         onClick={() => onNavigate('interesting')}
+                        onMouseEnter={() => onPrefetchPage?.('interesting')}
+                        onFocus={() => onPrefetchPage?.('interesting')}
                         title="Interesting"
                     >
                         <img 

@@ -1,7 +1,8 @@
-import { useRef, useMemo, useEffect, useState } from 'react'
+import { Suspense, lazy, useRef, useMemo, useEffect, useState } from 'react'
 import ShootingStars from './ShootingStars'
-import Antigravity from './Antigravity'
 import AutoVariableProximity from './AutoVariableProximity'
+
+const Antigravity = lazy(() => import('./Antigravity'))
 
 // Available profile images
 const PROFILE_IMAGES = [
@@ -149,14 +150,16 @@ function LandingPage({ theme, reduceMotion, onNavigate, showShootingStars = true
                                 {/* Antigravity particles behind photo */}
                                 {!reduceMotion && (
                                     <div className="photo-particles">
-                                        <Antigravity
-                                            color={theme === 'dark' ? '#544398' : '#7c5cbf'}
-                                            count={150}
-                                            ringRadius={80}
-                                            particleSize={1.5}
-                                            waveAmplitude={0.8}
-                                            rotationSpeed={0.08}
-                                        />
+                                        <Suspense fallback={null}>
+                                            <Antigravity
+                                                color={theme === 'dark' ? '#544398' : '#7c5cbf'}
+                                                count={150}
+                                                ringRadius={80}
+                                                particleSize={1.5}
+                                                waveAmplitude={0.8}
+                                                rotationSpeed={0.08}
+                                            />
+                                        </Suspense>
                                     </div>
                                 )}
 
@@ -168,6 +171,7 @@ function LandingPage({ theme, reduceMotion, onNavigate, showShootingStars = true
                                         alt="Portrait of Adon Paul Tomy"
                                         loading="eager"
                                         decoding="async"
+                                        fetchPriority="high"
                                         onLoad={() => setPhotoLoaded(true)}
                                     />
                                     <div className="photo-vignette" />

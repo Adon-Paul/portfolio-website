@@ -1,7 +1,8 @@
-import { memo, useState, useEffect, useRef, useCallback } from 'react'
+import { memo, lazy, Suspense, useState, useEffect, useRef, useCallback } from 'react'
 import useAppStore from '../store/useAppStore'
 import BorderGlow from './BorderGlow'
-import DarkVeil from './DarkVeil'
+
+const DarkVeil = lazy(() => import('./DarkVeil'))
 
 function SplashScreen({ state, onComplete, reduceMotion }) {
     const setTheme = useAppStore((s) => s.setTheme)
@@ -102,6 +103,24 @@ function SplashScreen({ state, onComplete, reduceMotion }) {
         }, 400)
         return () => clearInterval(id)
     }, [isEntering])
+
+    useEffect(() => {
+        if (phase !== 'ready' || reduceMotion || selectedTheme) {
+            return undefined
+        }
+
+        const preloadDarkVeil = () => {
+            import('./DarkVeil')
+        }
+
+        if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
+            const idleId = window.requestIdleCallback(preloadDarkVeil, { timeout: 1500 })
+            return () => window.cancelIdleCallback(idleId)
+        }
+
+        const timeoutId = window.setTimeout(preloadDarkVeil, 250)
+        return () => window.clearTimeout(timeoutId)
+    }, [phase, reduceMotion, selectedTheme])
 
     // Lock Body Scroll
     useEffect(() => {
@@ -287,19 +306,21 @@ function SplashScreen({ state, onComplete, reduceMotion }) {
                     transition: 'background-color 0.4s ease',
                     animation: 'splashVeilFadeIn 0.5s ease forwards'
                 }}>
-                    <DarkVeil
-                        theme={selectedTheme}
-                        hueShift={selectedTheme === 'dark' ? 35 : 0}
-                        animateHue={selectedTheme === 'dark'}
-                        hueSpeed={3}
-                        hueMin={320}
-                        hueMax={40}
-                        noiseIntensity={0.02}
-                        scanlineIntensity={0}
-                        scanlineFrequency={0}
-                        speed={selectedTheme === 'dark' ? 0.2 : 0.25}
-                        warpAmount={selectedTheme === 'dark' ? 0 : 0.45}
-                    />
+                    <Suspense fallback={null}>
+                        <DarkVeil
+                            theme={selectedTheme}
+                            hueShift={selectedTheme === 'dark' ? 35 : 0}
+                            animateHue={selectedTheme === 'dark'}
+                            hueSpeed={3}
+                            hueMin={320}
+                            hueMax={40}
+                            noiseIntensity={0.02}
+                            scanlineIntensity={0}
+                            scanlineFrequency={0}
+                            speed={selectedTheme === 'dark' ? 0.2 : 0.25}
+                            warpAmount={selectedTheme === 'dark' ? 0 : 0.45}
+                        />
+                    </Suspense>
                 </div>
             )}
 
