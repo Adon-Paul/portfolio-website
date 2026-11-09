@@ -1,0 +1,5 @@
+# robots.txt for adonpaultomy.tech
+User-agent: *
+Allow: /
+
+Sitemap: https://adonpaultomy.tech/sitemap.xml

@@ -1,10 +1,10 @@
-# CLAUDE.md — Portfolio Website (adonpaultomy.wiki)
+# CLAUDE.md — Portfolio Website (adonpaultomy.tech)
 
 ## Project Overview
 
 Personal portfolio website for **Adon Paul Tomy** — a final-year CS student at VISAT Engineering College (graduating 2026) focused on Flutter development, cybersecurity, and shipping production software.
 
-**Live**: [adonpaultomy.wiki](https://adonpaultomy.wiki)
+**Live**: [adonpaultomy.tech](https://adonpaultomy.tech)
 **Stack**: React 18 + Vite 6 SPA, deployed to GitHub Pages via GitHub Actions.
 
 ---
@@ -19,7 +19,7 @@ Personal portfolio website for **Adon Paul Tomy** — a final-year CS student at
 | Run tests | `npm test` |
 | Deploy | Push to `main` (auto via GitHub Actions) |
 
-Build output: `dist/`. Custom domain: CNAME → `adonpaultomy.wiki`.
+Build output: `dist/`. Custom domain: `adonpaultomy.tech`, configured in repository Settings → Pages.
 
 ---
 
@@ -212,7 +212,7 @@ GitHub Actions workflow (`.github/workflows/deploy.yml`):
 1. Trigger: push to `main` or manual dispatch
 2. Node 20, `npm ci`, `npm run build`
 3. Upload `dist/` as GitHub Pages artifact
-4. Custom domain via CNAME file
+4. Custom domain configured in repository Settings → Pages (Actions deployments do not use CNAME files to configure the domain)
 
 ---
 

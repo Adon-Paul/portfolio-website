@@ -4,7 +4,7 @@ A modern, animated React portfolio website showcasing my projects, skills, and p
 
 ## 🌐 Live Site
 
-**[adonpaultomy.wiki](https://adonpaultomy.wiki)**
+**[adonpaultomy.tech](https://adonpaultomy.tech)**
 
 ## ✨ Features
 
@@ -120,14 +120,14 @@ The site automatically deploys to GitHub Pages when pushing to `main`:
 
 1. GitHub Actions builds the Vite project
 2. Output is deployed to GitHub Pages
-3. Custom domain `adonpaultomy.wiki` is configured via CNAME
+3. Set `adonpaultomy.tech` in repository **Settings → Pages → Custom domain** and configure its DNS for GitHub Pages. This Actions deployment uses the Pages setting; CNAME files alone do not configure the live domain.
 
 ## 📞 Contact
 
 - **GitHub**: [@Adon-Paul](https://github.com/Adon-Paul)
 - **Email**: [adonpaultomy@gmail.com](mailto:adonpaultomy@gmail.com)
 - **LinkedIn**: [Adon Paul Tomy](https://linkedin.com/in/adon-paul-tomy)
-- **Website**: [adonpaultomy.wiki](https://adonpaultomy.wiki)
+- **Website**: [adonpaultomy.tech](https://adonpaultomy.tech)
 
 ---
 

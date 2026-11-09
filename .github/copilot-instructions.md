@@ -42,7 +42,7 @@ Pages receive `theme`, `reduceMotion`, and `onNavigate` as props; they do **not*
 | Preview prod build | `npm run preview` |
 
 - Build output goes to `dist/`
-- Deployed via GitHub Pages (custom domain `adonpaultomy.wiki`)
+- Deployed via GitHub Pages (custom domain `adonpaultomy.tech`)
 
 ---
 
