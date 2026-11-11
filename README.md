@@ -1,134 +1,49 @@
-# Portfolio Website
+# Adon Paul Tomy — personal workshop
 
-A modern, animated React portfolio website showcasing my projects, skills, and professional journey. Built with Vite, React, and featuring premium visual effects.
+A portfolio for [adonpaultomy.tech](https://adonpaultomy.tech): Flutter projects, experiments and the thinking behind them. React 18 + Vite, with build-time static HTML for GitHub Pages.
 
-## 🌐 Live Site
+## Develop
 
-**[adonpaultomy.tech](https://adonpaultomy.tech)**
+Use Node 22 (`nvm use`), then:
 
-## ✨ Features
-
-- **Animated Splash Screen**: Typewriter effect with spring physics transitions
-- **WebGL Background**: Dynamic nebula shader using OGL
-- **Glassmorphism Design**: Modern frosted glass UI components
-- **Dark Theme**: Sleek dark mode with neon accents
-- **Responsive Design**: Mobile-first approach
-- **Smooth Animations**: CSS animations with reduced motion support
-- **Client-side Routing**: React-based page navigation
-
-## 🛠️ Tech Stack
-
-| Category | Technology |
-|----------|------------|
-| **Framework** | React 18 |
-| **Build Tool** | Vite 6 |
-| **Styling** | CSS3 (Glassmorphism, Animations) |
-| **WebGL** | OGL (Shader background) |
-| **Fonts** | Inter, Quantico, Space Grotesk |
-| **Deployment** | GitHub Pages |
-
-## 🚀 Getting Started
-
-### Prerequisites
-- Node.js 18+
-- npm or yarn
-
-### Installation
-```bash
-# Clone the repository
-git clone https://github.com/Adon-Paul/portfolio-website.git
-cd portfolio-website
-
-# Install dependencies
-npm install
-
-# Start development server
+```sh
+npm ci
 npm run dev
 ```
 
-The site will be available at **http://localhost:3000**
+## Verify and preview
 
-### Build for Production
-```bash
-npm run build
-npm run preview
+```sh
+npm run check
+npx playwright install chromium
+npm run test:e2e
+node scripts/serve.mjs
 ```
 
-## 🗂️ Project Structure
+The last command serves the **built static site** at http://127.0.0.1:4173, including real project directories and a 404 response. `npm run dev` is for editing; Vite's development fallback is not a hosting test.
 
-```
-portfolio-website/
-├── index.html              # Vite entry point
-├── vite.config.js          # Vite configuration
-├── package.json            # Dependencies
-│
-├── src/
-│   ├── main.jsx            # React entry point
-│   ├── App.jsx             # Main app component
-│   ├── components/
-│   │   ├── SplashScreen.jsx    # Animated intro
-│   │   ├── LandingPage.jsx     # Home page
-│   │   ├── AboutPage.jsx       # About me page
-│   │   ├── ProjectsPage.jsx    # Projects page (placeholder)
-│   │   ├── InterestingPage.jsx # Interesting page (placeholder)
-│   │   ├── Header.jsx          # Navigation header
-│   │   ├── DarkVeil.jsx        # WebGL shader background
-│   │   ├── ShootingStars.jsx   # Star animations
-│   │   ├── FluidGlass.jsx      # Cursor lens effect
-│   │   ├── GlassCursor.jsx     # Glass cursor follower
-│   │   └── ThemeToggle.jsx     # Theme switcher
-│   └── styles/
-│       └── landing.css         # All styles
-│
-├── images/
-│   └── profile/            # Profile photos
-│
-├── public/
-│   └── CNAME               # Custom domain config
-│
-└── .github/
-    └── workflows/
-        └── deploy.yml      # GitHub Pages deployment
-```
+`npm run check` runs hook/accessibility lint, behavior tests, both Vite builds, prerendering and output/budget assertions. Browser checks cover 320–1440 px layouts, accessibility scans, native navigation, direct/reloaded project URLs, no-JavaScript reading, keyboard, reduced motion, unavailable storage and failed media. CI runs the same checks before deploying main. Pull requests validate without publishing.
 
-## 🎨 Key Components
+## Edit content
 
-### SplashScreen
-Typewriter animation with spring physics for smooth circle-wipe transition.
+- `src/content/projects.js`: project summaries, evidence links, status and case-study text. Every entry gets a real `/work/<slug>/index.html` at build time and a sitemap entry.
+- `src/content/profile.js`: contact and professional links.
+- `src/App.jsx`: page composition, personal biography and shared navigation.
+- `src/styles/site.css`: responsive visual system, reduced motion, forced colors and print styles.
+- `src/components/SignatureInteraction.jsx`: the optional Melody engineering view.
+- `src/components/ProjectMedia.jsx`: explicit video activation, native controls and failure/download fallback.
+- `docs/content-sources.md`: evidence and boundaries behind public claims.
 
-### DarkVeil
-WebGL CPPN neural network shader creating flowing nebula background effect.
+`src/entry-server.jsx` renders each route into Vite's built HTML via `scripts/prerender.mjs`. The browser hydrates that document. Ordinary anchors handle navigation; there is no client router, page transition timer or route preload. Unknown URLs use `404.html` and hydrate its embedded route correctly. The entire core reading journey works with JavaScript disabled.
 
-### LandingPage
-Hero section with profile image, glassmorphism content card, and social links.
+## Performance policy
 
-### AboutPage
-Biography, tech stack display, and architecture expertise showcase.
+No default WebGL, animation framework, external font service, analytics, storage, decorative animation loop, or automatic video download. Font: one local Latin variable font (22 kB); serif and mono accents use system fonts. Images have fixed dimensions; the portrait has responsive WebP sources and other images lazy-load. Video recordings are silent visual walkthroughs with a textual explanation on each case-study page.
 
-## 📱 Pages
+Build gates: total JS <200 kB gzip, CSS <30 kB gzip, font <100 kB and largest hero source <300 kB. These are build budgets, not field Core Web Vitals measurements. See `docs/audits/2026-11-11-renewal-validation.md` for measured results and limitations.
 
-| Page | Description |
-|------|-------------|
-| **Home** | Profile hero with social links |
-| **About** | Bio, skills, and expertise |
-| **Projects** | Placeholder page (links to GitHub) |
-| **Interesting Stuff** | Placeholder page (links to GitHub) |
+The raster sharing image is committed. To regenerate it from the site's type and portrait, run the static preview in another terminal and `node scripts/create-share.mjs`, then rebuild. The original portrait lives outside public in `assets/originals/`; legacy graphics are recoverable from Git revision `566a261`.
 
-## 🚀 Deployment
+## Release
 
-The site automatically deploys to GitHub Pages when pushing to `main`:
-
-1. GitHub Actions builds the Vite project
-2. Output is deployed to GitHub Pages
-3. Set `adonpaultomy.tech` in repository **Settings → Pages → Custom domain** and configure its DNS for GitHub Pages. This Actions deployment uses the Pages setting; CNAME files alone do not configure the live domain.
-
-## 📞 Contact
-
-- **GitHub**: [@Adon-Paul](https://github.com/Adon-Paul)
-- **Email**: [adonpaultomy@gmail.com](mailto:adonpaultomy@gmail.com)
-- **LinkedIn**: [Adon Paul Tomy](https://linkedin.com/in/adon-paul-tomy)
-- **Website**: [adonpaultomy.tech](https://adonpaultomy.tech)
-
----
-
-⭐ Star this repository if you find it helpful!
+The `feat/personal-workshop` branch is the review version. Merging to main deploys through GitHub Actions to the existing domain; verify Pages after release. The previous main revision `566a261` is the rollback reference. DNS and domain registration remain managed separately.

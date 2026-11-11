@@ -1,0 +1,100 @@
+[
+  {
+    "profile": "1440px, DPR1, unthrottled",
+    "cache": "disabled; fresh browser context",
+    "server": "local static HTTP, uncompressed assets",
+    "lcp": 68,
+    "cls": 0,
+    "longTasks": [],
+    "rafCalls": 0,
+    "dom": 233,
+    "canvases": 0,
+    "resources": [
+      {
+        "name": "/fonts/space-grotesk-latin.woff2",
+        "transfer": 22588,
+        "duration": 2
+      },
+      {
+        "name": "/assets/index-BSTBW5_l.css",
+        "transfer": 23564,
+        "duration": 2.099999999627471
+      },
+      {
+        "name": "/assets/index-giUpHvHj.js",
+        "transfer": 166439,
+        "duration": 3
+      },
+      {
+        "name": "/media/adon-400.webp",
+        "transfer": 10846,
+        "duration": 3.2999999998137355
+      },
+      {
+        "name": "/media/melody-phone.webp",
+        "transfer": 11654,
+        "duration": 2.099999999627471
+      }
+    ],
+    "paint": [
+      {
+        "name": "first-paint",
+        "startTime": 68
+      },
+      {
+        "name": "first-contentful-paint",
+        "startTime": 68
+      }
+    ]
+  },
+  {
+    "profile": "390px, DPR2, touch, 4x CPU, 150ms RTT, 1.6Mbps",
+    "cache": "disabled; fresh browser context",
+    "server": "local static HTTP, uncompressed assets",
+    "lcp": 868,
+    "cls": 0,
+    "longTasks": [
+      84
+    ],
+    "rafCalls": 0,
+    "dom": 233,
+    "canvases": 0,
+    "resources": [
+      {
+        "name": "/fonts/space-grotesk-latin.woff2",
+        "transfer": 22588,
+        "duration": 569.7999999998137
+      },
+      {
+        "name": "/assets/index-giUpHvHj.js",
+        "transfer": 166439,
+        "duration": 1372.2000000001863
+      },
+      {
+        "name": "/assets/index-BSTBW5_l.css",
+        "transfer": 23564,
+        "duration": 597.4000000003725
+      },
+      {
+        "name": "/media/adon-640.webp",
+        "transfer": 18410,
+        "duration": 537.0999999996275
+      },
+      {
+        "name": "/media/melody-phone.webp",
+        "transfer": 11654,
+        "duration": 266.09999999962747
+      }
+    ],
+    "paint": [
+      {
+        "name": "first-paint",
+        "startTime": 868
+      },
+      {
+        "name": "first-contentful-paint",
+        "startTime": 868
+      }
+    ]
+  }
+]

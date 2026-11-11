@@ -1,1 +1,0 @@
-fetch('https://reactbits.dev/components/border-glow').then(r=>r.text()).then(t=>require('fs').writeFileSync('reactbits.txt', t));
