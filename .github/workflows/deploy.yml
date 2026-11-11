@@ -12,7 +12,7 @@ concurrency:
   cancel-in-progress: false
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -21,7 +21,10 @@ jobs:
           cache: 'npm'
       - run: npm ci
       - run: npm run check
-      - run: npx playwright install --with-deps chromium
+      # The Ubuntu runner already supplies Chromium's runtime libraries.
+      # Avoid apt downloads for unrelated fonts; our Latin font is self-hosted.
+      - name: Install headless Chromium
+        run: npx playwright install --only-shell chromium
       - run: npm run test:e2e
       - name: Save browser evidence
         if: always()
@@ -45,7 +48,7 @@ jobs:
     permissions:
       pages: write
       id-token: write
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: build
     steps:
       - name: Deploy to GitHub Pages

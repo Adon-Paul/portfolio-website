@@ -34,3 +34,6 @@ Owner subsequently instructed “do what is needed,” authorizing completion of
 
 ## Reproduce Firefox checks
 `PLAYWRIGHT_BROWSERS_PATH=/tmp/portfolio-playwright TEST_BROWSER=firefox npm run test:e2e` (browser installed there for this session). For later sessions install Firefox with Playwright, or omit the custom browser path when using the default cache. CI retains Chromium as its default.
+
+## Release infrastructure correction
+The first release run (43049841961) passed application checks but failed before browser tests: Ubuntu mirror DNS errors prevented optional font packages from downloading during `playwright install --with-deps`. Logs confirm runtime libraries were already installed. Workflow now pins ubuntu-24.04 and installs only Playwright headless Chromium without apt; the complete browser test gate remains required before Pages deploy. Inspect the subsequent main run for final status.
