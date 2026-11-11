@@ -19,5 +19,5 @@ Original portrait retained in `assets/originals/adon.png`; responsive versions w
 - Style Transfer AI co-development is from the supplied résumé. No download counts or award claims carried over.
 - Three certificate scans: NASA Space Apps 2025 participation, IEEE SJCET Wireless & 5G Security 2024 webinar participation, WeCodeLife internship 2–16 May 2023. Original scans in Downloads remain untouched. Native disclosures preserve accurate types.
 - Sanitized Sunset note is based on the owner's local Obsidian VulnHub lab write-up. No passwords, flags, addresses, personal OSINT investigations or unverified CVEs are published.
-- Supplied résumé had an expired domain and unsupported product claims. A corrected one-page draft is in `docs/career/`, not linked as the site's public résumé. Education/completion wording remains for owner review.
+- Supplied résumé had an expired domain and unsupported product claims. The reviewed replacement is linked in Contact at `/documents/adon-paul-tomy-resume.pdf`; editable source is in `docs/career/`. It does not assert graduation or an unconfirmed end date for the µLearn role.
 - Research references, certificate inventory and design rationale: `docs/research/2026-11-11-evidence-and-direction.md`.

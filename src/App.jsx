@@ -73,6 +73,9 @@ function Contact() {
           </a>
         </div>
         <div className="socials">
+          <a href="/documents/adon-paul-tomy-resume.pdf">
+            Résumé (PDF) <Arrow />
+          </a>
           <a href={profile.github}>
             GitHub <Arrow />
           </a>

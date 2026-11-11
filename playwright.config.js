@@ -5,7 +5,7 @@ export default defineConfig({
   fullyParallel: true,
   use: {
     baseURL: "http://127.0.0.1:4173",
-    browserName: "chromium",
+    browserName: process.env.TEST_BROWSER || "chromium",
     trace: "retain-on-failure",
   },
   webServer: {

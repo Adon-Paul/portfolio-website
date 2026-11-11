@@ -1,4 +1,4 @@
-/* eslint-disable jsx-a11y/media-has-caption -- These silent recordings have adjacent scene-by-scene text alternatives. */
+// Silent recordings have adjacent scene-by-scene text alternatives.
 import { useState, useRef, useEffect } from "react";
 
 export default function ProjectMedia({ project }) {

@@ -24,7 +24,7 @@ node scripts/serve.mjs
 
 The last command serves the **built static site** at http://127.0.0.1:4173, including real project directories and a 404 response. `npm run dev` is for editing; Vite's development fallback is not a hosting test.
 
-`npm run check` runs hook/accessibility lint, behavior tests, both Vite builds, prerendering and output/budget assertions. Browser checks cover 320–1440 px layouts, accessibility scans, native navigation, direct/reloaded project URLs, no-JavaScript reading, keyboard, reduced motion, unavailable storage and failed media. CI runs the same checks before deploying main. Pull requests validate without publishing.
+`npm run check` runs hook/accessibility lint, behavior tests, both Vite builds, prerendering and output/budget assertions. Browser checks cover 320–1440 px layouts, accessibility scans, native navigation, direct/reloaded project URLs, no-JavaScript reading, keyboard, reduced motion, unavailable storage and failed media. CI runs the same checks before deploying main. Pull requests validate without publishing. Optional second-engine check: install Firefox using Playwright, then run `TEST_BROWSER=firefox npm run test:e2e`.
 
 ## Edit content
 
