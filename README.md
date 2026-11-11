@@ -50,4 +50,4 @@ The raster sharing image is committed. To regenerate it from the site's type and
 
 ## Release
 
-The `feat/evidence-led-portfolio` branch contains the current review version. Merging to main deploys through GitHub Actions to the existing domain; verify Pages after release. The live baseline before this revision is `66d67ac`. DNS and domain registration remain managed separately.
+The evidence-led revision is released on `main`; its feature branch was merged. Merging to main deploys through GitHub Actions to the existing domain; verify Pages after release. The live baseline before this revision is `66d67ac`. DNS and domain registration remain managed separately.

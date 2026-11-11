@@ -1,6 +1,6 @@
 # Current progress
 
-Updated November 11, 2026. Branch `feat/evidence-led-portfolio`, based on live `66d67ac`.
+Updated November 11, 2026. Current branch: `main`. Application release `ebc770f` is deployed; `66d67ac` is the previous live baseline.
 
 ## Implemented and verified
 - Replaced the beige collage with dark/green typographic identity, original SVG signal sculpture, editorial project layout and coherent case-study styling. Removed shipped portrait/phone artwork and obsolete SignatureInteraction; original portrait remains in assets/originals and Git history.
@@ -37,3 +37,10 @@ Owner subsequently instructed “do what is needed,” authorizing completion of
 
 ## Release infrastructure correction
 The first release run (43049841961) passed application checks but failed before browser tests: Ubuntu mirror DNS errors prevented optional font packages from downloading during `playwright install --with-deps`. Logs confirm runtime libraries were already installed. Workflow now pins ubuntu-24.04 and installs only Playwright headless Chromium without apt; the complete browser test gate remains required before Pages deploy. Inspect the subsequent main run for final status.
+
+## Verified deployment — complete
+- GitHub Pages run **43051714860** succeeded: https://github.com/Adon-Paul/portfolio-website/actions/runs/43051714860 . Application commit: `ebc770fd04218b2190f951e469adedfe0334bebf`.
+- Live HTTPS browser check passed at https://adonpaultomy.tech : new homepage, all four case-study URLs HTTP 200, selected architecture state, both original videos play and pause each other, zero video requests before activation, no page errors.
+- Public résumé and manuscript PDF SHA-256 hashes match the local release assets.
+- Release is DONE. Do not redeploy or rebuild the redesign simply because earlier sections describe the release procedure. Remaining work: real LumiSense recording when supplied, optional physical-device/Safari checks, and concrete owner feedback.
+- A documentation-only commit records this receipt; application files are unchanged from the successful release.
