@@ -46,7 +46,7 @@ Environment: local Linux, Node 26.12.1, headless Chromium 158; CI targets Node 2
 | 1440px, DPR 1, unthrottled | 68 ms | 0 | 0 | 0 | 0 |
 | 390px, DPR 2, touch, 4× CPU, 150ms latency, 1.6Mbps | 868 ms | 0 | 1 (84 ms) | 0 | 0 |
 
-These are single local lab samples, not field Core Web Vitals, an INP measurement, an award/compliance assertion or a deployed-domain speed promise. No real phone, screen reader, Safari or Firefox run was performed. Font fallback and image-failure behavior have automated coverage; native media decoder behavior on iOS still needs device testing. Production DNS/TLS and GitHub Actions execution must be verified after an authorized release.
+These are single local lab samples, not field Core Web Vitals, an INP measurement, an award/compliance assertion or a deployed-domain speed promise. No real phone, screen reader, Safari or Firefox run was performed. Image-failure behavior has automated coverage. Custom font failure uses system fallback stacks but was not separately exercised; native media decoder behavior on iOS still needs device testing. Production DNS/TLS and GitHub Actions execution must be verified after an authorized release.
 
 ## Delegation and decisions
 
