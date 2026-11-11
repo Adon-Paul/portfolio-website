@@ -1,5 +1,44 @@
 export const projects = [
   {
+    slug: "lumisense",
+    manuscript: "/documents/lumisense-project-manuscript.pdf",
+    title: "LumiSense",
+    category: "Assistive technology / applied AI",
+    label: "From a camera frame to a spoken answer.",
+    summary:
+      "An Android-first assistive app that turns text, objects and scenes into spoken information. Local perception meets optional AI providers.",
+    stack: ["Flutter", "ML Kit", "YOLO", "Dart"],
+    repository: "https://github.com/Adon-Paul/Lumisense",
+    status: "Final-year project · working prototype",
+    role: "I built the application with AI assistance, from the Flutter interface to the service integrations. The academic project and manuscript have a wider team of authors.",
+    intro:
+      "A camera can capture everything in front of you. The harder question is what to say, when to say it, and how much attention to ask for in return.",
+    problem:
+      "LumiSense explores a smartphone-based assistant for people with visual impairments. Reading text, identifying objects and describing a scene share a voice-led interface, with different processing paths for different tasks.",
+    decisions: [
+      [
+        "Use local perception where it fits",
+        "ML Kit handles tasks such as OCR and barcode reading on the device. YOLO supports object detection. These task-specific paths avoid making every camera interaction depend on a remote model.",
+      ],
+      [
+        "Make the AI route a choice",
+        "Scene understanding can use configured providers, with fallback between services. An optional llama.cpp path supports local models, subject to device capacity and model downloads. The app is not entirely offline by default.",
+      ],
+      [
+        "Treat speech as an interface",
+        "Reading-order sorting and speech chunking help turn OCR into usable narration. Detection announcements use persistence and debouncing to reduce repeated interruptions.",
+      ],
+      [
+        "Separate capability from readiness",
+        "Camera, microphone and location permissions, provider setup, and thermal limits affect real use. Walking guidance and on-device tool calling still need further tuning and validation.",
+      ],
+    ],
+    outcome:
+      "The documented implementation includes voice-led OCR, object and scene modes, QR reading, currency detection, directions and an SOS workflow. It is a final-year prototype, with source and architecture documentation available for inspection. It has not been established as a validated mobility aid.",
+    next: "Evaluate the spoken interaction with people who would use it. Test permission loss, unavailable providers and real walking conditions before relying on guidance outside a controlled environment.",
+    evidence: "Source, feature status and architecture",
+  },
+  {
     slug: "melody",
     title: "Melody",
     category: "Mobile development",
@@ -56,7 +95,7 @@ export const projects = [
       "A stored profile summary shows the user name adon, model gemma3:1b, enhanced mode, three files analyzed and zero total words. When the readable report is requested, the program says that report is not available in this profile. These are prototype limitations, not successful analysis results.",
       "Returning to the main menu shows writing-style analysis, saved profiles, content generation and transfer, comparison, report cleanup, model selection, configuration and exit options. The recording ends at the menu prompt.",
     ],
-    status: "Personal project · experimental tool",
+    status: "Co-developed project · experimental tool",
     intro:
       "Before asking a model to write in a particular voice, it helps to describe what that voice actually does.",
     problem:

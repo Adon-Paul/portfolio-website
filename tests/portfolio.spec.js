@@ -11,21 +11,15 @@ for (const width of [320, 390, 768, 1440]) {
     page.on("pageerror", (e) => errors.push(e.message));
     await page.goto("/");
     await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
-    await expect(
-      page.getByRole("button", { name: /under the hood/i }),
-    ).toBeVisible();
-    await page.getByRole("button", { name: /under the hood/i }).click();
-    await expect(page.getByText("One queue, two views.")).toBeVisible();
-    const notes = await page.locator(".engineering-notes").boundingBox();
-    const lastNote = await page
-      .locator(".state-diagram > span")
-      .last()
-      .boundingBox();
-    expect(lastNote.y + lastNote.height).toBeLessThanOrEqual(
-      notes.y + notes.height - 8,
-    );
+    const read = page.getByRole("button", { name: "Read text", exact: true });
+    const scene = page.getByRole("button", { name: /describe a scene/i });
+    await expect(read).toHaveAttribute("aria-pressed", "true");
+    await scene.click();
+    await expect(scene).toHaveAttribute("aria-pressed", "true");
+    await expect(read).toHaveAttribute("aria-pressed", "false");
+    await expect(page.getByRole("status")).toContainText("provider choice");
     expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
-    await page.getByRole("button", { name: /back to the surface/i }).click();
+    await read.click();
     expect(
       await page.evaluate(
         () => document.documentElement.scrollWidth <= innerWidth,
@@ -58,10 +52,9 @@ test("direct routes, reload, back and video activation use real static documents
     "/videos/melody.mp4",
   );
   await page.goBack();
-  await expect(page.getByRole("heading", { level: 1 })).toContainText(
-    "A curious mind.",
-  );
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("ADON");
   for (const [path, title] of [
+    ["lumisense", "LumiSense."],
     ["style-transfer-ai", "Style Transfer AI."],
     ["luxecart", "LuxeCart."],
   ]) {
@@ -81,7 +74,7 @@ test("core content and evidence links work without JavaScript", async ({
   const page = await context.newPage();
   await page.goto("http://127.0.0.1:4173/");
   await expect(
-    page.getByRole("button", { name: /under the hood/i }),
+    page.getByRole("button", { name: /describe a scene/i }),
   ).toBeHidden();
   await page.getByRole("link", { name: "Explore Melody", exact: true }).click();
   await expect(page.getByText("One queue, two views")).toBeVisible();
@@ -118,11 +111,11 @@ test("keyboard, reduced motion, zoom and blocked storage remain usable", async (
   await page.setViewportSize({ width: 640, height: 800 });
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.evaluate(() => (document.documentElement.style.zoom = "2"));
-  await page.getByRole("button", { name: /under the hood/i }).focus();
+  await page.getByRole("button", { name: /describe a scene/i }).focus();
   await page.keyboard.press("Enter");
   await expect(
-    page.getByRole("button", { name: /back to the surface/i }),
-  ).toHaveAttribute("aria-expanded", "true");
+    page.getByRole("button", { name: /describe a scene/i }),
+  ).toHaveAttribute("aria-pressed", "true");
   expect(
     await page.evaluate(
       () => document.documentElement.scrollWidth <= innerWidth,
@@ -151,7 +144,7 @@ test("slash redirects, history restoration and live motion changes remain usable
   await page.goto("/work/melody");
   await expect(page).toHaveURL(/\/work\/melody\/$/);
   await page.getByRole("button", { name: /play melody demo/i }).click();
-  await page.getByRole("link", { name: /next from the workbench/i }).click();
+  await page.getByRole("link", { name: /next project/i }).click();
   await page.goBack();
   await expect(
     page.getByRole("link", { name: /download the demo/i }),
@@ -165,4 +158,66 @@ test("slash redirects, history restoration and live motion changes remain usable
     ),
   ).toBe("auto");
   expect(errors).toEqual([]);
+});
+
+test("home plays both original recordings and pauses the previous player", async ({
+  page,
+}) => {
+  await page.goto("/");
+  await page.getByRole("button", { name: /play melody demo/i }).click();
+  const first = page.locator('video[src="/videos/melody.mp4"]');
+  await expect.poll(() => first.evaluate((v) => v.paused)).toBe(false);
+  await page
+    .getByRole("button", { name: /play style transfer ai demo/i })
+    .click();
+  const second = page.locator('video[src="/videos/style-transfer-ai.mp4"]');
+  await expect.poll(() => second.evaluate((v) => v.paused)).toBe(false);
+  await expect.poll(() => first.evaluate((v) => v.paused)).toBe(true);
+  await expect(second).toBeFocused();
+  await first.evaluate((v) => v.play());
+  await expect.poll(() => second.evaluate((v) => v.paused)).toBe(true);
+  expect(await first.evaluate((v) => v.currentTime)).toBeGreaterThanOrEqual(0);
+});
+
+test("certificates disclose accurate evidence and the lab note remains readable", async ({
+  page,
+}) => {
+  await page.goto("/");
+  const credential = page.locator(".credential").first();
+  await credential.locator("summary").click();
+  await expect(credential).toHaveAttribute("open", "");
+  await expect(credential).toContainText("Participation");
+  await expect(credential.locator("img")).toBeVisible();
+  expect(
+    await credential
+      .locator("img")
+      .evaluate((i) => i.complete && i.naturalWidth > 0),
+  ).toBe(true);
+  await page.getByText("What I took away", { exact: true }).click();
+  await expect(
+    page.getByText(
+      "Remove sensitive backups from publicly accessible services.",
+    ),
+  ).toBeVisible();
+  expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
+});
+
+test("disclosure and selected-path indicators survive forced colours", async ({
+  page,
+}) => {
+  await page.emulateMedia({ forcedColors: "active" });
+  await page.goto("/");
+  const scene = page.getByRole("button", { name: /describe a scene/i });
+  await scene.click();
+  expect(
+    await scene.evaluate((el) => getComputedStyle(el).textDecorationLine),
+  ).toContain("underline");
+  const icon = page.locator(".credential .disclosure-icon").first();
+  expect(
+    await icon.evaluate(
+      (el) => getComputedStyle(el, "::before").borderTopStyle,
+    ),
+  ).toBe("solid");
+  await page.locator(".credential summary").first().click();
+  await expect(page.locator(".credential").first()).toHaveAttribute("open", "");
 });

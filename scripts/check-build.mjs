@@ -13,6 +13,7 @@ assert(js < 200_000, `JS budget exceeded: ${js}`);
 assert(css < 30_000, `CSS budget exceeded: ${css}`);
 for (const path of [
   "",
+  "work/lumisense/",
   "work/melody/",
   "work/style-transfer-ai/",
   "work/luxecart/",
@@ -39,8 +40,16 @@ for (const path of [
 }
 const font = (await stat("dist/fonts/space-grotesk-latin.woff2")).size;
 assert(font < 100_000, `Font budget exceeded: ${font}`);
-const portrait = (await stat("dist/media/adon-640.webp")).size;
-assert(portrait < 300_000, `Hero image budget exceeded: ${portrait}`);
+const home = (await readFile("dist/index.html", "utf8")).replace(
+  /<!--.*?-->/g,
+  "",
+);
+assert(!home.includes("adon-640.webp"), "Rejected portrait remains on home");
+assert(
+  home.includes("Play Melody demo") &&
+    home.includes("Play Style Transfer AI demo"),
+  "Missing homepage recordings",
+);
 console.log(
-  `Budgets passed: JS ${js} B gzip; CSS ${css} B gzip; font ${font} B; hero ${portrait} B`,
+  `Budgets passed: JS ${js} B gzip; CSS ${css} B gzip; font ${font} B; hero is inline SVG`,
 );

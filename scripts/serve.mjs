@@ -11,6 +11,7 @@ const types = {
   ".png": "image/png",
   ".woff2": "font/woff2",
   ".mp4": "video/mp4",
+  ".pdf": "application/pdf",
   ".xml": "application/xml",
   ".txt": "text/plain",
 };

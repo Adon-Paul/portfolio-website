@@ -11,12 +11,18 @@ export default function ProjectMedia({ project }) {
     if (failed && document.activeElement === document.body)
       downloadRef.current?.focus();
   }, [playing, failed]);
+  function pauseOtherDemos(event) {
+    document.querySelectorAll("video[data-project-demo]").forEach((video) => {
+      if (video !== event.currentTarget) video.pause();
+    });
+  }
   if (!project.video) return null;
   return (
     <figure className="demo">
       <div className="demo-screen">
         {playing && !failed ? (
           <video
+            data-project-demo
             src={project.video}
             poster={project.poster}
             ref={videoRef}
@@ -26,6 +32,7 @@ export default function ProjectMedia({ project }) {
             autoPlay
             playsInline
             preload="none"
+            onPlay={pauseOtherDemos}
             onError={() => setFailed(true)}
             aria-label={`${project.title} interface demonstration`}
           />
@@ -37,6 +44,14 @@ export default function ProjectMedia({ project }) {
             height="720"
             loading="lazy"
           />
+        )}
+        {failed && (
+          <button
+            className="demo-play enhanced"
+            onClick={() => setFailed(false)}
+          >
+            Retry {project.title} demo <span aria-hidden="true">↻</span>
+          </button>
         )}
         {!playing && (
           <button

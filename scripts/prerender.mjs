@@ -13,9 +13,9 @@ const escape = (value) =>
 const routes = [
   {
     path: "/",
-    title: "Adon Paul Tomy — Developer & curious mind",
+    title: "Adon Paul Tomy — Developer · Mobile, AI & security",
     description:
-      "Flutter, mobile development and experiments in AI. Selected projects and the thinking behind them, by Adon Paul Tomy.",
+      "Mobile apps, applied AI and cybersecurity studies. Explore LumiSense, Melody and Style Transfer AI, with original demos and source code.",
   },
   ...projects.map((p) => ({
     path: projectPath(p),
@@ -25,7 +25,7 @@ const routes = [
   {
     path: "/404.html",
     title: "Page not found — Adon Paul Tomy",
-    description: "Back to the workshop.",
+    description: "Back to Adon’s projects.",
   },
 ];
 for (const route of routes) {
@@ -38,7 +38,7 @@ for (const route of routes) {
 <meta property="og:url" content="${url}" />
 <meta property="og:image" content="${origin}/media/share.png" />
 <meta property="og:image:width" content="1200" /><meta property="og:image:height" content="630" />
-<meta property="og:image:alt" content="Adon Paul Tomy — a curious mind, a builder’s instinct." />
+<meta property="og:image:alt" content="Adon Paul Tomy — build, observe, question." />
 <meta name="twitter:card" content="summary_large_image" />${route.path === "/404.html" ? '\n<meta name="robots" content="noindex" />' : ""}`;
   const html = template
     .replace(/<title>.*?<\/title>/, `<title>${escape(route.title)}</title>`)

@@ -1,4 +1,6 @@
-# Adon Paul Tomy — personal workshop
+# Adon Paul Tomy — evidence-led portfolio
+
+Start with [handoff/START-HERE.md](handoff/START-HERE.md) and [current progress](handoff/PROGRESS.md).
 
 A portfolio for [adonpaultomy.tech](https://adonpaultomy.tech): Flutter projects, experiments and the thinking behind them. React 18 + Vite, with build-time static HTML for GitHub Pages.
 
@@ -28,9 +30,11 @@ The last command serves the **built static site** at http://127.0.0.1:4173, incl
 
 - `src/content/projects.js`: project summaries, evidence links, status and case-study text. Every entry gets a real `/work/<slug>/index.html` at build time and a sitemap entry.
 - `src/content/profile.js`: contact and professional links.
-- `src/App.jsx`: page composition, personal biography and shared navigation.
+- `src/App.jsx`: static route composition, case studies and shared navigation.
+- `src/components/Home.jsx`: project showcase, biography and sanitized lab note.
 - `src/styles/site.css`: responsive visual system, reduced motion, forced colors and print styles.
-- `src/components/SignatureInteraction.jsx`: the optional Melody engineering view.
+- `src/components/SignalStudy.jsx`: interactive LumiSense architecture illustration.
+- `src/components/Credentials.jsx`: curated certificate disclosures.
 - `src/components/ProjectMedia.jsx`: explicit video activation, native controls and failure/download fallback.
 - `docs/content-sources.md`: evidence and boundaries behind public claims.
 
@@ -38,12 +42,12 @@ The last command serves the **built static site** at http://127.0.0.1:4173, incl
 
 ## Performance policy
 
-No default WebGL, animation framework, external font service, analytics, storage, decorative animation loop, or automatic video download. Font: one local Latin variable font (22 kB); serif and mono accents use system fonts. Images have fixed dimensions; the portrait has responsive WebP sources and other images lazy-load. Video recordings are silent visual walkthroughs with a textual explanation on each case-study page.
+No default WebGL, animation framework, external font service, analytics, storage, decorative animation loop, or automatic video download. Font: one local Latin variable font (22 kB); serif and mono accents use system fonts. Images have fixed dimensions; posters and certificate scans lazy-load; the hero is inline SVG. Video recordings are silent visual walkthroughs with a textual explanation on home and case-study pages.
 
-Build gates: total JS <200 kB gzip, CSS <30 kB gzip, font <100 kB and largest hero source <300 kB. These are build budgets, not field Core Web Vitals measurements. See `docs/audits/2026-11-11-renewal-validation.md` for measured results and limitations.
+Build gates: total JS <200 kB gzip, CSS <30 kB gzip and font <100 kB. These are build budgets, not field Core Web Vitals measurements. See `docs/audits/2026-11-11-renewal-validation.md` for measured results and limitations.
 
-The raster sharing image is committed. To regenerate it from the site's type and portrait, run the static preview in another terminal and `node scripts/create-share.mjs`, then rebuild. The original portrait lives outside public in `assets/originals/`; legacy graphics are recoverable from Git revision `566a261`.
+The raster sharing image is committed. To regenerate it from the site's type and original SVG, run the static preview in another terminal and `node scripts/create-share.mjs`, then rebuild. The original portrait lives outside public in `assets/originals/`; legacy graphics are recoverable from Git revision `566a261`.
 
 ## Release
 
-The `feat/personal-workshop` branch is the review version. Merging to main deploys through GitHub Actions to the existing domain; verify Pages after release. The previous main revision `566a261` is the rollback reference. DNS and domain registration remain managed separately.
+The `feat/evidence-led-portfolio` branch contains the current review version. Merging to main deploys through GitHub Actions to the existing domain; verify Pages after release. The live baseline before this revision is `66d67ac`. DNS and domain registration remain managed separately.

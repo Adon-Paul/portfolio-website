@@ -1,0 +1,31 @@
+{
+  "date": "2026-11-11",
+  "scope": "Single local Chromium lab navigation, not field data or Lighthouse. Static preview serves uncompressed resources.",
+  "conditions": {
+    "viewport": "390x844",
+    "cpuSlowdown": 4,
+    "latencyMs": 150,
+    "downloadBytesPerSecond": 200000,
+    "cache": "disabled"
+  },
+  "lcpMs": 964,
+  "cls": 0,
+  "resources": [
+    {
+      "path": "/fonts/space-grotesk-latin.woff2",
+      "transferSize": 22588,
+      "decodedBodySize": 22288
+    },
+    {
+      "path": "/assets/index-DiKLDvsX.js",
+      "transferSize": 175799,
+      "decodedBodySize": 175499
+    },
+    {
+      "path": "/assets/index-38Z_5w23.css",
+      "transferSize": 23991,
+      "decodedBodySize": 23691
+    }
+  ],
+  "requestsForVideo": 0
+}
