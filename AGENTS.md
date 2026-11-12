@@ -5,3 +5,5 @@
 - Keep GitHub Pages and `adonpaultomy.tech`. Project pages are actual prerendered HTML directories, not SPA fallback routes.
 - No invented qualifications, outcomes, metrics, clients or product capabilities. Project evidence and limitations are documented in `docs/content-sources.md`.
 - Run `npm run check` and `npm run test:e2e` before proposing release. Do not claim field performance based on build sizes or lab tests.
+
+- Latest visual request (Nov 12): no green, continuous CSS/SVG motion, richer interactive content, no cursor effects. MotionFrame and Workbench implement this; preserve pause/reduced-motion and local-only text processing.

@@ -221,3 +221,70 @@ test("disclosure and selected-path indicators survive forced colours", async ({
   await page.locator(".credential summary").first().click();
   await expect(page.locator(".credential").first()).toHaveAttribute("open", "");
 });
+
+test("continuous motion can be paused, survives navigation and respects system changes", async ({
+  page,
+}) => {
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.goto("/");
+  const emblem = page.locator(".motion-emblem");
+  const initial = await emblem.evaluate((el) => getComputedStyle(el).transform);
+  await expect
+    .poll(() => emblem.evaluate((el) => getComputedStyle(el).transform))
+    .not.toBe(initial);
+  await page.getByRole("button", { name: "Pause motion" }).click();
+  await expect(page.locator("#top")).toHaveAttribute("data-motion", "paused");
+  expect(
+    await emblem.evaluate((el) => getComputedStyle(el).animationPlayState),
+  ).toBe("paused");
+  await page.getByRole("link", { name: "Explore Melody", exact: true }).click();
+  await expect(
+    page.getByRole("button", { name: "Resume motion" }),
+  ).toBeVisible();
+  await page.getByRole("button", { name: "Resume motion" }).click();
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await expect(
+    page.getByRole("button", { name: "Motion reduced by system preference" }),
+  ).toBeDisabled();
+  expect(
+    await page
+      .locator(".motion-emblem")
+      .evaluate((el) => getComputedStyle(el).animationName),
+  ).toBe("none");
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await expect(page.locator("#top")).toHaveAttribute("data-motion", "running");
+  await page.evaluate(() => {
+    Object.defineProperty(document, "hidden", {
+      configurable: true,
+      get: () => true,
+    });
+    document.dispatchEvent(new Event("visibilitychange"));
+  });
+  await expect(page.locator("#top")).toHaveAttribute("data-motion", "paused");
+});
+
+test("interactive studies work on a narrow viewport without sending text away", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 320, height: 800 });
+  await page.goto("/");
+  await page.getByRole("button", { name: "Select Track 02" }).click();
+  await expect(page.getByTestId("queue-full")).toContainText("Track 02");
+  await expect(page.getByTestId("queue-mini")).toContainText("Track 02");
+  const outgoing = [];
+  page.on("request", (r) => {
+    if (r.method() !== "GET") outgoing.push(r.url());
+  });
+  await page
+    .getByLabel("Text to inspect")
+    .fill("Build carefully. Ask better questions!");
+  await expect(page.getByTestId("word-count")).toHaveText("5");
+  await expect(page.getByTestId("sentence-length")).toHaveText("2.5");
+  expect(outgoing).toEqual([]);
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth,
+    ),
+  ).toBe(true);
+  expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
+});

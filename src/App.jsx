@@ -1,5 +1,6 @@
 import { profile } from "./content/profile";
 import { projects, projectAtPath, projectPath } from "./content/projects";
+import MotionFrame from "./components/MotionFrame";
 import Home from "./components/Home";
 import SignalStudy from "./components/SignalStudy";
 import ProjectMedia from "./components/ProjectMedia";
@@ -190,7 +191,7 @@ function CaseStudy({ project }) {
 export default function App({ path = "/" }) {
   const project = projectAtPath(path);
   return (
-    <div id="top">
+    <MotionFrame>
       <Header />
       <main id="main">
         {path === "/" ? (
@@ -214,6 +215,6 @@ export default function App({ path = "/" }) {
         )}
       </main>
       <Footer />
-    </div>
+    </MotionFrame>
   );
 }

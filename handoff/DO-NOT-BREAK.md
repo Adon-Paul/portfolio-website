@@ -25,5 +25,8 @@
 - The rejected beige collage design is HISTORY, not the current spec. Do not restore it because an old doc says approved.
 - No generic neon hacker terminal, fake telemetry, arbitrary status dots, decorative progress percentages or unsupported benchmark numbers.
 - Every arrow/indicator must describe a real action or state. Distinguish external links, expansions, playback and navigation.
-- No compulsory intro, scroll hijack, custom cursor, endless decorative RAF, or hidden evidence behind hover-only interactions.
+- No compulsory intro, scroll hijack, custom cursor, JavaScript animation loops, or hidden evidence behind hover-only interactions.
 - A great screenshot is not completion: check actual playback, selected states, mobile, overflow, keyboard, failed requests and static URLs.
+
+## Current visual direction — November 12
+Owner explicitly rejected green and requested continuous motion with NO cursor effects. Charcoal/ivory/orange is the current implemented palette (recommended default; optional preference question had no reply). CSS/SVG hero rotation, signal flow and persistent motion emblem are intentional. Preserve global pause, session persistence, reduced-motion and hidden-tab handling. This supersedes older documents prohibiting continuous decorative motion. Never add cursor followers.

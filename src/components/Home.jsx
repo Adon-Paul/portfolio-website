@@ -1,6 +1,7 @@
 import { projects, projectPath } from "../content/projects";
 import ProjectMedia from "./ProjectMedia";
 import SignalStudy from "./SignalStudy";
+import Workbench from "./Workbench";
 import Credentials from "./Credentials";
 
 function IdentityGraphic() {
@@ -20,12 +21,12 @@ function IdentityGraphic() {
           y2="620"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stopColor="#eff7df" />
-          <stop offset=".45" stopColor="#d1ff86" />
-          <stop offset="1" stopColor="#35462b" />
+          <stop stopColor="#fff3e8" />
+          <stop offset=".45" stopColor="#ff9a62" />
+          <stop offset="1" stopColor="#68432f" />
         </linearGradient>
       </defs>
-      <g transform="rotate(-28 350 350)">
+      <g className="identity-filament" transform="rotate(-28 350 350)">
         {Array.from({ length: 44 }, (_, i) => (
           <ellipse
             key={i}
@@ -41,13 +42,13 @@ function IdentityGraphic() {
       </g>
       <path
         d="M350 14V686M14 350H686"
-        stroke="#a0b397"
+        stroke="#b99b89"
         strokeOpacity=".25"
         strokeDasharray="3 9"
       />
-      <circle cx="350" cy="350" r="326" stroke="#a0b397" strokeOpacity=".2" />
-      <circle cx="350" cy="24" r="5" fill="#d1ff86" />
-      <path d="M32 40H60M46 26V54M640 660H668M654 646V674" stroke="#d1ff86" />
+      <circle cx="350" cy="350" r="326" stroke="#b99b89" strokeOpacity=".2" />
+      <circle cx="350" cy="24" r="5" fill="#ff9a62" />
+      <path d="M32 40H60M46 26V54M640 660H668M654 646V674" stroke="#ff9a62" />
     </svg>
   );
 }
@@ -131,6 +132,32 @@ export default function Home() {
               <span className="project-year">SEE → UNDERSTAND → SPEAK</span>
             </div>
             <SignalStudy />
+            <div className="lumi-decisions">
+              <div>
+                <span>01 / LATENCY</span>
+                <h4>Keep the simple tasks close.</h4>
+                <p>
+                  OCR and barcode reading use on-device ML Kit. A cloud request
+                  is not necessary for every camera frame.
+                </p>
+              </div>
+              <div>
+                <span>02 / CONTEXT</span>
+                <h4>Choose the right route.</h4>
+                <p>
+                  Richer scene descriptions use configurable AI providers. Local
+                  models are an option, with device and download tradeoffs.
+                </p>
+              </div>
+              <div>
+                <span>03 / ATTENTION</span>
+                <h4>Know when to stay quiet.</h4>
+                <p>
+                  Speech chunking and debounced detections aim to prevent useful
+                  information becoming a stream of interruptions.
+                </p>
+              </div>
+            </div>
             <div className="feature-caption">
               <h4>
                 A little more of the world,
@@ -175,6 +202,18 @@ export default function Home() {
                   <span className="eyebrow">{project.category}</span>
                   <h3>{project.title}</h3>
                   <p>{project.summary}</p>
+                  <details className="build-notes">
+                    <summary>Decisions behind the interface</summary>
+                    <dl>
+                      {project.decisions.slice(0, 2).map(([title, detail]) => (
+                        <div key={title}>
+                          <dt>{title}</dt>
+                          <dd>{detail}</dd>
+                        </div>
+                      ))}
+                    </dl>
+                    <p>{project.next}</p>
+                  </details>
                   <div className="project-links">
                     <a className="inline-link" href={projectPath(project)}>
                       Explore {project.title} <span aria-hidden="true">↗</span>
@@ -187,6 +226,7 @@ export default function Home() {
               </article>
             ))}
           </div>
+          <Workbench />
           <a href="/work/luxecart/" className="archive-link">
             <span>FROM THE ARCHIVE</span>
             <span>LuxeCart — an early Flutter learning project</span>

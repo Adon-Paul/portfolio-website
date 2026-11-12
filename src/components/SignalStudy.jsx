@@ -62,9 +62,9 @@ export default function SignalStudy({
         <svg viewBox="0 0 1000 390" fill="none">
           <defs>
             <linearGradient id={`${id}-light`}>
-              <stop stopColor="#d1ff86" stopOpacity="0" />
-              <stop offset=".6" stopColor="#d1ff86" stopOpacity=".3" />
-              <stop offset="1" stopColor="#d1ff86" stopOpacity=".02" />
+              <stop stopColor="#ff9a62" stopOpacity="0" />
+              <stop offset=".6" stopColor="#ff9a62" stopOpacity=".3" />
+              <stop offset="1" stopColor="#ff9a62" stopOpacity=".02" />
             </linearGradient>
           </defs>
           <path d="M52 110L460 164V226L52 305Z" fill={`url(#${id}-light)`} />
@@ -88,18 +88,27 @@ export default function SignalStudy({
               transform={`rotate(${(i - 9) * 1.7} 470 195)`}
             />
           ))}
-          <circle cx="470" cy="195" r="12" fill="#d1ff86" />
+          <circle cx="470" cy="195" r="12" fill="#ff9a62" />
           <path
             className="signal-bracket"
             d="M52 117V87H82M52 273V303H82M132 87H162V117M132 303H162V273"
           />
-          {Array.from({ length: 35 }, (_, i) => (
-            <path
-              key={i}
-              className="signal-wave"
-              d={`M${750 + i * 5} ${195 - (12 + Math.sin(i * 0.64) * Math.cos(i * 0.23) * 58)}v${(12 + Math.sin(i * 0.64) * Math.cos(i * 0.23) * 58) * 2}`}
-            />
-          ))}
+          <g className="signal-voice">
+            {Array.from({ length: 35 }, (_, i) => (
+              <path
+                key={i}
+                className="signal-wave"
+                d={`M${750 + i * 5} ${195 - (12 + Math.sin(i * 0.64) * Math.cos(i * 0.23) * 58)}v${(12 + Math.sin(i * 0.64) * Math.cos(i * 0.23) * 58) * 2}`}
+              />
+            ))}
+          </g>
+          <circle
+            className="signal-packet"
+            cx="52"
+            cy="195"
+            r="4"
+            fill="currentColor"
+          />
           <text x="52" y="345">
             01 / PERCEIVE
           </text>
