@@ -1,6 +1,7 @@
 import { projects, projectPath } from "../content/projects";
 import ProjectMedia from "./ProjectMedia";
 import SignalStudy from "./SignalStudy";
+import TechText from "./TechText";
 import Workbench from "./Workbench";
 import Credentials from "./Credentials";
 
@@ -65,7 +66,24 @@ export default function Home() {
         <div className="identity-stage">
           <IdentityGraphic />
           <h1 id="hero-title">
-            <span className="given-name">ADON</span>
+            <span className="given-name tech-adon">
+              <span className="tech-adon-fallback">ADON</span>
+              <TechText
+                text="ADON"
+                fontFamily="Space, Arial, sans-serif"
+                fontWeight={600}
+                fontSize={360}
+                align="left"
+                accentColor="#ff9a62"
+                reveal="letter"
+                dashLength={4}
+                dashGap={2}
+                specks={15}
+                intro="none"
+                clickKick
+                guides={false}
+              />
+            </span>
             <span className="family-name">
               PAUL TOMY
               <span className="identity-mark" aria-hidden="true">

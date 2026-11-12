@@ -1,0 +1,45 @@
+.tech-text {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  touch-action: pan-y;
+  user-select: none;
+}
+.tech-text-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.tech-adon {
+  display: block;
+  position: relative;
+  width: 100%;
+  height: 0.9em;
+}
+.tech-adon .tech-text {
+  position: absolute;
+  inset: -0.3em auto auto 0;
+  height: 1.5em;
+  width: 75%;
+  opacity: 0;
+}
+.tech-adon .tech-text[data-ready="true"] {
+  opacity: 1;
+}
+.tech-adon:has(.tech-text[data-ready="true"]) > .tech-adon-fallback {
+  opacity: 0;
+}
+@media (max-width: 700px) {
+  .tech-adon .tech-text {
+    width: 85%;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tech-adon .tech-text {
+    display: none;
+  }
+  .tech-adon:has(.tech-text[data-ready="true"]) > .tech-adon-fallback {
+    opacity: 1;
+  }
+}
