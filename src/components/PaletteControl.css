@@ -1,0 +1,219 @@
+/* Editor chrome stays readable even when the page palette is unusable. */
+.palette-launch {
+  position: fixed;
+  left: 18px;
+  bottom: 20px;
+  z-index: 10;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 10px 15px;
+  border: 1px solid #8f8075;
+  border-radius: 24px;
+  background: #242225;
+  color: #f6f2ed;
+  font: 11px/1.5 var(--mono);
+}
+.palette-launch-swatch {
+  display: block;
+  width: 13px;
+  height: 13px;
+  background: var(--p-accent);
+  border: 1px solid #fff;
+  border-radius: 50%;
+}
+.palette-dialog {
+  position: fixed;
+  inset: 12px 12px 12px auto;
+  margin: 0;
+  width: 390px;
+  max-width: calc(100vw - 24px);
+  height: calc(100dvh - 24px);
+  max-height: calc(100dvh - 24px);
+  overflow: auto;
+  overscroll-behavior: contain;
+  border: 1px solid #a8a8a8;
+  border-radius: 10px;
+  padding: 20px;
+  background: #fafafa;
+  color: #202020;
+  font:
+    13px/1.5 Arial,
+    sans-serif;
+  box-shadow: 0 10px 35px #0004;
+  scrollbar-gutter: stable;
+}
+.palette-dialog::backdrop {
+  background: rgba(0, 0, 0, 0.12);
+}
+.palette-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.palette-top h2 {
+  font:
+    600 23px/1.2 Space,
+    Arial,
+    sans-serif;
+  letter-spacing: -0.03em;
+}
+.palette-dialog button,
+.palette-dialog select,
+.palette-dialog input,
+.palette-dialog textarea {
+  font: inherit;
+  color: #202020;
+  background: #fff;
+  border: 1px solid #777;
+  border-radius: 4px;
+  min-height: 38px;
+  padding: 7px 9px;
+}
+.palette-dialog button {
+  cursor: pointer;
+}
+.palette-dialog button:hover {
+  background: #e8e8e8;
+}
+.palette-dialog :is(button, select, input, textarea, summary):focus-visible {
+  outline: 3px solid #2457bb;
+  outline-offset: 3px;
+}
+.palette-dialog label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+.palette-dialog label > input,
+.palette-dialog label > select,
+.palette-dialog label > textarea {
+  display: block;
+  width: 100%;
+  margin-top: 6px;
+  font-weight: 400;
+}
+.palette-help {
+  font:
+    12px/1.6 Arial,
+    sans-serif;
+  color: #555;
+  margin: 14px 0;
+}
+.palette-actions {
+  display: flex;
+  gap: 10px;
+  align-items: end;
+  flex-wrap: wrap;
+  margin: 16px 0;
+}
+.palette-actions label {
+  flex: 1;
+  min-width: 130px;
+  margin: 0;
+}
+.palette-dialog fieldset {
+  border: 0;
+  border-top: 1px solid #ccc;
+  margin: 22px 0;
+  padding: 15px 0 0;
+  min-width: 0;
+}
+.palette-dialog legend {
+  font-weight: 700;
+  padding: 0 8px 0 0;
+}
+.palette-field {
+  display: grid;
+  grid-template-columns: 1fr 142px;
+  align-items: center;
+  gap: 8px;
+  margin: 10px 0;
+}
+.palette-field > label {
+  margin: 0;
+  font-size: 12px;
+}
+.palette-inputs {
+  display: flex;
+  gap: 6px;
+  min-width: 0;
+}
+.palette-inputs input[type="color"] {
+  padding: 2px;
+  width: 38px;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+.palette-inputs input:not([type="color"]) {
+  font: 12px var(--mono);
+  width: 98px;
+  min-width: 0;
+  padding: 6px;
+}
+.palette-dialog input[aria-invalid="true"] {
+  border: 2px solid #a02020;
+}
+.palette-error {
+  grid-column: 1/-1;
+  font-size: 11px;
+  color: #a02020;
+}
+.palette-dialog summary {
+  cursor: pointer;
+  padding: 12px 0;
+  font-weight: 700;
+}
+.palette-dialog details {
+  border-top: 1px solid #ccc;
+}
+.palette-dialog textarea {
+  resize: vertical;
+}
+.palette-message {
+  font-size: 12px;
+  color: #363636;
+  min-height: 20px;
+  margin-top: 15px;
+}
+.palette-dialog fieldset > button {
+  margin-bottom: 14px;
+}
+@media (max-width: 400px) {
+  .palette-launch {
+    left: 12px;
+    bottom: 14px;
+    font-size: 10px;
+    padding: 8px 12px;
+  }
+  .palette-dialog {
+    padding: 16px;
+  }
+  .palette-field {
+    grid-template-columns: 1fr 137px;
+    gap: 5px;
+  }
+  .palette-inputs input:not([type="color"]) {
+    width: 93px;
+  }
+}
+@media print {
+  .palette-launch,
+  .palette-dialog {
+    display: none !important;
+  }
+}
+
+.palette-top {
+  position: sticky;
+  top: -20px;
+  z-index: 1;
+  background: #fafafa;
+  padding-block: 8px;
+}
+@media (max-width: 400px) {
+  .palette-top {
+    top: -16px;
+  }
+}

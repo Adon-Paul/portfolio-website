@@ -1,5 +1,7 @@
 import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { render, projects, projectPath } from "../.prerender/entry-server.js";
+import { originalPalette, paletteFavicon } from "../src/content/palette.js";
+await writeFile("dist/favicon.svg", paletteFavicon(originalPalette) + "\n");
 const origin = "https://adonpaultomy.tech";
 const template = await readFile("dist/index.html", "utf8");
 const escape = (value) =>
@@ -41,6 +43,10 @@ for (const route of routes) {
 <meta property="og:image:alt" content="Adon Paul Tomy — build, observe, question." />
 <meta name="twitter:card" content="summary_large_image" />${route.path === "/404.html" ? '\n<meta name="robots" content="noindex" />' : ""}`;
   const html = template
+    .replace(
+      /<meta name="theme-color" content="[^"]*" \/>/,
+      `<meta name="theme-color" content="${originalPalette.canvas}" />`,
+    )
     .replace(/<title>.*?<\/title>/, `<title>${escape(route.title)}</title>`)
     .replace("<!--page-meta-->", meta)
     .replace('<div id="root">', `<div id="root" data-route="${route.path}">`)

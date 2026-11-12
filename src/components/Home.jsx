@@ -22,9 +22,9 @@ function IdentityGraphic() {
           y2="620"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stopColor="#fff3e8" />
-          <stop offset=".45" stopColor="#ff9a62" />
-          <stop offset="1" stopColor="#68432f" />
+          <stop stopColor="var(--p-hero-light)" />
+          <stop offset=".45" stopColor="var(--p-accent)" />
+          <stop offset="1" stopColor="var(--p-hero-dark)" />
         </linearGradient>
       </defs>
       <g className="identity-filament" transform="rotate(-28 350 350)">
@@ -43,13 +43,22 @@ function IdentityGraphic() {
       </g>
       <path
         d="M350 14V686M14 350H686"
-        stroke="#b99b89"
+        stroke="var(--p-hero-grid)"
         strokeOpacity=".25"
         strokeDasharray="3 9"
       />
-      <circle cx="350" cy="350" r="326" stroke="#b99b89" strokeOpacity=".2" />
-      <circle cx="350" cy="24" r="5" fill="#ff9a62" />
-      <path d="M32 40H60M46 26V54M640 660H668M654 646V674" stroke="#ff9a62" />
+      <circle
+        cx="350"
+        cy="350"
+        r="326"
+        stroke="var(--p-hero-grid)"
+        strokeOpacity=".2"
+      />
+      <circle cx="350" cy="24" r="5" fill="var(--p-accent)" />
+      <path
+        d="M32 40H60M46 26V54M640 660H668M654 646V674"
+        stroke="var(--p-accent)"
+      />
     </svg>
   );
 }
@@ -74,7 +83,7 @@ export default function Home() {
                 fontWeight={600}
                 fontSize={360}
                 align="left"
-                accentColor="#ff9a62"
+                accentColor="var(--p-accent)"
                 reveal="letter"
                 dashLength={4}
                 dashGap={2}

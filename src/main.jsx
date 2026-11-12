@@ -2,6 +2,8 @@ import React from "react";
 import { createRoot, hydrateRoot } from "react-dom/client";
 import App from "./App";
 import "./styles/site.css";
+import { readPalette, applyPalette } from "./content/palette";
+applyPalette(readPalette());
 const root = document.getElementById("root");
 const app = (
   <React.StrictMode>

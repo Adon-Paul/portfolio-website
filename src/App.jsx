@@ -1,3 +1,4 @@
+import PaletteControl, { PaletteDefaults } from "./components/PaletteControl";
 import { profile } from "./content/profile";
 import { projects, projectAtPath, projectPath } from "./content/projects";
 import MotionFrame from "./components/MotionFrame";
@@ -192,6 +193,7 @@ export default function App({ path = "/" }) {
   const project = projectAtPath(path);
   return (
     <MotionFrame>
+      <PaletteDefaults />
       <Header />
       <main id="main">
         {path === "/" ? (
@@ -215,6 +217,7 @@ export default function App({ path = "/" }) {
         )}
       </main>
       <Footer />
+      <PaletteControl />
     </MotionFrame>
   );
 }

@@ -7,3 +7,4 @@
 - Run `npm run check` and `npm run test:e2e` before proposing release. Do not claim field performance based on build sizes or lab tests.
 
 - Latest visual request (Nov 12): no green, continuous CSS/SVG motion, richer interactive content, no cursor effects. MotionFrame and Workbench implement this; preserve pause/reduced-motion and local-only text processing.
+- Palette source of truth: src/content/palette.js. Preserve exact original values unless owner explicitly changes the published theme. Use CSS tokens for new themed UI. Palette studio edits are browser-local; fixed editor chrome is intentionally independent for recovery. See docs/palette-studio.md.

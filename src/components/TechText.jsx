@@ -169,8 +169,14 @@ const TechText = ({
 
     const palette = (s) => {
       const current = getComputedStyle(container).color || "#000000";
-      const pick = (value) =>
-        !value || INHERIT.test(String(value).trim()) ? current : value;
+      const pick = (value) => {
+        if (!value || INHERIT.test(String(value).trim())) return current;
+        const token = /^var\((--[\w-]+)\)$/.exec(value);
+        return token
+          ? getComputedStyle(container).getPropertyValue(token[1]).trim() ||
+              current
+          : value;
+      };
       return { ink: pick(s.color), accent: pick(s.accentColor) };
     };
 
