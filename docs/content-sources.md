@@ -21,3 +21,9 @@ Original portrait retained in `assets/originals/adon.png`; responsive versions w
 - Sanitized Sunset note is based on the owner's local Obsidian VulnHub lab write-up. No passwords, flags, addresses, personal OSINT investigations or unverified CVEs are published.
 - Supplied résumé had an expired domain and unsupported product claims. The reviewed replacement is linked in Contact at `/documents/adon-paul-tomy-resume.pdf`; editable source is in `docs/career/`. It does not assert graduation or an unconfirmed end date for the µLearn role.
 - Research references, certificate inventory and design rationale: `docs/research/2026-11-11-evidence-and-direction.md`.
+
+## Owner confirmation and repository review — November 13, 2026
+
+The owner confirms all supplied résumé details are real. This supersedes earlier uncertainty labels about owner-provided facts; it is not an independent product audit. No résumé rewrite was requested in this update. Browser behavior is satisfactory in the owner’s checks; exact browsers/devices were not supplied. New project recordings/evidence are deferred at the owner’s request.
+
+NitroMax is linked from the homepage as work in progress, not a finished or independently verified hardened product. Reviewed README, repository tree and NITRO_MASTER_PLAN.md at revision 03a5a860ab45906c6e3b527739eae8eeb37dcd10: Avalonia/C# UI, Python daemon, upstream Linuwu Sense dependency. The plan is future intent, not proof of completed safety/performance properties. Source: https://github.com/Adon-Paul/NitroMax . Other repositories and guide-publication assessment: docs/research/2026-11-13-repositories-and-guides.md.

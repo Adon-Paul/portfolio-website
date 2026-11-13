@@ -18,7 +18,7 @@
 - Manuscript benchmarks are author-reported on one device; no independently verified/user-study claims. Avoid headline performance numbers until raw evidence is available.
 - NASA certificates establish participation, not employment, an award or NASA endorsement. Wireless & 5G is webinar participation, not a professional cybersecurity certification.
 - Generic Buildathon qualification graphic has no recipient/project name; don't label it individually verified.
-- Supplied résumé still has the expired .wiki domain and unverified product/metric claims. Don't publish it unchanged. An updated download needs factual review.
+- Owner confirmed on November 13 that all supplied résumé details are real. Treat them as owner-confirmed, not independently audited. Preserve the corrected .tech domain; do not restore the obsolete .wiki URL. Do not infer dates or wording absent from the supplied résumé.
 - Remove old portrait/record/receipt artwork from visible design and sharing image. Keep originals recoverable outside public or in Git history.
 
 ## Visual quality

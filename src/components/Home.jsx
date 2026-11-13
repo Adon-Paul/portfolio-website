@@ -254,6 +254,17 @@ export default function Home() {
             ))}
           </div>
           <Workbench />
+          <a
+            href="https://github.com/Adon-Paul/NitroMax"
+            className="archive-link"
+          >
+            <span>LINUX / WORK IN PROGRESS</span>
+            <span>
+              NitroMax — Acer laptop controls with Avalonia, C# and Python,
+              powered by Linuwu Sense
+            </span>
+            <span aria-hidden="true">↗</span>
+          </a>
           <a href="/work/luxecart/" className="archive-link">
             <span>FROM THE ARCHIVE</span>
             <span>LuxeCart — an early Flutter learning project</span>
