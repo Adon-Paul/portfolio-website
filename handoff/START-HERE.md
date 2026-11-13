@@ -5,10 +5,12 @@ The live personal-workshop redesign was rejected as too generic and insufficient
 
 ## Live and working state
 - Repo `/home/adon/Projects/Repositiories/portfolio-website`; live `https://adonpaultomy.tech` on GitHub Pages.
-- Live application release `ebc770f` on main; verified Pages run 43051714860. Prior baseline `66d67ac` and original `566a261` remain historical rollback references.
-- Current working branch is `main`; `feat/evidence-led-portfolio` was merged. Check git status and `handoff/PROGRESS.md` before touching anything. Never assume the last assistant's plan is the implementation.
+- Live application release `7db7853` on main; verified Pages run 43262133443. Includes orange palette, continuous motion, TechText and Palette studio. Prior baseline `66d67ac` and original `566a261` remain historical rollback references.
+- Current working branch is `main`; all current feature branches were merged. Check git status and `handoff/PROGRESS.md` before touching anything. Never assume the last assistant's plan is the implementation.
 - Existing stack React 18/Vite 6, static prerendered route directories. No router or backend required.
 - Owner subsequently said “do what is needed,” continuing the earlier push/deploy authorization. Local review, Chromium/Firefox checks, release to main and live GitHub Pages verification are complete. See PROGRESS for actual deployment status.
+
+Current original colours must stay unchanged unless the owner explicitly selects a new published palette. All theme values live in `src/content/palette.js`; Palette studio previews and saved combinations are browser-local. Read `docs/palette-studio.md` before colour changes.
 
 ## Read in order
 1. `handoff/PROGRESS.md` — what is actually done, test results and next task.

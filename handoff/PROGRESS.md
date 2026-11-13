@@ -1,8 +1,18 @@
 # Current progress
 
-Updated November 11, 2026. Current branch: `main`. Application release `ebc770f` is deployed; `66d67ac` is the previous live baseline.
+Updated November 13, 2026. Current branch: `main`. Application release **7db7853** is deployed. This top summary supersedes historical checkpoints below.
 
-## Implemented and verified
+## Current production state
+- Live: https://adonpaultomy.tech . Successful Pages run: https://github.com/Adon-Paul/portfolio-website/actions/runs/43262133443 .
+- Current palette is charcoal/ivory/orange; all default colours preserved exactly during centralization. Green is historical and rejected.
+- Continuous motion, global pause/reduced-motion support, TechText ADON, interactive project studies and Palette studio are implemented. Do not recreate them.
+- Latest release checks: lint/build/static budgets and 12 unit tests pass; all 18 Chromium browser tests pass; four palette-specific Firefox tests pass. Earlier Firefox/axe edited-text scan limitation remains documented below; do not claim full cross-browser coverage.
+- Nov 13 live check: palette edit/save/download/import/navigation/reset pass, fresh visitor gets original colours, all four project routes return 200, résumé/manuscript hashes match local release, no browser page errors. Receipt: docs/verification/2026-11-13-production-review.json.
+- Remaining priorities: real LumiSense recording; owner-confirmed degree/role dates; additional evidence-based case-study outcomes; physical-device/Safari checks; isolate the Firefox/axe tooling crash. No release is pending.
+
+## Historical implementation checkpoints
+
+### Initial evidence-led revision
 - Replaced the beige collage with dark/green typographic identity, original SVG signal sculpture, editorial project layout and coherent case-study styling. Removed shipped portrait/phone artwork and obsolete SignatureInteraction; original portrait remains in assets/originals and Git history.
 - LumiSense leads the showcase and has a real static `/work/lumisense/` case study. Interactive architecture paths explain OCR, scenes and objects. This is explicitly an illustration, not a fake live app demo.
 - Both original silent videos are playable on home and detail. No MP4 before activation; native controls, walkthroughs, focus/failure download, manual retry, and mutual pause.
@@ -11,7 +21,7 @@ Updated November 11, 2026. Current branch: `main`. Application release `ebc770f`
 - Reviewed one-page résumé is downloadable in Contact at /documents/adon-paul-tomy-resume.pdf. Editable HTML remains in docs/career. Graduation and uncertain community end dates are not asserted.
 - Updated sharing image, favicon, static metadata, sitemap/build checks; all old project routes preserved.
 
-## Verification
+### Initial verification (superseded by current summary)
 - `npm run check`: PASS — lint, 9 unit tests, static builds, all route/asset and size assertions.
 - `npm run test:e2e`: PASS — 12 Chromium tests. Four viewport widths (320/390/768/1440), axe, no-JS, keyboard, 200% CSS zoom/reflow, reduced motion, blocked storage, real playback/mutual pause, failures, history/404, disclosures and forced colours.
 - JavaScript 57,536 B gzip; CSS 5,750 B gzip; font 22,288 B. No added runtime dependencies.

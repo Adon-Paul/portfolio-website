@@ -1,0 +1,14 @@
+{
+  "release": "7db7853",
+  "date": "2026-11-13",
+  "palette": "edit/save/export download/import/navigation/reset pass",
+  "freshVisitor": "original colours",
+  "projectRoutes": [
+    "/work/lumisense/",
+    "/work/melody/",
+    "/work/style-transfer-ai/",
+    "/work/luxecart/"
+  ],
+  "documents": "resume and manuscript hashes match release",
+  "browserErrors": []
+}
