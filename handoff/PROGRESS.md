@@ -1,6 +1,6 @@
 # Field Guides release — November 13, 2026
 
-Implementation complete on feat/field-guides; final production receipt will be recorded after deployment. Owner approved direct implementation/push, preservation of original notes except rewritten Sakura/Bandit, and prohibits Antigravity until renewed permission.
+Implementation merged to main and deployed as `175ebc18d14db49ed61882811d8ad010c851fc00`. Pages run [43428270273](https://github.com/Adon-Paul/portfolio-website/actions/runs/43428270273) succeeded. Live verification passed for all 22 routes, guide headings/canonicals, mobile reflow, index-to-article navigation, palette preset/persistence/reset and motion pause across old work routes, with no page errors or unsolicited MP4 requests. Receipt: docs/verification/2026-11-13-field-guides-production.json. Owner approved direct implementation/push, preservation of original notes except rewritten Sakura/Bandit, and prohibits Antigravity until renewed permission.
 
 - Added 16 public content pages plus /guides/, homepage preview and shared navigation. Read docs/field-guides.md for maintenance and docs/content/guides-ledger.md for provenance and review decisions.
 - Original palette, site stylesheet, videos, PDFs and four work routes retained. Markdown compilation is build-time only; article chunks load on demand.
@@ -12,15 +12,15 @@ Implementation complete on feat/field-guides; final production receipt will be r
 
 # Current progress
 
-Updated November 13, 2026. Current branch: `main`. Application release **97b9db5** is the previous deployed baseline; the Field Guides release below is awaiting production verification. This top summary supersedes historical checkpoints below.
+Updated November 13, 2026. Current branch: `main`. Application release **175ebc1** is deployed and verified; **97b9db5** is the previous baseline. This top summary supersedes historical checkpoints below.
 
 ## Current production state
-- Live: https://adonpaultomy.tech . Successful Pages run: https://github.com/Adon-Paul/portfolio-website/actions/runs/43262133443 .
+- Live: https://adonpaultomy.tech . Successful Pages run: https://github.com/Adon-Paul/portfolio-website/actions/runs/43428270273 .
 - Current palette is charcoal/ivory/orange; all default colours preserved exactly during centralization. Green is historical and rejected.
 - Continuous motion, global pause/reduced-motion support, TechText ADON, interactive project studies and Palette studio are implemented. Do not recreate them.
-- Latest release checks: lint/build/static budgets and 12 unit tests pass; all 18 Chromium browser tests pass; four palette-specific Firefox tests pass. Earlier Firefox/axe edited-text scan limitation remains documented below; do not claim full cross-browser coverage.
+- Latest release checks: lint/build/static budgets and 18 unit tests pass; all 24 Chromium browser tests pass; six guide-specific Firefox tests pass. Earlier Firefox/axe edited-text scan limitation remains documented below; do not claim full cross-browser coverage.
 - Nov 13 live check: palette edit/save/download/import/navigation/reset pass, fresh visitor gets original colours, all four project routes return 200, résumé/manuscript hashes match local release, no browser page errors. Receipt: docs/verification/2026-11-13-production-review.json.
-- Owner update Nov 13: all résumé facts confirmed; new project recordings/evidence deferred; browsers look good in owner checks (versions unspecified). Next content priority is curated public study guides. Historical uncertainty and requests below are superseded by this update.
+- Owner update Nov 13: all résumé facts confirmed; new project recordings/evidence deferred; browsers look good in owner checks (versions unspecified). Curated public study guides are now published; next additions should follow concrete reader feedback or individually reviewed source notes. Historical uncertainty and requests below are superseded by this update.
 
 ## Historical implementation checkpoints
 

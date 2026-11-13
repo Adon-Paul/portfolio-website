@@ -1,0 +1,114 @@
+{
+  "checkedAt": "2026-11-13T12:51:58.869Z",
+  "base": "https://adonpaultomy.tech",
+  "applicationCommit": "175ebc18d14db49ed61882811d8ad010c851fc00",
+  "workflowRun": "43428270273",
+  "deployment": "success",
+  "routes": [
+    {
+      "path": "/",
+      "status": 200
+    },
+    {
+      "path": "/guides/",
+      "status": 200
+    },
+    {
+      "path": "/guides/sunset/",
+      "status": 200
+    },
+    {
+      "path": "/guides/sakura/",
+      "status": 200
+    },
+    {
+      "path": "/guides/linux-bootcamp/",
+      "status": 200
+    },
+    {
+      "path": "/guides/bandit/",
+      "status": 200
+    },
+    {
+      "path": "/guides/linux-bootcamp-walkthrough/",
+      "status": 200
+    },
+    {
+      "path": "/guides/linux-filesystem/",
+      "status": 200
+    },
+    {
+      "path": "/guides/linux-permissions/",
+      "status": 200
+    },
+    {
+      "path": "/guides/linux-pipelines/",
+      "status": 200
+    },
+    {
+      "path": "/guides/linux-processes/",
+      "status": 200
+    },
+    {
+      "path": "/guides/linux-networking/",
+      "status": 200
+    },
+    {
+      "path": "/guides/linux-logs-cron/",
+      "status": 200
+    },
+    {
+      "path": "/guides/bandit-files/",
+      "status": 200
+    },
+    {
+      "path": "/guides/bandit-text/",
+      "status": 200
+    },
+    {
+      "path": "/guides/bandit-formats-and-access/",
+      "status": 200
+    },
+    {
+      "path": "/guides/nmap/",
+      "status": 200
+    },
+    {
+      "path": "/guides/osint-workflow/",
+      "status": 200
+    },
+    {
+      "path": "/work/lumisense/",
+      "status": 200
+    },
+    {
+      "path": "/work/melody/",
+      "status": 200
+    },
+    {
+      "path": "/work/style-transfer-ai/",
+      "status": 200
+    },
+    {
+      "path": "/work/luxecart/",
+      "status": 200
+    }
+  ],
+  "browser": "Chromium",
+  "viewport": {
+    "width": 390,
+    "height": 844
+  },
+  "checks": [
+    "All 22 routes HTTP 200 and mobile reflow",
+    "16 guide headings, canonical URLs and nonempty articles",
+    "Homepage to library to Sunset and Summary anchor navigation",
+    "Original accent, Cobalt preview, navigation persistence and reset",
+    "Motion pause persists to existing Melody page",
+    "No uncaught page errors",
+    "No MP4 requests before activation"
+  ],
+  "limitations": [
+    "No physical-device or Safari check in this release"
+  ]
+}

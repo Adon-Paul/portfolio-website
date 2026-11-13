@@ -5,7 +5,7 @@ The live personal-workshop redesign was rejected as too generic and insufficient
 
 ## Live and working state
 - Repo `/home/adon/Projects/Repositiories/portfolio-website`; live `https://adonpaultomy.tech` on GitHub Pages.
-- Live application release `97b9db5` on main; verified Pages run 43372944066. Adds the NitroMax source link. Includes orange palette, continuous motion, TechText and Palette studio. Prior baseline `66d67ac` and original `566a261` remain historical rollback references.
+- Live application release `175ebc1` on main; verified successful Pages run 43428270273. Adds 16 curated Field Guides, their index, homepage preview and navigation. Includes the NitroMax source link, unchanged orange palette, continuous motion, TechText and Palette studio. Production receipt: docs/verification/2026-11-13-field-guides-production.json. Prior baseline `66d67ac` and original `566a261` remain historical rollback references.
 - Current working branch is `main`; all current feature branches were merged. Check git status and `handoff/PROGRESS.md` before touching anything. Never assume the last assistant's plan is the implementation.
 - Existing stack React 18/Vite 6, static prerendered route directories. No router or backend required.
 - Owner subsequently said “do what is needed,” continuing the earlier push/deploy authorization. Local review, Chromium/Firefox checks, release to main and live GitHub Pages verification are complete. See PROGRESS for actual deployment status.
