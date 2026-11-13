@@ -1,5 +1,11 @@
 import { readFile, writeFile, mkdir } from "node:fs/promises";
-import { render, projects, projectPath } from "../.prerender/entry-server.js";
+import {
+  render,
+  projects,
+  projectPath,
+  guides,
+  guidePath,
+} from "../.prerender/entry-server.js";
 import { originalPalette, paletteFavicon } from "../src/content/palette.js";
 await writeFile("dist/favicon.svg", paletteFavicon(originalPalette) + "\n");
 const origin = "https://adonpaultomy.tech";
@@ -19,6 +25,18 @@ const routes = [
     description:
       "Mobile apps, applied AI and cybersecurity studies. Explore LumiSense, Melody and Style Transfer AI, with original demos and source code.",
   },
+  {
+    path: "/guides/",
+    title: "Field Guides — Adon Paul Tomy",
+    description:
+      "Linux study notes, lab walkthroughs and OSINT references. Follow the work behind the learning.",
+  },
+  ...guides.map((g) => ({
+    path: guidePath(g),
+    title: `${g.title} — Adon Paul Tomy`,
+    description: g.description,
+    guide: g,
+  })),
   ...projects.map((p) => ({
     path: projectPath(p),
     title: `${p.title} — Adon Paul Tomy`,
@@ -32,6 +50,9 @@ const routes = [
 ];
 for (const route of routes) {
   const url = origin + route.path;
+  const structured = route.guide
+    ? `<script type="application/ld+json">${JSON.stringify({ "@context": "https://schema.org", "@type": route.guide.group === "Learning paths" ? "CollectionPage" : "Article", headline: route.guide.title, description: route.guide.description, url, author: { "@type": "Person", name: "Adon Paul Tomy", url: origin }, datePublished: route.guide.publishedAt, dateModified: route.guide.reviewedAt }).replaceAll("<", "\\u003c")}</script>`
+    : "";
   const meta = `<meta name="description" content="${escape(route.description)}" />
 <link rel="canonical" href="${url}" />
 <meta property="og:type" content="website" />
@@ -48,9 +69,9 @@ for (const route of routes) {
       `<meta name="theme-color" content="${originalPalette.canvas}" />`,
     )
     .replace(/<title>.*?<\/title>/, `<title>${escape(route.title)}</title>`)
-    .replace("<!--page-meta-->", meta)
+    .replace("<!--page-meta-->", meta + structured)
     .replace('<div id="root">', `<div id="root" data-route="${route.path}">`)
-    .replace("<!--app-html-->", render(route.path));
+    .replace("<!--app-html-->", await render(route.path));
   const destination =
     route.path === "/404.html"
       ? "dist/404.html"

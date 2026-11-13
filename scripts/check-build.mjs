@@ -1,3 +1,4 @@
+import { guides } from "../src/content/guides.js";
 import { readdir, readFile, stat } from "node:fs/promises";
 import { gzipSync } from "node:zlib";
 import assert from "node:assert/strict";
@@ -17,6 +18,8 @@ for (const path of [
   "work/melody/",
   "work/style-transfer-ai/",
   "work/luxecart/",
+  "guides/",
+  ...guides.map((g) => `guides/${g.slug}/`),
 ]) {
   const html = await readFile(`dist/${path}index.html`, "utf8");
   assert(html.includes("<h1"), `Missing prerendered heading at /${path}`);
@@ -32,6 +35,12 @@ for (const path of [
     !html.includes("<video"),
     `Video loaded before interaction at /${path}`,
   );
+  for (const match of html.matchAll(/href="#([^"#]+)"/g)) {
+    assert(
+      html.includes(`id="${match[1]}"`),
+      `Broken fragment ${match[1]} at /${path}`,
+    );
+  }
   for (const match of html.matchAll(/(?:src|href)="(\/[^"#?]*)"/g)) {
     const asset = match[1];
     if (asset.endsWith("/")) await stat(`dist${asset}index.html`);

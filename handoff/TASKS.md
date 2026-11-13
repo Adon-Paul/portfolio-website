@@ -1,3 +1,17 @@
+# Current continuation priorities
+
+Field Guides implementation is complete; check the latest PROGRESS production receipt before doing anything. Do not re-create the collection from the planning documents. Antigravity/agy remains disabled by owner instruction.
+
+1. Respond to concrete feedback on /guides/ and the 16 public articles. Keep the owner’s original wording where requested; use the source ledger for deliberate corrections.
+2. Add new notes only as reviewed editorial copies using docs/field-guides.md; no vault auto-sync.
+3. Consider NitroMax and portfolio engineering case studies later, using actual implementation evidence and upstream attribution.
+4. Add a real LumiSense recording only when supplied; currently deferred by owner.
+5. Maintain the existing release gates, palette defaults, original videos, static URLs and domain.
+
+Historical planning tasks below are retained for context and superseded where already implemented.
+
+---
+
 # Small continuation tasks
 
 Read PROGRESS first. The redesign, demos, certificate gallery, manuscript and lab summary are already implemented; do not recreate them.
@@ -8,7 +22,9 @@ Read PROGRESS first. The redesign, demos, certificate gallery, manuscript and la
 4. **Cross-browser QA:** owner reports browsers look good; no current browser bug is reported. Run targeted checks if a concrete issue arises. Report specific browser/version and reproduction; never imply Chromium covers them.
 5. **Future releases:** the current release is complete. For subsequent authorized changes, use the existing workflow and verify Action result, HTTPS and routes. Do not repeat the completed redesign/deployment.
 
-Prompt for Antigravity/OpenCode:
+Continuation prompt (Antigravity is disabled until renewed owner permission):
 “Read AGENTS.md, handoff/START-HERE.md and handoff/PROGRESS.md. Work only on task N and the named files. Preserve DO-NOT-BREAK.md. Run the acceptance check and record exact changes/results/next action. Do not redo completed work, change hosting or deploy unless that is the assigned task.”
 
 6. **Field guides:** assessment and proposed first articles are in docs/research/2026-11-13-repositories-and-guides.md. The request was to assess publication feasibility; no vault content is published yet. Use curated copies, never sync the private vault.
+
+7. **Detailed publication plan:** read docs/superpowers/specs/2026-11-13-field-guides-design.md and docs/superpowers/plans/2026-11-13-field-guides.md. Planning only so far; no guide pages implemented or published.

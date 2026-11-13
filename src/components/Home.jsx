@@ -346,6 +346,47 @@ export default function Home() {
             </div>
           </details>
         </article>
+        <div className="guide-home-preview">
+          <span className="eyebrow">FROM MY STUDY VAULT / FIELD GUIDES</span>
+          <h3>The work behind the learning.</h3>
+          <p>
+            Long-form room walkthroughs, connected Linux notes and practical
+            references. The questions, commands and reasoning—not just the
+            result.
+          </p>
+          <div className="guide-home-cards">
+            <a href="/guides/sunset/">
+              <span>01 / LAB WALKTHROUGH</span>
+              <strong>Follow the Sunset investigation.</strong>
+              <span>
+                From the first exposed service to the permission that changed
+                everything.
+              </span>
+              <span>Read the full account ↗</span>
+            </a>
+            <a href="/guides/linux-bootcamp/">
+              <span>02 / LEARNING PATH</span>
+              <strong>Build a Linux foundation.</strong>
+              <span>
+                The complete Bootcamp walkthrough and six connected topic
+                guides.
+              </span>
+              <span>Explore the notes ↗</span>
+            </a>
+            <a href="/guides/bandit/">
+              <span>03 / COMMAND-LINE PRACTICE</span>
+              <strong>Fifteen steps through Bandit.</strong>
+              <span>
+                Files, text, encodings and access—rewritten to explain the
+                decisions.
+              </span>
+              <span>Follow the path ↗</span>
+            </a>
+          </div>
+          <a className="inline-link" href="/guides/">
+            Browse all field guides
+          </a>
+        </div>
         <div className="study-strip">
           <span className="eyebrow">CURRENTLY EXPLORING</span>
           <p>

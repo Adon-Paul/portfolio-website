@@ -1,3 +1,6 @@
+import GuideIndex from "./components/guides/GuideIndex";
+import GuidePage from "./components/guides/GuidePage";
+import { guideAtPath } from "./content/guides";
 import PaletteControl, { PaletteDefaults } from "./components/PaletteControl";
 import { profile } from "./content/profile";
 import { projects, projectAtPath, projectPath } from "./content/projects";
@@ -23,6 +26,9 @@ function Header() {
         <nav aria-label="Main navigation">
           <a href="/#work">
             Work <span>01</span>
+          </a>
+          <a href="/guides/">
+            Guides <span>02</span>
           </a>
           <a href="/#about">
             About <span>03</span>
@@ -189,7 +195,8 @@ function CaseStudy({ project }) {
     </>
   );
 }
-export default function App({ path = "/" }) {
+export default function App({ path = "/", guideArticle = null }) {
+  const guide = guideAtPath(path);
   const project = projectAtPath(path);
   return (
     <MotionFrame>
@@ -201,6 +208,10 @@ export default function App({ path = "/" }) {
             <Home />
             <Contact />
           </>
+        ) : path === "/guides/" || path === "/guides" ? (
+          <GuideIndex />
+        ) : guide ? (
+          <GuidePage guide={guide} article={guideArticle} />
         ) : project ? (
           <CaseStudy project={project} />
         ) : (

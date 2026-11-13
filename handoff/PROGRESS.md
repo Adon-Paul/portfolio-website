@@ -1,6 +1,18 @@
+# Field Guides release — November 13, 2026
+
+Implementation complete on feat/field-guides; final production receipt will be recorded after deployment. Owner approved direct implementation/push, preservation of original notes except rewritten Sakura/Bandit, and prohibits Antigravity until renewed permission.
+
+- Added 16 public content pages plus /guides/, homepage preview and shared navigation. Read docs/field-guides.md for maintenance and docs/content/guides-ledger.md for provenance and review decisions.
+- Original palette, site stylesheet, videos, PDFs and four work routes retained. Markdown compilation is build-time only; article chunks load on demand.
+- Latest local gates: 18 unit tests, lint/build/route/asset/fragment/budget checks, and all 24 Chromium browser tests pass. All six Firefox guide tests also pass. Fresh code review completed; all flagged content issues corrected.
+- Original vault is unchanged. Private dossiers, exploit claims and unreviewed screenshots are not published. Sakura is attributed learning commentary; Bandit credits OverTheWire. Other articles keep original structure with technical corrections and redactions.
+- New engineering case studies and real project videos remain future work; guide publication does not depend on them.
+
+---
+
 # Current progress
 
-Updated November 13, 2026. Current branch: `main`. Application release **7db7853** is deployed. This top summary supersedes historical checkpoints below.
+Updated November 13, 2026. Current branch: `main`. Application release **97b9db5** is the previous deployed baseline; the Field Guides release below is awaiting production verification. This top summary supersedes historical checkpoints below.
 
 ## Current production state
 - Live: https://adonpaultomy.tech . Successful Pages run: https://github.com/Adon-Paul/portfolio-website/actions/runs/43262133443 .
@@ -76,3 +88,10 @@ Final palette release checks: 12 unit tests, full lint/build/static route budget
 - Reviewed connected repository inventory; added NitroMax homepage source link using existing archive styling, labeled Linux/work in progress and crediting Linuwu Sense. No extra dependencies, palette changes or new project capability claims.
 - Reviewed selected Linux/Nmap Obsidian notes read-only. No raw vault, private investigations, credentials or unverified CVE notes published. Feasibility, corrections, candidate articles and recommended static guide architecture are recorded in docs/research/2026-11-13-repositories-and-guides.md. Guide implementation is the next proposed task, not claimed complete.
 - Antigravity completed the bounded editorial review. Verification: npm run check passed (12 unit tests, lint, static build, budgets); npm run test:e2e passed all 18 Chromium tests. JS 71,481 B gzip; CSS 8,249 B gzip.
+
+## Nov 13 — detailed Field Guides plan (not implemented)
+- Owner explicitly suspended Antigravity/agy delegation until renewed permission. AGENTS.md and current handoff instructions updated; no agy invocation in this planning turn.
+- Created docs/superpowers/specs/2026-11-13-field-guides-design.md and docs/superpowers/plans/2026-11-13-field-guides.md: inventory, article briefs, provenance, visual direction, phased release and concrete implementation checks.
+- Key finding: Sakura note explicitly adapts Levent Durdalı’s article; its 24 images were extracted from that article PDF. Plan calls for original attributed learning commentary, not republication as owner-originated investigation. Bandit correctly identified as OverTheWire.
+- Reviewed selected learning sources; private dossiers and exploit-note bodies remain unread. No guide content or source attachments published. Production remains 97b9db5, successful run 43372944066.
+- Documentation-only planning update; no app tests rerun because product code/assets are unchanged. Next: owner review of plan, then direct implementation of release A.
