@@ -52,7 +52,12 @@ test("guide folders fit 320px and respect motion and palette controls", async ({
 }) => {
   await page.setViewportSize({ width: 320, height: 800 });
   await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.route("**/*.woff2", (route) => route.abort());
   await page.goto("/#guide-folders");
+  const motionBox = await page.locator(".motion-control").boundingBox();
+  const paletteBox = await page.locator(".palette-launch").boundingBox();
+  expect(motionBox.y + motionBox.height).toBeLessThanOrEqual(paletteBox.y);
+
   const collection = page.getByRole("article", { name: "Labs & references" });
   await collection
     .getByRole("button", { name: "Labs & references guides folder" })

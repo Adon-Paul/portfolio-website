@@ -2278,3 +2278,11 @@ details[open] > summary .disclosure-icon:after {
     animation: none !important;
   }
 }
+
+/* Keep the full reduced-motion label clear of the palette launcher. */
+@media (max-width: 600px) {
+  .motion-control {
+    bottom: 74px;
+    max-width: calc(100vw - 28px);
+  }
+}

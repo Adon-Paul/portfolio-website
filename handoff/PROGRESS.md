@@ -1,3 +1,7 @@
+# CI root cause correction — November 15
+
+Run 43584090712 passed 54/55 checks. Downloaded trace proves the remaining failure was a genuine mobile overlap: the disabled reduced-motion button intercepted palette-launch clicks for 89 seconds. Earlier attribution to slow rendering was incomplete. At <=600px, position motion control above palette row with bounded width. Existing guide-folder test now blocks font downloads to exercise fallback metrics and asserts the controls never overlap before the normal click/accessibility/palette checks. No forced clicks or test removal. Verification: npm run check passes 27 tests plus lint/build/budgets; npm run test:e2e passes all 55 tests (3.1m), including blocked-font overlap regression. Deployment pending.
+
 # Hosted release runner adjustment — November 14
 
 First Pages run 43583445194 failed 11 browser checks: predominantly 30-second workflow timeouts on software WebGL, plus fixed-window cube displacement and a skip-button observation after the opening had ended. Local full 55-test suite passed. Configure one CI worker, 90-second CI workflow deadlines and 15-second assertion deadlines (local remains 30/5 seconds with two workers). Cube movement still must exceed 8px, now polled; bounds and pause assertions unchanged. Opening tests observe DOM readiness instead of waiting for all resource loading. No product rendering quality change or test removal. Follow-up CI pending.
