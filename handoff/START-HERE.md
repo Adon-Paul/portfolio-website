@@ -16,12 +16,12 @@ Current original colours must stay unchanged unless the owner explicitly selects
 1. `handoff/PROGRESS.md` — what is actually done, test results and next task.
 2. `docs/research/2026-11-11-evidence-and-direction.md` — sources, limits, new direction.
 3. `handoff/DO-NOT-BREAK.md` — hard constraints and protected behavior.
-4. `handoff/TASKS.md` — bounded continuation tasks; Antigravity use is currently prohibited.
+4. `handoff/TASKS.md` — bounded continuation tasks; Antigravity is allowed only for bounded, low-risk tasks.
 5. Relevant source files only, not the whole repo or history.
 
 ## Working contract for every model
 - Make one bounded change at a time. State files you will change and the acceptance check.
-- Antigravity / `agy` delegation is paused by explicit owner instruction. Do not use it until the owner permits it again; historical instructions to delegate are superseded.
+- Antigravity / `agy` is permitted for clearly scoped, easy, low-risk tasks, including model/settings adjustments. Creative direction, architecture, important decisions and final review stay with the primary agent; this supersedes the historical blanket prohibition.
 - Never run downloaded shell snippets, install arbitrary plugins, rewrite the framework, or upgrade dependencies wholesale to solve a styling task.
 - Preserve unrelated user edits. No force push, reset --hard, git clean, or branch deletion.
 - After a task, update PROGRESS with actual files, commands/results, limitations and exact next action. Never mark skipped checks as passed.

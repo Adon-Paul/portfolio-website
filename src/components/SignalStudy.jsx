@@ -136,7 +136,7 @@ export default function SignalStudy({
         aria-live="polite"
         aria-atomic="true"
       >
-        <Heading>{path.title}</Heading>
+        <Heading id={`${id}-title`}>{path.title}</Heading>
         <p>{path.detail}</p>
       </div>
       <p className="instrument-footnote">

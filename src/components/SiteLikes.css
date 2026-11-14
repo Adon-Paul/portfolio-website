@@ -1,0 +1,41 @@
+.js .site-likes.enhanced {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+  padding-block: 3rem;
+  border-top: 1px solid var(--p-line);
+}
+.site-likes h2 {
+  margin: 0;
+  color: var(--p-text);
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  letter-spacing: -0.04em;
+}
+.site-likes-message {
+  color: var(--p-muted);
+  font-size: 0.9rem;
+  line-height: 1.6;
+  margin: 0.6rem 0 0;
+}
+.site-likes-retry {
+  color: var(--p-accent);
+  background: transparent;
+  border: 0;
+  text-decoration: underline;
+  min-height: 44px;
+  padding: 0.5rem 0;
+  cursor: pointer;
+}
+.site-likes .pulse-heart {
+  flex-shrink: 0;
+}
+@media (max-width: 480px) {
+  .js .site-likes.enhanced {
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  .site-likes h2 {
+    font-size: 1.4rem;
+  }
+}

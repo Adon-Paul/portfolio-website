@@ -1,0 +1,29 @@
+.identity-graphic.hero-glass {
+  z-index: 2;
+  opacity: 1;
+  pointer-events: none;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  overflow: hidden;
+}
+.hero-glass-fallback,
+.hero-glass-fallback svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.hero-glass[data-ready="true"] .hero-glass-fallback {
+  visibility: hidden;
+}
+.hero-glass[data-ready="false"] .fluid-glass__canvas {
+  opacity: 0;
+}
+@media print {
+  .hero-glass .fluid-glass {
+    display: none;
+  }
+  .hero-glass[data-ready] .hero-glass-fallback {
+    visibility: visible;
+  }
+}

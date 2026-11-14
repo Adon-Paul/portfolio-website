@@ -152,20 +152,20 @@ section[id] {
   letter-spacing: 0.1em;
   margin-left: 15px;
 }
-.header nav {
+.header > nav {
   display: flex;
   gap: 38px;
   font-size: 13px;
 }
-.header nav a {
+.header > nav a {
   padding-block: 16px;
 }
-.header nav span {
+.header > nav span {
   font: 9px var(--mono);
   margin-left: 6px;
   color: var(--muted);
 }
-.header nav a:last-child {
+.header > nav a:last-child {
   color: var(--accent);
 }
 .hero {
@@ -1195,14 +1195,14 @@ details[open] > summary .disclosure-icon:after {
   .wordmark-note {
     display: none;
   }
-  .header nav {
+  .header > nav {
     gap: 21px;
     font-size: 12px;
   }
-  .header nav span {
+  .header > nav span {
     display: none;
   }
-  .header nav a:last-child > span {
+  .header > nav a:last-child > span {
     display: inline;
   }
   .hero {
@@ -1678,7 +1678,7 @@ details[open] > summary .disclosure-icon:after {
   }
 }
 @media print {
-  .header nav,
+  .header > nav,
   .signal-controls,
   .demo-play,
   .contact-arrow {

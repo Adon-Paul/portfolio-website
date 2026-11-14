@@ -1,5 +1,17 @@
 import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
+
+async function settledSignalControls(page) {
+  // Scan the selected state after its existing 180ms colour transition ends.
+  await page.waitForFunction(() =>
+    [...document.querySelectorAll(".signal-controls button")].every((button) =>
+      button
+        .getAnimations()
+        .every((animation) => animation.playState !== "running"),
+    ),
+  );
+}
+
 for (const width of [320, 390, 768, 1440]) {
   test(`home fits ${width}px and has no automatic video or 3D requests`, async ({
     page,
@@ -15,11 +27,13 @@ for (const width of [320, 390, 768, 1440]) {
     const scene = page.getByRole("button", { name: /describe a scene/i });
     await expect(read).toHaveAttribute("aria-pressed", "true");
     await scene.click();
+    await settledSignalControls(page);
     await expect(scene).toHaveAttribute("aria-pressed", "true");
     await expect(read).toHaveAttribute("aria-pressed", "false");
     await expect(page.getByRole("status")).toContainText("provider choice");
     expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
     await read.click();
+    await settledSignalControls(page);
     expect(
       await page.evaluate(
         () => document.documentElement.scrollWidth <= innerWidth,

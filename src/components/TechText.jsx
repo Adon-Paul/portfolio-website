@@ -39,6 +39,7 @@ const signed = (value) =>
 
 const TechText = ({
   text = "React Bits",
+  interactiveCharacters,
   fontFamily = "",
   fontWeight = 600,
   fontSize = 150,
@@ -75,6 +76,7 @@ const TechText = ({
   useEffect(() => {
     settingsRef.current = {
       text,
+      interactiveCharacters,
       fontFamily,
       fontWeight,
       fontSize,
@@ -353,6 +355,11 @@ const TechText = ({
       return next;
     };
 
+    const interactive = (index) => {
+      const allowed = settingsRef.current?.interactiveCharacters;
+      return allowed == null || allowed.includes(glyphs[index]?.char);
+    };
+
     const glyphAt = (x, y) => {
       if (!word || y < word.top - 24 || y > word.bottom + 24) return -1;
       let best = -1;
@@ -366,7 +373,7 @@ const TechText = ({
           best = i;
         }
       });
-      return bestDistance < 28 ? best : -1;
+      return bestDistance < 28 && interactive(best) ? best : -1;
     };
 
     const falloff = (target, cx, cy, radius, strength, softness) => {
@@ -759,13 +766,14 @@ const TechText = ({
     };
 
     const kick = (index) => {
+      if (!interactive(index)) return;
       const strength = (word ? word.size : 120) * 11;
       kicks.push({ index, at: pulse, velocity: strength });
       for (let d = 1; d < glyphs.length; d++) {
         const velocity = strength * Math.pow(KICK_DECAY, d);
         if (velocity < 30) break;
         for (const j of [index - d, index + d]) {
-          if (j >= 0 && j < glyphs.length)
+          if (j >= 0 && j < glyphs.length && interactive(j))
             kicks.push({ index: j, at: pulse + d * 0.055, velocity });
         }
       }

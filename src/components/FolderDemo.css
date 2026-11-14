@@ -1,0 +1,33 @@
+.js .folder-demo.enhanced {
+  display: block;
+}
+.folder-demo {
+  padding-top: 72px;
+  padding-bottom: 64px;
+  overflow: clip;
+}
+.folder-demo h2 {
+  margin: 28px 0 16px;
+  font-size: clamp(30px, 4vw, 54px);
+  letter-spacing: -0.04em;
+}
+.folder-demo-intro,
+.folder-demo-selection {
+  color: var(--p-muted);
+  line-height: 1.6;
+}
+.folder-demo-stage {
+  display: flex;
+  justify-content: center;
+  padding-top: 160px;
+  padding-bottom: 26px;
+}
+.folder-demo-selection {
+  min-height: 2em;
+  text-align: center;
+}
+@media (max-width: 600px) {
+  .folder-demo-stage {
+    padding-top: 240px;
+  }
+}

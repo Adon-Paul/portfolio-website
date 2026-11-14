@@ -18,7 +18,11 @@ export default function ProjectMedia({ project }) {
   }
   if (!project.video) return null;
   return (
-    <figure className="demo">
+    <figure
+      id={`${project.slug}-demo`}
+      className="demo"
+      aria-label={`${project.title} demo and walkthrough`}
+    >
       <div className="demo-screen">
         {playing && !failed ? (
           <video

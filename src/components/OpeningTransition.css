@@ -1,0 +1,65 @@
+.opening-transition {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  pointer-events: none;
+  animation: opening-failsafe 0s 5.5s forwards;
+}
+.opening-art {
+  position: absolute;
+  inset: 0;
+  background: var(--p-canvas);
+  --reveal-feather: clamp(80px, 14vh, 160px);
+  /* Start with the feather below the viewport, then sweep it upward.
+     The canvas and homepage stay fixed; only the veil's coverage changes. */
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    #000 calc(50% - var(--reveal-feather) / 2),
+    transparent calc(50% + var(--reveal-feather) / 2)
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    #000 calc(50% - var(--reveal-feather) / 2),
+    transparent calc(50% + var(--reveal-feather) / 2)
+  );
+  -webkit-mask-size: 100% calc(200% + var(--reveal-feather));
+  mask-size: 100% calc(200% + var(--reveal-feather));
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: 0 0;
+  mask-position: 0 0;
+  transition:
+    -webkit-mask-position 1100ms cubic-bezier(0.65, 0, 0.35, 1),
+    mask-position 1100ms cubic-bezier(0.65, 0, 0.35, 1);
+}
+.opening-transition.is-leaving .opening-art {
+  -webkit-mask-position: 0 100%;
+  mask-position: 0 100%;
+}
+.opening-skip {
+  position: absolute;
+  bottom: max(28px, env(safe-area-inset-bottom));
+  right: 28px;
+  pointer-events: auto;
+  border: 1px solid var(--p-muted);
+  border-radius: 999px;
+  padding: 12px 18px;
+  background: var(--p-canvas);
+  color: var(--p-text);
+  font: inherit;
+  cursor: pointer;
+}
+.opening-skip span {
+  margin-left: 16px;
+}
+@keyframes opening-failsafe {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .opening-transition {
+    display: none;
+  }
+}

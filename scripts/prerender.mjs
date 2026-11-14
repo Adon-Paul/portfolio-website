@@ -1,3 +1,4 @@
+import { buildSiteDirectory } from "./site-directory.mjs";
 import { readFile, writeFile, mkdir } from "node:fs/promises";
 import {
   render,
@@ -82,9 +83,13 @@ for (const route of routes) {
   await writeFile(destination, html);
   console.log(`Rendered ${route.path}`);
 }
+await buildSiteDirectory(routes);
 await writeFile(
   "dist/sitemap.xml",
-  `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${routes
+  `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${[
+    ...routes,
+    { path: "/directory/" },
+  ]
     .filter((r) => r.path !== "/404.html")
     .map((r) => `<url><loc>${origin}${r.path}</loc></url>`)
     .join("")}</urlset>\n`,

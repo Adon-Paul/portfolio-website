@@ -7,6 +7,13 @@ test("guides are complete static documents, with valid contents and no hydration
 }) => {
   const errors = [];
   page.on("pageerror", (e) => errors.push(e.message));
+  page.on("console", (message) => {
+    if (
+      message.type() === "error" &&
+      /hydrat|server HTML|did not match/i.test(message.text())
+    )
+      errors.push(message.text());
+  });
   for (const guide of guides) {
     expect((await page.goto(`/guides/${guide.slug}/`)).status()).toBe(200);
     await expect(page.getByRole("heading", { level: 1 })).toHaveText(
@@ -30,10 +37,10 @@ test("guides are complete static documents, with valid contents and no hydration
   expect((await page.goto("/guides/unknown/")).status()).toBe(404);
 });
 
-test("library and long articles reflow and remain accessible", async ({
-  page,
-}) => {
-  for (const width of [320, 390, 768, 1440]) {
+for (const width of [320, 390, 768, 1440]) {
+  test(`library and long articles reflow and remain accessible at ${width}px`, async ({
+    page,
+  }) => {
     await page.setViewportSize({ width, height: 900 });
     for (const path of [
       "/guides/",
@@ -48,18 +55,23 @@ test("library and long articles reflow and remain accessible", async ({
       ).toBe(true);
       expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
     }
-  }
-  await page.screenshot({
-    path: "test-results/guide-desktop.png",
-    fullPage: false,
+
+    if (width === 1440) {
+      await page.screenshot({
+        path: "test-results/guide-desktop.png",
+        fullPage: false,
+      });
+    }
+    if (width === 390) {
+      await page.setViewportSize({ width: 390, height: 844 });
+      await page.goto("/guides/");
+      await page.screenshot({
+        path: "test-results/guides-mobile.png",
+        fullPage: true,
+      });
+    }
   });
-  await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto("/guides/");
-  await page.screenshot({
-    path: "test-results/guides-mobile.png",
-    fullPage: true,
-  });
-});
+}
 
 test("guides work without JavaScript and do not ship article chunks to the homepage", async ({
   browser,
@@ -88,16 +100,25 @@ test("guides work without JavaScript and do not ship article chunks to the homep
   await context.close();
 });
 
-test("failed article chunk preserves the complete server-rendered page", async ({
+test("prerendered guides hydrate without duplicate article downloads", async ({
   page,
 }) => {
   const errors = [];
   page.on("pageerror", (e) => errors.push(e.message));
+  const articleRequests = [];
+  page.on("request", (r) => {
+    if (/\/assets\/sunset-.*\.js/.test(r.url())) articleRequests.push(r.url());
+  });
   await page.route("**/assets/sunset-*.js", (route) => route.abort());
   await page.goto("/guides/sunset/");
   await expect(page.locator(".guide-prose")).toContainText("Remediation");
   await expect(
     page.getByRole("link", { name: "All field guides", exact: true }),
+  ).toBeVisible();
+  expect(articleRequests).toEqual([]);
+  await page.getByRole("button", { name: "Open palette controls" }).click();
+  await expect(
+    page.getByRole("button", { name: "Close palette controls" }),
   ).toBeVisible();
   expect(errors).toEqual([]);
 });

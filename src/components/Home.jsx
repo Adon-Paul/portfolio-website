@@ -3,6 +3,8 @@ import ProjectMedia from "./ProjectMedia";
 import SignalStudy from "./SignalStudy";
 import TechText from "./TechText";
 import Workbench from "./Workbench";
+import GuideFolders from "./GuideFolders";
+import HeroGlass from "./HeroGlass";
 import Credentials from "./Credentials";
 
 function IdentityGraphic() {
@@ -74,11 +76,13 @@ export default function Home() {
         </div>
         <div className="identity-stage">
           <IdentityGraphic />
+          <HeroGlass />
           <h1 id="hero-title">
             <span className="given-name tech-adon">
               <span className="tech-adon-fallback">ADON</span>
               <TechText
                 text="ADON"
+                interactiveCharacters="DO"
                 fontFamily="Space, Arial, sans-serif"
                 fontWeight={600}
                 fontSize={360}
@@ -145,7 +149,7 @@ export default function Home() {
               The same urge to figure things out.
             </p>
           </div>
-          <article className="lumi-feature">
+          <article id="lumisense" className="lumi-feature">
             <div className="project-heading">
               <span className="project-number">01</span>
               <div>
@@ -162,7 +166,7 @@ export default function Home() {
             <div className="lumi-decisions">
               <div>
                 <span>01 / LATENCY</span>
-                <h4>Keep the simple tasks close.</h4>
+                <h4 id="local-tasks">Keep the simple tasks close.</h4>
                 <p>
                   OCR and barcode reading use on-device ML Kit. A cloud request
                   is not necessary for every camera frame.
@@ -170,7 +174,7 @@ export default function Home() {
               </div>
               <div>
                 <span>02 / CONTEXT</span>
-                <h4>Choose the right route.</h4>
+                <h4 id="provider-routes">Choose the right route.</h4>
                 <p>
                   Richer scene descriptions use configurable AI providers. Local
                   models are an option, with device and download tradeoffs.
@@ -178,7 +182,7 @@ export default function Home() {
               </div>
               <div>
                 <span>03 / ATTENTION</span>
-                <h4>Know when to stay quiet.</h4>
+                <h4 id="assistive-constraints">Know when to stay quiet.</h4>
                 <p>
                   Speech chunking and debounced detections aim to prevent useful
                   information becoming a stream of interruptions.
@@ -186,7 +190,7 @@ export default function Home() {
               </div>
             </div>
             <div className="feature-caption">
-              <h4>
+              <h4 id="assistive-system">
                 A little more of the world,
                 <br />
                 within reach.
@@ -215,6 +219,7 @@ export default function Home() {
           <div className="recorded-projects">
             {[melody, style].map((project, i) => (
               <article
+                id={project.slug}
                 className={`recorded-project recorded-${project.slug}`}
                 key={project.slug}
               >
@@ -290,7 +295,7 @@ export default function Home() {
             decision—and understanding how to fix it.
           </p>
         </div>
-        <article className="field-note">
+        <article id="sunset-lab-summary" className="field-note">
           <div className="field-note-heading">
             <span className="eyebrow">
               FIELD NOTE 001 / AUTHORISED TRAINING LAB
@@ -346,7 +351,7 @@ export default function Home() {
             </div>
           </details>
         </article>
-        <div className="guide-home-preview">
+        <div id="guide-preview" className="guide-home-preview">
           <span className="eyebrow">FROM MY STUDY VAULT / FIELD GUIDES</span>
           <h3>The work behind the learning.</h3>
           <p>
@@ -383,6 +388,7 @@ export default function Home() {
               <span>Follow the path ↗</span>
             </a>
           </div>
+          <GuideFolders />
           <a className="inline-link" href="/guides/">
             Browse all field guides
           </a>

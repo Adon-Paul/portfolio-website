@@ -25,8 +25,21 @@
 - The rejected beige collage design is HISTORY, not the current spec. Do not restore it because an old doc says approved.
 - No generic neon hacker terminal, fake telemetry, arbitrary status dots, decorative progress percentages or unsupported benchmark numbers.
 - Every arrow/indicator must describe a real action or state. Distinguish external links, expansions, playback and navigation.
-- No compulsory intro, scroll hijack, custom cursor, JavaScript animation loops, or hidden evidence behind hover-only interactions.
+- No scroll hijack, custom cursor, or hidden evidence behind hover-only interactions. Owner explicitly requested the React Bits GradientASCII homepage opening on November 13: its temporary WebGL animation loop is allowed; preserve immediate skip, reduced-motion/saved-pause bypass, failure timeout, and resource cleanup. Other continuous motion follows the existing CSS/SVG approach.
 - A great screenshot is not completion: check actual playback, selected states, mobile, overflow, keyboard, failed requests and static URLs.
 
 ## Current visual direction — November 12
 Owner explicitly rejected green and requested continuous motion with NO cursor effects. Charcoal/ivory/orange is the current implemented palette (recommended default; optional preference question had no reply). CSS/SVG hero rotation, signal flow and persistent motion emblem are intentional. Preserve global pause, session persistence, reduced-motion and hidden-tab handling. This supersedes older documents prohibiting continuous decorative motion. Never add cursor followers.
+
+## FluidGlass hero — November 14 owner request
+The owner explicitly replaced the spinning hero filament with React Bits FluidGlass inside the circle beside ADON. Its local follow/spin/wobble and bounded WebGL loop are authorized here; preserve the wordmark, palette defaults, global pause/reduced motion, offscreen/hidden suspension, static fallback and no eager project-video requests. Do not extend this into a global cursor follower. The owner-requested FolderFloat physics remains another scoped exception to the general CSS/SVG preference.
+
+Latest November 14 follow-up supersedes replacing/removing the filament: **restore and preserve the full original IdentityGraphic**, with FluidGlass as a separate foremost hero layer. Cube pixels outside the glass must be transparent so the restored content remains visible. Keep pointer events passing through the decorative overlay.
+
+- Nov 14 owner explicitly rejected simplifying FluidGlass. Preserve the full upstream renderer, original optics and 2× DPR cap. Keep restored IdentityGraphic and foreground cube. Use build-time compression rather than removing effects to satisfy budgets.
+
+- Latest Nov 14 motion instruction: hero cube bounces autonomously within its circular/visible hero confines, instead of following the mouse. Keep that behavior, full optics, live backdrop, impact wobble, and pause/reduced-motion support.
+
+- Latest Nov 14 addition: preserve both the cube and prism as separate full-quality glass objects in the same hero confines, each with autonomous bouncing and original optical effects. Do not replace the cube or simplify either renderer.
+
+- Latest Nov 14 supersedes the prism addition: remove the prism instance from the homepage; retain the full-quality bouncing cube. ADON TechText interaction is restricted to D and O only. A and N retain their appearance/spacing but stay static, including when D/O click impulses propagate.

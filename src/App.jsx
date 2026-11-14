@@ -1,9 +1,13 @@
+import SiteDirectory from "./components/SiteDirectory";
 import GuideIndex from "./components/guides/GuideIndex";
 import GuidePage from "./components/guides/GuidePage";
 import { guideAtPath } from "./content/guides";
 import PaletteControl, { PaletteDefaults } from "./components/PaletteControl";
 import { profile } from "./content/profile";
 import { projects, projectAtPath, projectPath } from "./content/projects";
+import SiteLikes from "./components/SiteLikes";
+import FolderDemo from "./components/FolderDemo";
+import OpeningTransition from "./components/OpeningTransition";
 import MotionFrame from "./components/MotionFrame";
 import Home from "./components/Home";
 import SignalStudy from "./components/SignalStudy";
@@ -19,10 +23,13 @@ function Header() {
         Skip to content
       </a>
       <header className="header wrap">
-        <a className="wordmark" href="/" aria-label="Adon Paul Tomy — home">
-          adon<span className="wordmark-dot">.</span>
-          <span className="wordmark-note">PAUL TOMY</span>
-        </a>
+        <div className="header-brand">
+          <a className="wordmark" href="/" aria-label="Adon Paul Tomy — home">
+            adon<span className="wordmark-dot">.</span>
+            <span className="wordmark-note">PAUL TOMY</span>
+          </a>
+          <SiteDirectory />
+        </div>
         <nav aria-label="Main navigation">
           <a href="/#work">
             Work <span>01</span>
@@ -131,18 +138,18 @@ function CaseStudy({ project }) {
         <div className="case-body">
           <section>
             <span className="eyebrow">01 / The starting point</span>
-            <h2>{project.label}</h2>
+            <h2 id="starting-point">{project.label}</h2>
             <p>{project.problem}</p>
           </section>
           <section>
             <span className="eyebrow">02 / Inside the build</span>
-            <h2>A few decisions.</h2>
+            <h2 id="build-decisions">A few decisions.</h2>
             <div className="decisions">
               {project.decisions.map(([title, text], index) => (
                 <div key={title}>
                   <span className="decision-number">0{index + 1}</span>
                   <div>
-                    <h3>{title}</h3>
+                    <h3 id={`decision-${index + 1}`}>{title}</h3>
                     <p>{text}</p>
                   </div>
                 </div>
@@ -153,7 +160,7 @@ function CaseStudy({ project }) {
           {project.manuscript && (
             <section className="manuscript-note">
               <span className="eyebrow">COMPANION RESEARCH</span>
-              <h2>The thinking, written down.</h2>
+              <h2 id="manuscript">The thinking, written down.</h2>
               <p>
                 The completed final-year manuscript explores a smartphone-based
                 hybrid assistive system: local perception for specific tasks,
@@ -172,7 +179,7 @@ function CaseStudy({ project }) {
 
           <section>
             <span className="eyebrow">03 / Where it stands</span>
-            <h2>Work, with context.</h2>
+            <h2 id="current-state">Work, with context.</h2>
             <p>{project.outcome}</p>
             <a className="text-link" href={project.repository}>
               {project.evidence} <Arrow />
@@ -180,7 +187,7 @@ function CaseStudy({ project }) {
           </section>
           <section>
             <span className="eyebrow">04 / The next question</span>
-            <h2>There’s more to figure out.</h2>
+            <h2 id="next-question">There’s more to figure out.</h2>
             <p>{project.next}</p>
           </section>
         </div>
@@ -201,12 +208,15 @@ export default function App({ path = "/", guideArticle = null }) {
   return (
     <MotionFrame>
       <PaletteDefaults />
+      {path === "/" && <OpeningTransition />}
       <Header />
       <main id="main">
         {path === "/" ? (
           <>
             <Home />
             <Contact />
+            <FolderDemo />
+            <SiteLikes />
           </>
         ) : path === "/guides/" || path === "/guides" ? (
           <GuideIndex />

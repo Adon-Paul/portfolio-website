@@ -36,7 +36,7 @@ export default function Workbench() {
             <span>STUDY 01 / MELODY</span>
             <span>STATE</span>
           </div>
-          <h4>
+          <h4 id="queue-study">
             Two views.
             <br />
             <em>One source of truth.</em>
@@ -98,7 +98,7 @@ export default function Workbench() {
             <span>STUDY 02 / STYLE TRANSFER AI</span>
             <span>LANGUAGE</span>
           </div>
-          <h4>
+          <h4 id="language-study">
             A voice has
             <br />
             <em>a rhythm.</em>

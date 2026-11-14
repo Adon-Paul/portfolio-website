@@ -46,7 +46,7 @@ export default function GuidePage({ guide, article }) {
       </div>
       <footer className="guide-related">
         <span className="eyebrow">KEEP FOLLOWING THE THREAD</span>
-        <h2>Connected reading.</h2>
+        <h2 id="connected-reading">Connected reading.</h2>
         <div>
           {guide.related.map((slug) => {
             const next = guides.find((g) => g.slug === slug);

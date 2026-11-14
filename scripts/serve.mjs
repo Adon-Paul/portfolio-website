@@ -14,6 +14,7 @@ const types = {
   ".pdf": "application/pdf",
   ".xml": "application/xml",
   ".txt": "text/plain",
+  ".json": "application/json; charset=utf-8",
 };
 const server = http.createServer(async (req, res) => {
   try {

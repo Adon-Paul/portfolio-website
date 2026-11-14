@@ -11,9 +11,12 @@
     "lint": "eslint src scripts tests",
     "test:e2e": "playwright test",
     "check": "npm run lint && npm test -- --run && npm run build",
-    "format": "prettier --write src scripts tests *.js index.html"
+    "format": "prettier --write src scripts tests *.js index.html",
+    "test:likes-db": "node scripts/test-likes-db.mjs"
   },
   "dependencies": {
+    "@hugeicons/core-free-icons": "^4.4.0",
+    "matter-js": "^0.20.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
@@ -31,6 +34,7 @@
     "jsdom": "^27.4.0",
     "marked": "18.2.0",
     "prettier": "^3.9.10",
+    "terser": "^5.51.2",
     "vite": "^6.4.6",
     "vitest": "^4.1.12"
   },

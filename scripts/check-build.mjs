@@ -60,5 +60,5 @@ assert(
   "Missing homepage recordings",
 );
 console.log(
-  `Budgets passed: JS ${js} B gzip; CSS ${css} B gzip; font ${font} B; hero is inline SVG`,
+  `Budgets passed: JS ${js} B gzip; CSS ${css} B gzip; font ${font} B; hero retains a static SVG fallback`,
 );
