@@ -7,7 +7,7 @@ test("homepage opening completes and releases its canvas without fetching videos
   page.on("request", (request) => {
     if (/\.mp4/.test(request.url())) videos.push(request.url());
   });
-  await page.goto("/");
+  await page.goto("/", { waitUntil: "domcontentloaded" });
   await expect(
     page.getByRole("button", { name: "Skip opening" }),
   ).toBeVisible();
@@ -22,7 +22,7 @@ test("homepage opening completes and releases its canvas without fetching videos
 test("opening can be skipped immediately with the keyboard", async ({
   page,
 }) => {
-  await page.goto("/");
+  await page.goto("/", { waitUntil: "domcontentloaded" });
   await expect(
     page.getByRole("button", { name: "Skip opening" }),
   ).toBeVisible();
@@ -38,7 +38,7 @@ test("opening respects reduced motion and saved pause, and leaves deep links dir
   page,
 }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
-  await page.goto("/");
+  await page.goto("/", { waitUntil: "domcontentloaded" });
   await expect(page.locator(".opening-transition")).toHaveCount(0);
   await page.emulateMedia({ reducedMotion: "no-preference" });
   await page.evaluate(() =>
@@ -57,7 +57,7 @@ test("missing WebGL never blocks the homepage", async ({ page }) => {
       return type === "webgl2" ? null : original.call(this, type, ...args);
     };
   });
-  await page.goto("/");
+  await page.goto("/", { waitUntil: "domcontentloaded" });
   await expect(page.locator(".opening-transition")).toHaveCount(0);
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
 });

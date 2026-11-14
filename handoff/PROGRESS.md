@@ -1,3 +1,7 @@
+# Hosted release runner adjustment — November 14
+
+First Pages run 43583445194 failed 11 browser checks: predominantly 30-second workflow timeouts on software WebGL, plus fixed-window cube displacement and a skip-button observation after the opening had ended. Local full 55-test suite passed. Configure one CI worker, 90-second CI workflow deadlines and 15-second assertion deadlines (local remains 30/5 seconds with two workers). Cube movement still must exceed 8px, now polled; bounds and pause assertions unchanged. Opening tests observe DOM readiness instead of waiting for all resource loading. No product rendering quality change or test removal. Follow-up CI pending.
+
 # Sidebar release — November 14, 2026
 
 Owner approved publishing accumulated local changes, replacing directory popup with a full-height left sidebar, and hiding unconfigured shared likes. Implemented edge-attached 440px/max-viewport sidebar, reduced-motion/pause-aware entry, native disclosure/search/branch/static index preserved, selection restores trigger focus. Likes render only after valid public configuration; existing shared-service behavior remains.

@@ -214,13 +214,17 @@ for (const shape of ["cube"]) {
         ).toBeLessThanOrEqual(circle.width / 2 + 1);
         positions.push(box);
       }
-      expect(
-        Math.max(
-          ...positions.map((p) =>
-            Math.hypot(p.x - positions[0].x, p.y - positions[0].y),
-          ),
-        ),
-      ).toBeGreaterThan(8);
+      await expect
+        .poll(
+          async () => {
+            const box = await glass
+              .locator(".fluid-glass__handle")
+              .boundingBox();
+            return Math.hypot(box.x - positions[0].x, box.y - positions[0].y);
+          },
+          { timeout: 15000 },
+        )
+        .toBeGreaterThan(8);
       const pause = page.getByRole("button", {
         name: "Pause motion",
         exact: true,
