@@ -1,3 +1,7 @@
+# Production verified — November 15, 2026
+
+Release 375923f54681707d270c1dd38623c91d4be13b59 deployed successfully: GitHub Actions run 43631442952, both build and deploy successful. Includes all accumulated interactive updates, left sidebar, hidden unconfigured likes, and mobile motion/palette overlap fix. Local check: 27 unit tests plus lint/build/budgets; all 55 browser tests passed. Hosted full checks passed. Live Chromium 320x800/reduced-motion verification: control rectangles do not overlap, palette opens/closes, directory loads full-height at x=0/y=0, unconfigured likes absent. No outstanding deployment task. Supabase setup remains optional future work.
+
 # CI root cause correction — November 15
 
 Run 43584090712 passed 54/55 checks. Downloaded trace proves the remaining failure was a genuine mobile overlap: the disabled reduced-motion button intercepted palette-launch clicks for 89 seconds. Earlier attribution to slow rendering was incomplete. At <=600px, position motion control above palette row with bounded width. Existing guide-folder test now blocks font downloads to exercise fallback metrics and asserts the controls never overlap before the normal click/accessibility/palette checks. No forced clicks or test removal. Verification: npm run check passes 27 tests plus lint/build/budgets; npm run test:e2e passes all 55 tests (3.1m), including blocked-font overlap regression. Deployment pending.
