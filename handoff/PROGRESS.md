@@ -1,3 +1,7 @@
+# Rose/explorer release verified — November 15
+
+Application release 95e48fbf61c547784dbbd62a5d7c2943c7cb8648 deployed successfully in Pages run 43682785763 (build and deploy success). Local 27 unit tests, 57 browser tests and build gates passed. Live Chromium fresh-session smoke confirms Rose default, splash completion, compact 32px explorer rows, arrow-key expansion, collapse-all, Escape and Rose reset, with no page errors. Local preview opened and rendered page families reviewed. Saved visitor palettes remain preserved; reset selects the new published Rose default. No pending deployment work.
+
 # Rose Study, compact explorer and loading splash — November 15
 
 Owner approved compact VS Code-like explorer, Rose Study default, readiness-driven splash and usability review. Implemented 360px sidebar, 32px desktop/44px coarse-pointer rows, chevrons, selected backgrounds, collapse all, native links plus arrow/Home/End navigation. Long labels retain full title/accessibility names; generated multi-line heading labels now separate words at br tags.

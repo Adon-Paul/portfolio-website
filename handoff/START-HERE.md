@@ -4,6 +4,7 @@
 The live personal-workshop redesign was rejected as too generic and insufficiently focused on actual work. User wants ambitious studio-level visual craft, prominent Melody + Style Transfer AI videos, no mismatched portrait/photos, stronger work/cybersecurity positioning, curated certificates, and explicit instructions for lower-cost models. Awards/perfection are aspirations, never claims.
 
 ## Live and working state
+- Newest production release: `95e48fb`, verified Pages run `43682785763`: compact explorer, Rose Study default and readiness-driven splash. Older release references below are historical.
 - Latest verified production release: `375923f` (November 15), successful Pages run `43631442952`. Includes sidebar and accumulated interactive changes plus mobile control-overlap fix. See newest PROGRESS entry; older release references below are historical.
 - Repo `/home/adon/Projects/Repositiories/portfolio-website`; live `https://adonpaultomy.tech` on GitHub Pages.
 - Live application release `175ebc1` on main; verified successful Pages run 43428270273. Adds 16 curated Field Guides, their index, homepage preview and navigation. Includes the NitroMax source link, unchanged orange palette, continuous motion, TechText and Palette studio. Production receipt: docs/verification/2026-11-13-field-guides-production.json. Prior baseline `66d67ac` and original `566a261` remain historical rollback references.
