@@ -1,3 +1,7 @@
+# Compact explorer/full splash release verified — November 15
+
+Application release 1cb7d3c8d6d5eba74faa5ab1db1b9cbf595f32d8 deployed successfully in Pages run 43732009011; build/deploy both success. Local npm run check passes 27 unit tests/build gates; final full browser suite passes 59 tests. Live 390px smoke confirms 280px sidebar, trigger left of name, 2846ms artwork playback before graceful exit, 1291ms exit duration. Rose remains default. Local mobile screenshots inspected. No pending deployment task.
+
 # Further explorer refinement — November 15
 
 Owner requested even more compact sidebar, trigger left of name, full splash playback and release. Sidebar narrowed to 280px, desktop rows 28px, touch rows retained at 44px; tighter padding/search/header. Trigger precedes wordmark in actual DOM order. Touch screenshot caught header crowding at 390px; extended two-row mobile header through 600px and added geometry regression. Existing splash changes included. Interrupted pre-final browser run intentionally after this visual finding; Final combined verification: npm run check passes 27 unit tests and build gates; npm run test:e2e passes all 59 tests (2.4m). Mobile screenshots inspected. Deployment pending.
