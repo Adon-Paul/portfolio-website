@@ -1,3 +1,11 @@
+# Rose Study, compact explorer and loading splash — November 15
+
+Owner approved compact VS Code-like explorer, Rose Study default, readiness-driven splash and usability review. Implemented 360px sidebar, 32px desktop/44px coarse-pointer rows, chevrons, selected backgrounds, collapse all, native links plus arrow/Home/End navigation. Long labels retain full title/accessibility names; generated multi-line heading labels now separate words at br tags.
+
+Introduced defaultPalette = Rose Study independently of preserved originalPalette (orange preset); default SSR CSS/favicon/reset and initial hero/folder/editor values use Rose. Existing visitor saves remain valid. Updated reset label/tests and handoff contracts.
+
+Splash now waits for first artwork frame, document fonts and hero-ready/fallback signal; hero loads concurrently instead of waiting for splash exit. Preserved feathered exit, skip/Escape/Tab, 5.5-second deadline, reduced motion and deep-link bypass. No automatic media download introduced. Tests updated for the explicitly changed loading contract, with delayed-module regression and explorer keyboard/density checks. Desktop/mobile explorer and home/guide/article/project screenshots reviewed; local preview opened. Verification: npm run check passes 27 unit tests plus lint/build/budgets; npm run test:e2e passes all 57 tests (2.9m). Deployment pending.
+
 # Production verified — November 15, 2026
 
 Release 375923f54681707d270c1dd38623c91d4be13b59 deployed successfully: GitHub Actions run 43631442952, both build and deploy successful. Includes all accumulated interactive updates, left sidebar, hidden unconfigured likes, and mobile motion/palette overlap fix. Local check: 27 unit tests plus lint/build/budgets; all 55 browser tests passed. Hosted full checks passed. Live Chromium 320x800/reduced-motion verification: control rectangles do not overlap, palette opens/closes, directory loads full-height at x=0/y=0, unconfigured likes absent. No outstanding deployment task. Supabase setup remains optional future work.

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import Folder from "./Folder";
 import { guides, guidePath } from "../content/guides";
-import { originalPalette } from "../content/palette";
+import { defaultPalette } from "../content/palette";
 import "./GuideFolders.css";
 
 const collections = [
@@ -185,7 +185,7 @@ function GuideCollection({ collection, palette, motion }) {
 }
 
 export default function GuideFolders() {
-  const [palette, setPalette] = useState(originalPalette);
+  const [palette, setPalette] = useState(defaultPalette);
   const [motion, setMotion] = useState(initialMotion);
   const root = useRef(null);
   useEffect(() => {
@@ -193,9 +193,8 @@ export default function GuideFolders() {
       const css = getComputedStyle(document.documentElement);
       setPalette({
         accent:
-          css.getPropertyValue("--p-accent").trim() || originalPalette.accent,
-        paper:
-          css.getPropertyValue("--p-paper").trim() || originalPalette.paper,
+          css.getPropertyValue("--p-accent").trim() || defaultPalette.accent,
+        paper: css.getPropertyValue("--p-paper").trim() || defaultPalette.paper,
       });
     };
     const colors = new MutationObserver(readColors);

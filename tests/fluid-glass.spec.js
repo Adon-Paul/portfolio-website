@@ -8,12 +8,10 @@ test("hero preserves the original filament with FluidGlass in the foreground", a
     if (/\.mp4/.test(request.url())) videos.push(request.url());
   });
   await page.goto("/");
-  await expect(
-    page.getByRole("button", { name: "Skip opening" }),
-  ).toBeVisible();
+  // The hero now loads during the readiness-driven splash.
   await expect(
     page.locator(".hero-glass[data-shape='cube'] .fluid-glass"),
-  ).toHaveCount(0);
+  ).toHaveCount(1);
   await page.keyboard.press("Escape");
   await expect(page.locator(".hero-glass[data-shape='cube']")).toHaveAttribute(
     "data-ready",

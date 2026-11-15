@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import {
   paletteTokens,
-  originalPalette,
+  defaultPalette,
   paletteCSS,
   normalizeColor,
   validatePalette,
@@ -85,12 +85,12 @@ function ColorField({ token, value, onChange, resetKey }) {
 }
 export default function PaletteControl() {
   const [revision, setRevision] = useState(0);
-  const [colors, setColors] = useState({ ...originalPalette });
+  const [colors, setColors] = useState({ ...defaultPalette });
   const [saved, setSaved] = useState([]);
   const [name, setName] = useState("");
   const [json, setJSON] = useState("");
   const [message, setMessage] = useState("");
-  const [preset, setPreset] = useState("original");
+  const [preset, setPreset] = useState("rose");
   const [chosen, setChosen] = useState("");
   const dialog = useRef(null);
   const trigger = useRef(null);
@@ -200,7 +200,7 @@ export default function PaletteControl() {
         </div>
         <p className="palette-help">
           Preview colours in your browser. Visitors keep the published palette.
-          Reset restores every original value.
+          Reset restores the published Rose Study palette.
         </p>
         <div className="palette-actions">
           <label>
@@ -226,10 +226,10 @@ export default function PaletteControl() {
           <button
             onClick={() => {
               setChosen("");
-              update(originalPalette, "original");
+              update(defaultPalette, "rose");
             }}
           >
-            Reset to original
+            Reset to default
           </button>
         </div>
         <fieldset className="palette-core">

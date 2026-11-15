@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from "react";
-import { normalizeColor, originalPalette } from "../content/palette";
+import { normalizeColor, defaultPalette } from "../content/palette";
 import "./HeroGlass.css";
 import useHeroBackdrop from "./useHeroBackdrop";
 const keys = ["accent", "hero-grid", "hero-light", "hero-dark"];
 
 export default function HeroGlass({ shape = "cube" }) {
   const prism = shape === "prism";
-  const [colors, setColors] = useState(originalPalette);
+  const [colors, setColors] = useState(defaultPalette);
   const [width, setWidth] = useState(700);
   const [Glass, setGlass] = useState(null);
   const [ready, setReady] = useState(false);
@@ -18,20 +18,15 @@ export default function HeroGlass({ shape = "cube" }) {
       requested = false,
       armed = false;
     const load = () => {
-      if (
-        !active ||
-        !armed ||
-        !visible ||
-        requested ||
-        document.documentElement.dataset.opening === "active"
-      )
-        return;
+      if (!active || !armed || !visible || requested) return;
       requested = true;
       import("./FluidGlass")
         .then((module) => {
           if (active) setGlass(() => module.default);
         })
-        .catch(() => {});
+        .catch(() => {
+          document.documentElement.dataset.heroReady = "fallback";
+        });
     };
     const readColors = () => {
       const css = getComputedStyle(document.documentElement);
@@ -40,7 +35,7 @@ export default function HeroGlass({ shape = "cube" }) {
           keys.map((key) => [
             key,
             normalizeColor(css.getPropertyValue(`--p-${key}`).trim()) ||
-              originalPalette[key],
+              defaultPalette[key],
           ]),
         ),
       );
@@ -132,8 +127,14 @@ export default function HeroGlass({ shape = "cube" }) {
           overlay
           color={colors.accent}
           tint={0}
-          onReady={() => setReady(true)}
-          onUnavailable={() => setReady(false)}
+          onReady={() => {
+            setReady(true);
+            document.documentElement.dataset.heroReady = "ready";
+          }}
+          onUnavailable={() => {
+            setReady(false);
+            document.documentElement.dataset.heroReady = "fallback";
+          }}
         />
       )}
     </div>

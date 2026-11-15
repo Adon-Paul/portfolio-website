@@ -161,8 +161,8 @@ test("guide theme and motion controls survive navigation to existing work", asyn
   await expect(page.getByLabel("Accent HEX", { exact: true })).toHaveValue(
     "#8bb7ff",
   );
-  await page.getByRole("button", { name: "Reset to original" }).click();
+  await page.getByRole("button", { name: "Reset to default" }).click();
   await expect(page.getByLabel("Accent HEX", { exact: true })).toHaveValue(
-    "#ff9a62",
+    "#f6a6c5",
   );
 });

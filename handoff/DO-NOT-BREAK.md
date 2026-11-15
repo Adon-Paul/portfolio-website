@@ -43,3 +43,5 @@ Latest November 14 follow-up supersedes replacing/removing the filament: **resto
 - Latest Nov 14 addition: preserve both the cube and prism as separate full-quality glass objects in the same hero confines, each with autonomous bouncing and original optical effects. Do not replace the cube or simplify either renderer.
 
 - Latest Nov 14 supersedes the prism addition: remove the prism instance from the homepage; retain the full-quality bouncing cube. ADON TechText interaction is restricted to D and O only. A and N retain their appearance/spacing but stay static, including when D/O click impulses propagate.
+
+- November 15 owner approved Rose Study as the published default, superseding orange-default instructions. Retain orange as a preset and preserve saved visitor palettes. Owner approved compact explorer and readiness-driven splash; preserve skip and failure escape routes.

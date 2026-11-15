@@ -184,3 +184,27 @@ test("failed directory enhancement retains the full static index link", async ({
     "Complete site directory.",
   );
 });
+
+test("compact explorer supports collapse and keyboard navigation", async ({
+  page,
+}) => {
+  await page.goto("/guides/");
+  await page
+    .getByRole("button", { name: "Site directory", exact: true })
+    .click();
+  const menu = page.getByRole("navigation", {
+    name: "All pages and locations",
+  });
+  await menu.getByRole("button", { name: "Collapse all" }).click();
+  await expect(menu.locator('[aria-expanded="true"]')).toHaveCount(0);
+  const head = menu.locator(".branched-menu__head").first();
+  await head.focus();
+  await page.keyboard.press("ArrowRight");
+  await expect(head).toHaveAttribute("aria-expanded", "true");
+  const link = menu.getByRole("link").first();
+  await expect(link).toBeFocused();
+  expect((await link.boundingBox()).height).toBe(32);
+  await page.keyboard.press("ArrowLeft");
+  await expect(head).toBeFocused();
+  await expect(head).toHaveAttribute("aria-expanded", "false");
+});

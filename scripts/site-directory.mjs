@@ -2,6 +2,12 @@ import assert from "node:assert/strict";
 import { readFile, writeFile, mkdir, stat } from "node:fs/promises";
 import { JSDOM } from "jsdom";
 import { paletteCSS } from "../src/content/palette.js";
+const headingText = (node) => {
+  if (!node) return undefined;
+  const copy = node.cloneNode(true);
+  for (const br of copy.querySelectorAll("br")) br.replaceWith(" ");
+  return copy.textContent.replace(/\s+/g, " ").trim();
+};
 const escape = (value) =>
   String(value).replace(
     /[&<>"']/g,
@@ -58,7 +64,7 @@ export async function buildSiteDirectory(routes) {
       parents.set(heading.id, stack.at(-1)?.title);
       stack.push({
         level,
-        title: heading.textContent.replace(/\s+/g, " ").trim(),
+        title: headingText(heading),
       });
     }
     const children = [{ value: route.path, label: `Open ${label}` }];
@@ -78,7 +84,7 @@ export async function buildSiteDirectory(routes) {
       const title =
         labels[node.id] ||
         node.getAttribute("aria-label") ||
-        heading?.textContent.replace(/\s+/g, " ").trim();
+        headingText(heading);
       if (title)
         children.push({ value: route.path + "#" + node.id, label: title });
     }

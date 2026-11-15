@@ -239,10 +239,6 @@ export const originalPalette = Object.freeze(
 );
 export const PALETTE_KEY = "adon-palette-v1";
 export const SAVED_KEY = "adon-palettes-saved-v1";
-export const paletteCSS =
-  ":root{" +
-  paletteTokens.map((t) => `--p-${t.key}:${t.value}`).join(";") +
-  "}";
 export function normalizeColor(value) {
   if (
     typeof value !== "string" ||
@@ -279,11 +275,11 @@ export function readPalette() {
   try {
     return (
       validatePalette(JSON.parse(localStorage.getItem(PALETTE_KEY))) || {
-        ...originalPalette,
+        ...defaultPalette,
       }
     );
   } catch {
-    return { ...originalPalette };
+    return { ...defaultPalette };
   }
 }
 export function applyPalette(colors) {
@@ -291,8 +287,8 @@ export function applyPalette(colors) {
   if (icon)
     icon.setAttribute(
       "href",
-      colors.surface === originalPalette.surface &&
-        colors.accent === originalPalette.accent
+      colors.surface === defaultPalette.surface &&
+        colors.accent === defaultPalette.accent
         ? "/favicon.svg"
         : "data:image/svg+xml," + encodeURIComponent(paletteFavicon(colors)),
     );
@@ -303,7 +299,7 @@ export function applyPalette(colors) {
     ?.setAttribute("content", colors.canvas);
 }
 export const presets = {
-  original: { name: "Original — current colours", colors: originalPalette },
+  original: { name: "Original orange", colors: originalPalette },
   cobalt: {
     name: "Cobalt study",
     colors: {
@@ -321,7 +317,7 @@ export const presets = {
     },
   },
   rose: {
-    name: "Rose study",
+    name: "Rose study — default",
     colors: {
       ...originalPalette,
       accent: "#f6a6c5",
@@ -337,6 +333,14 @@ export const presets = {
     },
   },
 };
+
+export const defaultPalette = Object.freeze({ ...presets.rose.colors });
+export const paletteCSS =
+  ":root{" +
+  Object.entries(defaultPalette)
+    .map(([key, value]) => `--p-${key}:${value}`)
+    .join(";") +
+  "}";
 
 export function paletteFavicon(colors) {
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="12" fill="${colors.surface}"/><path d="M14 48L29 15h7l15 33H39l-3-8H27l-3 8Zm16-17h3l-1.5-5Z" fill="${colors.accent}"/></svg>`;

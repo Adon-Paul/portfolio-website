@@ -63,3 +63,17 @@
     display: none;
   }
 }
+
+.opening-status {
+  position: absolute;
+  bottom: max(36px, env(safe-area-inset-bottom));
+  left: 28px;
+  color: var(--p-text);
+  font: 12px/1.5 var(--mono);
+}
+@media (max-width: 500px) {
+  .opening-status {
+    bottom: 94px;
+    left: 20px;
+  }
+}

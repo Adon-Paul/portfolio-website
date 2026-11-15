@@ -7,8 +7,8 @@ import {
   guides,
   guidePath,
 } from "../.prerender/entry-server.js";
-import { originalPalette, paletteFavicon } from "../src/content/palette.js";
-await writeFile("dist/favicon.svg", paletteFavicon(originalPalette) + "\n");
+import { defaultPalette, paletteFavicon } from "../src/content/palette.js";
+await writeFile("dist/favicon.svg", paletteFavicon(defaultPalette) + "\n");
 const origin = "https://adonpaultomy.tech";
 const template = await readFile("dist/index.html", "utf8");
 const escape = (value) =>
@@ -67,7 +67,7 @@ for (const route of routes) {
   const html = template
     .replace(
       /<meta name="theme-color" content="[^"]*" \/>/,
-      `<meta name="theme-color" content="${originalPalette.canvas}" />`,
+      `<meta name="theme-color" content="${defaultPalette.canvas}" />`,
     )
     .replace(/<title>.*?<\/title>/, `<title>${escape(route.title)}</title>`)
     .replace("<!--page-meta-->", meta + structured)

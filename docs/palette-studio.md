@@ -19,3 +19,5 @@ Changing the default for everyone requires applying reviewed exported values to 
 The original palette was captured before refactoring. A fresh browser comparison of text, backgrounds, borders, SVG fill/stroke/gradient stops, shadows and background gradients found **zero differences** across home and all four case-study pages. No existing colour value was intentionally changed. Editor controls are new UI, not part of that baseline.
 
 Browser coverage includes navigation persistence, reset including invalid input, save/load, JSON rejection/roundtrip, blocked and corrupt storage, mobile reflow, native Escape/focus return and accessibility scanning. A separate canvas pixel check verified that TechText draws the edited accent. The main production suite retains all motion/media/static-route checks.
+
+November 15: owner selected Rose Study as the published default. `defaultPalette` supplies SSR tokens, reset, initial component colours and generated favicon; `originalPalette` remains the optional original-orange preset. Existing saved visitor palettes are preserved. Reset to default returns to Rose Study.

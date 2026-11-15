@@ -10,9 +10,9 @@ export default function BranchedMenu({
   defaultOpen = 0,
   defaultActive = "",
   onSelect,
-  rowHeight: minimumRowHeight = 64,
-  indent = 40,
-  trunk = 14,
+  rowHeight: minimumRowHeight = 32,
+  indent = 28,
+  trunk = 4,
   radius = 10,
   lineWidth = 1.5,
   drawDuration = 400,
@@ -28,7 +28,7 @@ export default function BranchedMenu({
             : [],
       ),
   );
-  const [availableWidth, setAvailableWidth] = useState(460);
+  const [touch, setTouch] = useState(false);
   const [active, setActive] = useState(defaultActive);
   const navRef = useRef(null),
     heads = useRef([]),
@@ -52,18 +52,54 @@ export default function BranchedMenu({
       }
     };
     place(true);
-    const observer = new ResizeObserver(([entry]) => {
-      setAvailableWidth(entry.contentRect.width);
+    const observer = new ResizeObserver(() => {
+      setTouch(window.matchMedia("(pointer: coarse)").matches);
       place(false);
     });
     observer.observe(navRef.current);
     return () => observer.disconnect();
   }, [activeSection, shown, items]);
+  const handleKey = (event) => {
+    const controls = [...navRef.current.querySelectorAll("button, a")].filter(
+      (el) => !el.closest("[inert]"),
+    );
+    const index = controls.indexOf(event.target);
+    if (index < 0) return;
+    const section = event.target.closest(".branched-menu__section");
+    const group = section
+      ? [...navRef.current.querySelectorAll(".branched-menu__section")].indexOf(
+          section,
+        )
+      : -1;
+    let target;
+    if (event.key === "ArrowDown")
+      target = controls[Math.min(index + 1, controls.length - 1)];
+    if (event.key === "ArrowUp") target = controls[Math.max(0, index - 1)];
+    if (event.key === "Home") target = controls[0];
+    if (event.key === "End") target = controls.at(-1);
+    if (group >= 0 && event.key === "ArrowRight") {
+      setOpen((prev) => new Set([...prev, group]));
+      target = section.querySelector("a");
+    }
+    if (group >= 0 && event.key === "ArrowLeft") {
+      setOpen((prev) => {
+        const next = new Set(prev);
+        next.delete(group);
+        return next;
+      });
+      target = heads.current[group];
+    }
+    if (target) {
+      event.preventDefault();
+      requestAnimationFrame(() => target.focus());
+    }
+  };
   return (
     <nav
       ref={navRef}
       className="branched-menu"
       aria-label="All pages and locations"
+
       style={{
         "--bm-row": `${minimumRowHeight}px`,
         "--bm-indent": `${indent}px`,
@@ -72,21 +108,20 @@ export default function BranchedMenu({
         "--bm-fold": `${foldDuration}ms`,
       }}
     >
+      <button
+        className="branched-menu__collapse"
+        type="button"
+        onClick={() => setOpen(new Set())}
+      >
+        Collapse all
+      </button>
       <span
         ref={markerRef}
         className="branched-menu__marker"
         aria-hidden="true"
       />
       {items.map((item, i) => {
-        const rowHeight = Math.max(
-          minimumRowHeight,
-          Math.ceil(
-            (Math.max(...item.children.map((kid) => kid.label.length)) * 7.5) /
-              Math.max(120, availableWidth - indent),
-          ) *
-            17 +
-            12,
-        );
+        const rowHeight = touch ? 44 : minimumRowHeight;
         const r = Math.min(radius, rowHeight / 2 - 2),
           endX = indent - 8;
         const rowY = (k) => PAD + k * rowHeight + rowHeight / 2;
@@ -109,6 +144,7 @@ export default function BranchedMenu({
               }}
               type="button"
               className="branched-menu__head"
+              onKeyDown={handleKey}
               aria-expanded={open.has(i)}
               onClick={() =>
                 setOpen((prev) => {
@@ -119,6 +155,9 @@ export default function BranchedMenu({
                 })
               }
             >
+              <span aria-hidden="true" className="branched-menu__chevron">
+                ›
+              </span>
               {item.label}
             </button>
             <div
@@ -163,7 +202,9 @@ export default function BranchedMenu({
                   {item.children.map((kid) => (
                     <a
                       key={kid.value}
+                      onKeyDown={handleKey}
                       href={kid.value}
+                      title={kid.label}
                       className="branched-menu__item"
                       aria-current={
                         kid.value === active ? "location" : undefined

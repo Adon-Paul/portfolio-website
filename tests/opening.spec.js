@@ -3,6 +3,14 @@ import { test, expect } from "@playwright/test";
 test("homepage opening completes and releases its canvas without fetching videos", async ({
   page,
 }) => {
+  let release;
+  const hold = new Promise((resolve) => {
+    release = resolve;
+  });
+  await page.route("**/FluidGlass-*.js", async (route) => {
+    await hold;
+    await route.continue();
+  });
   const videos = [];
   page.on("request", (request) => {
     if (/\.mp4/.test(request.url())) videos.push(request.url());
@@ -12,6 +20,7 @@ test("homepage opening completes and releases its canvas without fetching videos
     page.getByRole("button", { name: "Skip opening" }),
   ).toBeVisible();
   await expect(page.locator(".opening-transition canvas")).toBeVisible();
+  release();
   await expect(page.locator(".opening-transition")).toHaveCount(0, {
     timeout: 9000,
   });
@@ -60,4 +69,34 @@ test("missing WebGL never blocks the homepage", async ({ page }) => {
   await page.goto("/", { waitUntil: "domcontentloaded" });
   await expect(page.locator(".opening-transition")).toHaveCount(0);
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+});
+
+test("loading splash waits for the hero module and then releases", async ({
+  page,
+}) => {
+  let release;
+  const hold = new Promise((resolve) => {
+    release = resolve;
+  });
+  await page.route("**/FluidGlass-*.js", async (route) => {
+    await hold;
+    await route.continue();
+  });
+  try {
+    await page.goto("/", { waitUntil: "domcontentloaded" });
+    await expect(page.getByText("Preparing the experience…")).toBeVisible();
+    await expect(page.locator(".opening-transition")).not.toHaveClass(
+      /is-leaving/,
+    );
+    release();
+    await expect(page.locator("html")).toHaveAttribute(
+      "data-hero-ready",
+      /ready|fallback/,
+    );
+    await expect(page.locator(".opening-transition")).toHaveCount(0, {
+      timeout: 9000,
+    });
+  } finally {
+    release();
+  }
 });

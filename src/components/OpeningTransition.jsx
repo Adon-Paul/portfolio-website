@@ -6,14 +6,13 @@ import "./OpeningTransition.css";
 export default function OpeningTransition() {
   const [opening, setOpening] = useState(null);
   const [leaving, setLeaving] = useState(false);
-  const timer = useRef(null);
+  const ready = useRef(() => {});
   const finish = useCallback(() => {
     document.documentElement.dataset.opening = "complete";
     setOpening(null);
   }, []);
   const reveal = useCallback(() => {
-    clearTimeout(timer.current);
-    timer.current = setTimeout(() => setLeaving(true), 2700);
+    ready.current();
   }, []);
 
   useEffect(() => {
@@ -29,6 +28,31 @@ export default function OpeningTransition() {
     if (media.matches || paused || window.location.hash) return;
     document.documentElement.dataset.opening = "active";
     setOpening(readPalette());
+    let active = true,
+      artworkReady = false,
+      fontsReady = false;
+    const check = () => {
+      if (
+        active &&
+        artworkReady &&
+        fontsReady &&
+        document.documentElement.dataset.heroReady
+      )
+        setLeaving(true);
+    };
+    ready.current = () => {
+      artworkReady = true;
+      check();
+    };
+    Promise.resolve(document.fonts?.ready).then(() => {
+      fontsReady = true;
+      check();
+    });
+    const loading = new MutationObserver(check);
+    loading.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["data-hero-ready"],
+    });
     // A compilation failure must never strand an opaque opening screen.
     const deadline = setTimeout(finish, 5500);
     const escape = (event) => {
@@ -53,8 +77,10 @@ export default function OpeningTransition() {
     document.addEventListener("visibilitychange", visibility);
     media.addEventListener("change", preference);
     return () => {
+      active = false;
+      loading.disconnect();
+      ready.current = () => {};
       clearTimeout(deadline);
-      clearTimeout(timer.current);
       motion.disconnect();
       window.removeEventListener("keydown", escape);
       document.removeEventListener("visibilitychange", visibility);
@@ -89,6 +115,9 @@ export default function OpeningTransition() {
           onUnavailable={finish}
         />
       </div>
+      <p className="opening-status" role="status">
+        {leaving ? "Ready" : "Preparing the experience…"}
+      </p>
       {!leaving && (
         <button className="opening-skip" onClick={finish}>
           Skip opening <span aria-hidden="true">↗</span>

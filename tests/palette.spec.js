@@ -8,12 +8,12 @@ test("palette edits stay local, survive navigation and reset exactly", async ({
   const dialog = page.getByRole("dialog", { name: "Palette studio" });
   await expect(dialog).toBeVisible();
   const hex = page.getByLabel("Accent HEX", { exact: true });
-  await expect(hex).toHaveValue("#ff9a62");
+  await expect(hex).toHaveValue("#f6a6c5");
   await hex.fill("not-hex");
   await hex.press("Tab");
   await expect(hex).toHaveAttribute("aria-invalid", "true");
-  await page.getByRole("button", { name: "Reset to original" }).click();
-  await expect(hex).toHaveValue("#ff9a62");
+  await page.getByRole("button", { name: "Reset to default" }).click();
+  await expect(hex).toHaveValue("#f6a6c5");
   await expect(hex).toHaveAttribute("aria-invalid", "false");
   await hex.fill("#3366cc");
   await hex.press("Tab");
@@ -39,9 +39,9 @@ test("palette edits stay local, survive navigation and reset exactly", async ({
     )
     .toBe("#3366cc");
   await page.getByRole("button", { name: "Open palette controls" }).click();
-  await page.getByRole("button", { name: "Reset to original" }).click();
+  await page.getByRole("button", { name: "Reset to default" }).click();
   await expect(page.getByLabel("Accent HEX", { exact: true })).toHaveValue(
-    "#ff9a62",
+    "#f6a6c5",
   );
   await page.keyboard.press("Escape");
   await expect(dialog).not.toBeVisible();
@@ -61,7 +61,7 @@ test("palette panel remains usable on mobile with saved combinations and validat
   await page.getByText("Import / export", { exact: true }).click();
   await page.getByRole("button", { name: "Export JSON", exact: true }).click();
   const exported = await page.getByLabel("Palette JSON").inputValue();
-  await page.getByRole("button", { name: "Reset to original" }).click();
+  await page.getByRole("button", { name: "Reset to default" }).click();
   await page
     .getByLabel("Saved combination", { exact: true })
     .selectOption("My blue");
@@ -79,7 +79,7 @@ test("palette panel remains usable on mobile with saved combinations and validat
   ).toBeVisible();
   await page.getByLabel("Palette JSON").fill(exported);
   await page.getByRole("button", { name: "Import JSON", exact: true }).click();
-  await page.getByRole("button", { name: "Reset to original" }).click();
+  await page.getByRole("button", { name: "Reset to default" }).click();
   expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
   expect(
     await page.evaluate(
@@ -110,7 +110,7 @@ for (const storage of ["blocked", "corrupt"]) {
     await page.goto("/");
     await page.getByRole("button", { name: "Open palette controls" }).click();
     await expect(page.getByLabel("Accent HEX", { exact: true })).toHaveValue(
-      "#ff9a62",
+      "#f6a6c5",
     );
     await page.getByLabel("Accent HEX", { exact: true }).fill("#123456");
     await page.getByLabel("Accent HEX", { exact: true }).press("Tab");
@@ -129,9 +129,9 @@ for (const storage of ["blocked", "corrupt"]) {
           "Preview applied. Browser storage is unavailable; export JSON to keep it.",
         ),
       ).toBeVisible();
-    await page.getByRole("button", { name: "Reset to original" }).click();
+    await page.getByRole("button", { name: "Reset to default" }).click();
     await expect(page.getByLabel("Accent HEX", { exact: true })).toHaveValue(
-      "#ff9a62",
+      "#f6a6c5",
     );
   });
 }

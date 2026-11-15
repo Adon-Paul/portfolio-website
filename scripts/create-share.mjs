@@ -1,5 +1,5 @@
 // Build first and run the static preview on port 4173. Reuses the site's original SVG and font.
-import { originalPalette } from "../src/content/palette.js";
+import { defaultPalette } from "../src/content/palette.js";
 import { chromium } from "@playwright/test";
 const browser = await chromium.launch();
 try {
@@ -16,7 +16,7 @@ try {
       document.documentElement.style.setProperty(`--p-${key}`, value);
     const svg = document.querySelector("svg");
     svg.style.cssText = "width:100%;height:100%;position:static;opacity:.8";
-  }, originalPalette);
+  }, defaultPalette);
   await page.screenshot({ path: "public/media/share.png" });
 } finally {
   await browser.close();
