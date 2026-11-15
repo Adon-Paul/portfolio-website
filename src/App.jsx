@@ -24,11 +24,11 @@ function Header() {
       </a>
       <header className="header wrap">
         <div className="header-brand">
+          <SiteDirectory />
           <a className="wordmark" href="/" aria-label="Adon Paul Tomy — home">
             adon<span className="wordmark-dot">.</span>
             <span className="wordmark-note">PAUL TOMY</span>
           </a>
-          <SiteDirectory />
         </div>
         <nav aria-label="Main navigation">
           <a href="/#work">

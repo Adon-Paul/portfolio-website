@@ -30,7 +30,9 @@ for (const width of [320, 390, 768, 1440]) {
     await settledSignalControls(page);
     await expect(scene).toHaveAttribute("aria-pressed", "true");
     await expect(read).toHaveAttribute("aria-pressed", "false");
-    await expect(page.getByRole("status")).toContainText("provider choice");
+    await expect(page.locator("#signal-description")).toContainText(
+      "provider choice",
+    );
     expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
     await read.click();
     await settledSignalControls(page);

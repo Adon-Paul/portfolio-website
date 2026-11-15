@@ -1,3 +1,11 @@
+# Further explorer refinement — November 15
+
+Owner requested even more compact sidebar, trigger left of name, full splash playback and release. Sidebar narrowed to 280px, desktop rows 28px, touch rows retained at 44px; tighter padding/search/header. Trigger precedes wordmark in actual DOM order. Touch screenshot caught header crowding at 390px; extended two-row mobile header through 600px and added geometry regression. Existing splash changes included. Interrupted pre-final browser run intentionally after this visual finding; Final combined verification: npm run check passes 27 unit tests and build gates; npm run test:e2e passes all 59 tests (2.4m). Mobile screenshots inspected. Deployment pending.
+
+# Full splash playback — November 15
+
+Owner requested splash play fully before graceful exit. Added 2700ms first-frame playback prerequisite alongside existing fonts/hero readiness. Retained 1100ms feather exit; loading deadline now begins graceful exit at 8s with 10s CSS emergency removal. Skip/reduced-motion and unsupported-renderer behavior preserved; status fades on exit. Added browser timing regression. Verification/release pending.
+
 # Rose/explorer release verified — November 15
 
 Application release 95e48fbf61c547784dbbd62a5d7c2943c7cb8648 deployed successfully in Pages run 43682785763 (build and deploy success). Local 27 unit tests, 57 browser tests and build gates passed. Live Chromium fresh-session smoke confirms Rose default, splash completion, compact 32px explorer rows, arrow-key expansion, collapse-all, Escape and Rose reset, with no page errors. Local preview opened and rendered page families reviewed. Saved visitor palettes remain preserved; reset selects the new published Rose default. No pending deployment work.

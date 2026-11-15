@@ -80,6 +80,11 @@ test("directory fits mobile, wraps detailed topics and follows palette and pause
 }) => {
   await page.setViewportSize({ width: 320, height: 760 });
   await page.goto("/guides/");
+  const toggleBox = await page
+    .getByRole("button", { name: "Site directory", exact: true })
+    .boundingBox();
+  const brandBox = await page.locator(".wordmark").boundingBox();
+  expect(toggleBox.x + toggleBox.width).toBeLessThanOrEqual(brandBox.x);
   await page
     .getByRole("button", { name: "Site directory", exact: true })
     .click();
@@ -102,6 +107,7 @@ test("directory fits mobile, wraps detailed topics and follows palette and pause
   await expect(
     page.getByText("1 destination · 1 group", { exact: true }),
   ).toBeVisible();
+  expect(panel.width).toBe(280);
   expect(panel.x).toBe(0);
   expect(panel.y).toBe(0);
   expect(panel.height).toBe(760);
@@ -203,8 +209,25 @@ test("compact explorer supports collapse and keyboard navigation", async ({
   await expect(head).toHaveAttribute("aria-expanded", "true");
   const link = menu.getByRole("link").first();
   await expect(link).toBeFocused();
-  expect((await link.boundingBox()).height).toBe(32);
+  expect((await link.boundingBox()).height).toBe(28);
   await page.keyboard.press("ArrowLeft");
   await expect(head).toBeFocused();
   await expect(head).toHaveAttribute("aria-expanded", "false");
+});
+
+test("mobile header keeps the left explorer toggle and navigation separate", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/guides/");
+  const brand = await page.locator(".header-brand").boundingBox();
+  const navigation = await page
+    .getByRole("navigation", { name: "Main navigation" })
+    .boundingBox();
+  expect(navigation.y).toBeGreaterThanOrEqual(brand.y + brand.height);
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth,
+    ),
+  ).toBe(true);
 });

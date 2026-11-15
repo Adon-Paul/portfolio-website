@@ -30,18 +30,26 @@ export default function OpeningTransition() {
     setOpening(readPalette());
     let active = true,
       artworkReady = false,
+      playbackComplete = false,
+      playbackTimer,
       fontsReady = false;
     const check = () => {
       if (
         active &&
         artworkReady &&
+        playbackComplete &&
         fontsReady &&
         document.documentElement.dataset.heroReady
       )
         setLeaving(true);
     };
     ready.current = () => {
+      if (artworkReady) return;
       artworkReady = true;
+      playbackTimer = setTimeout(() => {
+        playbackComplete = true;
+        check();
+      }, 2700);
       check();
     };
     Promise.resolve(document.fonts?.ready).then(() => {
@@ -54,7 +62,7 @@ export default function OpeningTransition() {
       attributeFilter: ["data-hero-ready"],
     });
     // A compilation failure must never strand an opaque opening screen.
-    const deadline = setTimeout(finish, 5500);
+    const deadline = setTimeout(() => setLeaving(true), 8000);
     const escape = (event) => {
       if (event.key === "Escape" || event.key === "Tab") finish();
     };
@@ -81,6 +89,7 @@ export default function OpeningTransition() {
       loading.disconnect();
       ready.current = () => {};
       clearTimeout(deadline);
+      clearTimeout(playbackTimer);
       motion.disconnect();
       window.removeEventListener("keydown", escape);
       document.removeEventListener("visibilitychange", visibility);

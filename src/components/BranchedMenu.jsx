@@ -10,7 +10,7 @@ export default function BranchedMenu({
   defaultOpen = 0,
   defaultActive = "",
   onSelect,
-  rowHeight: minimumRowHeight = 32,
+  rowHeight: minimumRowHeight = 28,
   indent = 28,
   trunk = 4,
   radius = 10,

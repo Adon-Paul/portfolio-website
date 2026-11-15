@@ -3,7 +3,7 @@
   inset: 0;
   z-index: 80;
   pointer-events: none;
-  animation: opening-failsafe 0s 5.5s forwards;
+  animation: opening-failsafe 0s 10s forwards;
 }
 .opening-art {
   position: absolute;
@@ -76,4 +76,9 @@
     bottom: 94px;
     left: 20px;
   }
+}
+
+.opening-transition.is-leaving .opening-status {
+  opacity: 0;
+  transition: opacity 350ms ease;
 }

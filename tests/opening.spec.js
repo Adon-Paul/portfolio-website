@@ -22,7 +22,7 @@ test("homepage opening completes and releases its canvas without fetching videos
   await expect(page.locator(".opening-transition canvas")).toBeVisible();
   release();
   await expect(page.locator(".opening-transition")).toHaveCount(0, {
-    timeout: 9000,
+    timeout: 12000,
   });
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
   expect(videos).toEqual([]);
@@ -94,9 +94,42 @@ test("loading splash waits for the hero module and then releases", async ({
       /ready|fallback/,
     );
     await expect(page.locator(".opening-transition")).toHaveCount(0, {
-      timeout: 9000,
+      timeout: 12000,
     });
   } finally {
     release();
   }
+});
+
+test("ready content does not cut short splash playback or its graceful exit", async ({
+  page,
+}) => {
+  await page.addInitScript(() => {
+    window.splashTiming = {};
+    const observer = new MutationObserver(() => {
+      const node = document.querySelector(".opening-transition");
+      const timing = window.splashTiming;
+      if (node?.querySelector("canvas") && !timing.started)
+        timing.started = performance.now();
+      if (node?.classList.contains("is-leaving") && !timing.leaving)
+        timing.leaving = performance.now();
+      if (!node && timing.leaving && !timing.finished)
+        timing.finished = performance.now();
+    });
+    observer.observe(document, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ["class"],
+    });
+  });
+  await page.goto("/", { waitUntil: "domcontentloaded" });
+  await expect
+    .poll(() => page.evaluate(() => Boolean(window.splashTiming.finished)), {
+      timeout: 12000,
+    })
+    .toBe(true);
+  const timing = await page.evaluate(() => window.splashTiming);
+  expect(timing.leaving - timing.started).toBeGreaterThanOrEqual(2600);
+  expect(timing.finished - timing.leaving).toBeGreaterThanOrEqual(1000);
 });

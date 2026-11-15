@@ -111,8 +111,7 @@ export default function SiteDirectory() {
       >
         <div className="site-directory__top">
           <div>
-            <strong>Explore the site</strong>
-            <p>Every page, section and guide topic.</p>
+            <strong>Explorer</strong>
           </div>
           <button
             type="button"

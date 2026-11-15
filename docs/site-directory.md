@@ -15,3 +15,5 @@ Coverage: deep-section navigation, marker/branch geometry and folding, keyboard/
 November 14: owner approved replacing the floating popup with a full-height, edge-attached sidebar (440px maximum, full width on narrow screens), with motion-aware entry. Search, branches, static fallback and native disclosure remain.
 
 November 15: compact explorer revision uses 32px desktop rows, 44px coarse-pointer rows, chevrons, active-row background, collapse-all and Up/Down/Home/End/Left/Right navigation alongside native Tab and links. Long labels use ellipsis with full native titles and accessible link names; search still matches the full label. Sidebar maximum width is 360px.
+
+November 15 follow-up: owner requested substantially less sidebar width and trigger before the wordmark. Sidebar is now 280px wide with 28px desktop rows, 44px touch rows, tighter chrome and a short Explorer heading. Header trigger precedes the name in DOM/keyboard order. At <=600px navigation occupies its own row to avoid name/link collisions (verified at 390px).
