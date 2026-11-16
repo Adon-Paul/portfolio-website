@@ -3,6 +3,76 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      #boot-screen {
+        display: none;
+      }
+      html[data-boot="loading"] #boot-screen {
+        display: grid;
+        position: fixed;
+        inset: 0;
+        z-index: 10000;
+        place-items: center;
+        background: #171719;
+        color: #f6a6c5;
+        font: 12px/1.5 monospace;
+      }
+      html[data-boot="loading"] .opening-transition {
+        visibility: hidden;
+      }
+      #boot-screen button {
+        position: absolute;
+        right: 28px;
+        bottom: 28px;
+        padding: 12px 18px;
+        color: inherit;
+        background: #171719;
+        border: 1px solid currentColor;
+        border-radius: 99px;
+        font: inherit;
+      }
+    </style>
+    <script>
+      (() => {
+        const root = document.documentElement;
+        let paused = false;
+        try {
+          paused = sessionStorage.getItem("portfolio-motion") === "paused";
+        } catch {}
+        if (
+          location.pathname !== "/" ||
+          location.hash ||
+          paused ||
+          matchMedia("(prefers-reduced-motion: reduce)").matches
+        )
+          return;
+        root.dataset.boot = "loading";
+        const skip = () => {
+          root.dataset.boot = "skipped";
+          window.dispatchEvent(new Event("portfolio-skip-opening"));
+        };
+        const keys = (event) => {
+          if (event.key === "Escape" || event.key === "Tab") skip();
+        };
+        const clicks = (event) => {
+          if (event.target.closest?.("#boot-skip")) skip();
+        };
+        document.addEventListener("keydown", keys);
+        document.addEventListener("click", clicks);
+        const timeout = setTimeout(skip, 10000);
+        const changes = new MutationObserver(() => {
+          if (root.dataset.boot === "loading") return;
+          clearTimeout(timeout);
+          document.removeEventListener("keydown", keys);
+          document.removeEventListener("click", clicks);
+          changes.disconnect();
+        });
+        changes.observe(root, {
+          attributes: true,
+          attributeFilter: ["data-boot"],
+        });
+      })();
+    </script>
     <meta name="theme-color" content="#171719" />
     <title>Adon Paul Tomy — Developer · Mobile, AI & security</title>
     <!--page-meta-->
@@ -16,6 +86,10 @@
     />
   </head>
   <body>
+    <div id="boot-screen" aria-label="Loading portfolio">
+      <p>Preparing the experience…</p>
+      <button id="boot-skip" type="button">Skip opening ↗</button>
+    </div>
     <div id="root"><!--app-html--></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>

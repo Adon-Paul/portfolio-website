@@ -84,7 +84,7 @@ test("loading splash waits for the hero module and then releases", async ({
   });
   try {
     await page.goto("/", { waitUntil: "domcontentloaded" });
-    await expect(page.getByText("Preparing the experience…")).toBeVisible();
+    await expect(page.locator(".opening-status")).toBeVisible();
     await expect(page.locator(".opening-transition")).not.toHaveClass(
       /is-leaving/,
     );
@@ -132,4 +132,36 @@ test("ready content does not cut short splash playback or its graceful exit", as
   const timing = await page.evaluate(() => window.splashTiming);
   expect(timing.leaving - timing.started).toBeGreaterThanOrEqual(2600);
   expect(timing.finished - timing.leaving).toBeGreaterThanOrEqual(1000);
+});
+
+test("initial HTML covers the homepage while the application bundle loads", async ({
+  page,
+}) => {
+  let release;
+  const hold = new Promise((resolve) => {
+    release = resolve;
+  });
+  await page.route("**/assets/index-*.js", async (route) => {
+    await hold;
+    await route.continue();
+  });
+  try {
+    await page.goto("/", { waitUntil: "commit" });
+    await expect(page.locator("#boot-screen")).toBeVisible();
+    expect(
+      await page.evaluate(
+        () =>
+          document
+            .elementFromPoint(innerWidth / 2, innerHeight / 2)
+            ?.closest("#boot-screen") !== null,
+      ),
+    ).toBe(true);
+    await page.getByRole("button", { name: "Skip opening" }).click();
+    await expect(page.locator("#boot-screen")).toBeHidden();
+    release();
+    await page.waitForLoadState("domcontentloaded");
+    await expect(page.locator(".opening-transition")).toHaveCount(0);
+  } finally {
+    release();
+  }
 });

@@ -231,3 +231,26 @@ test("mobile header keeps the left explorer toggle and navigation separate", asy
     ),
   ).toBe(true);
 });
+
+test("floating explorer stays reachable after scrolling on home, guides and work", async ({
+  page,
+}) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  for (const path of ["/", "/guides/sunset/", "/work/lumisense/"]) {
+    await page.goto(path);
+    await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+    const trigger = page.getByRole("button", {
+      name: "Site directory",
+      exact: true,
+    });
+    await expect(trigger).toBeInViewport();
+    await trigger.click();
+    await expect(page.getByRole("searchbox")).toBeFocused();
+    await page.keyboard.press("Escape");
+  }
+  await page.goto("/directory/");
+  await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+  await expect(
+    page.getByRole("link", { name: "Site directory — back to top" }),
+  ).toBeInViewport();
+});

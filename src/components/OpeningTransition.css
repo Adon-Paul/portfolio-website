@@ -1,8 +1,8 @@
 .opening-transition {
   position: fixed;
   inset: 0;
-  z-index: 80;
-  pointer-events: none;
+  z-index: 1000;
+  pointer-events: auto;
   animation: opening-failsafe 0s 10s forwards;
 }
 .opening-art {

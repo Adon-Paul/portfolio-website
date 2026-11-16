@@ -9,9 +9,11 @@ export default function OpeningTransition() {
   const ready = useRef(() => {});
   const finish = useCallback(() => {
     document.documentElement.dataset.opening = "complete";
+    document.documentElement.dataset.boot = "complete";
     setOpening(null);
   }, []);
   const reveal = useCallback(() => {
+    document.documentElement.dataset.boot = "complete";
     ready.current();
   }, []);
 
@@ -25,7 +27,15 @@ export default function OpeningTransition() {
     } catch {
       /* Optional storage. */
     }
-    if (media.matches || paused || window.location.hash) return;
+    if (
+      media.matches ||
+      paused ||
+      window.location.hash ||
+      document.documentElement.dataset.boot === "skipped"
+    ) {
+      document.documentElement.dataset.boot = "complete";
+      return;
+    }
     document.documentElement.dataset.opening = "active";
     setOpening(readPalette());
     let active = true,
@@ -82,6 +92,7 @@ export default function OpeningTransition() {
         attributeFilter: ["data-motion"],
       });
     window.addEventListener("keydown", escape);
+    window.addEventListener("portfolio-skip-opening", finish);
     document.addEventListener("visibilitychange", visibility);
     media.addEventListener("change", preference);
     return () => {
@@ -92,6 +103,7 @@ export default function OpeningTransition() {
       clearTimeout(playbackTimer);
       motion.disconnect();
       window.removeEventListener("keydown", escape);
+      window.removeEventListener("portfolio-skip-opening", finish);
       document.removeEventListener("visibilitychange", visibility);
       media.removeEventListener("change", preference);
     };

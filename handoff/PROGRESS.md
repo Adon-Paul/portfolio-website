@@ -1,3 +1,7 @@
+# Floating explorer and initial-paint splash — November 16
+
+Owner requested tree button accessible while scrolling everywhere, with splash as first homepage content. Added fixed opaque 44px tree trigger, preserved header slot/left-of-name ordering, index-page floating top link, and splash above all site controls. Initial HTML now has critical CSS and a lightweight loading cover with early skip/failsafe, handing off to animated splash only at first frame. Preserved no-JS, reduced-motion and deep-link access. Added delayed-app-bundle and scrolled-navigation regressions. First suite 60/61 passed; remaining failure was ambiguous text matching both loading layers, now scoped to animated status. Final verification: npm run check passes 27 unit tests and build gates; npm run test:e2e passes all 61 tests (2.8m). Initial-cover and scrolled mobile screenshots inspected. Deployment pending.
+
 # Compact explorer/full splash release verified — November 15
 
 Application release 1cb7d3c8d6d5eba74faa5ab1db1b9cbf595f32d8 deployed successfully in Pages run 43732009011; build/deploy both success. Local npm run check passes 27 unit tests/build gates; final full browser suite passes 59 tests. Live 390px smoke confirms 280px sidebar, trigger left of name, 2846ms artwork playback before graceful exit, 1291ms exit duration. Rose remains default. Local mobile screenshots inspected. No pending deployment task.
